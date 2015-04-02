@@ -15,7 +15,6 @@ namespace IdGen
         private readonly DateTime _epoch;
         private readonly int _generatorId;
 
-        private readonly long MASK_GENERATOR;
         private readonly long MASK_SEQUENCE;
         private readonly long MASK_TIME;
         private readonly int SHIFT_TIME;
@@ -27,6 +26,11 @@ namespace IdGen
         /// <summary>
         /// Gets the Id of the generator.
         /// </summary>
+        /// <remarks>
+        /// The returned value MAY not be the generatorId passed into one of the <see cref="IdGenerator"/>'s 
+        /// constructors; the Id will be masked by the <see cref="MaskConfig"/>'s
+        /// <see cref="MaskConfig.GeneratorIdBits"/>-mask.
+        /// </remarks>
         public int Id { get { return _generatorId; } }
 
         /// <summary>
@@ -78,7 +82,6 @@ namespace IdGen
 
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
-            MASK_GENERATOR = GetMask(maskConfig.GeneratorIdBits);
             MASK_SEQUENCE = GetMask(maskConfig.SequenceBits);
 
             SHIFT_TIME = maskConfig.GeneratorIdBits + maskConfig.SequenceBits;
@@ -86,7 +89,7 @@ namespace IdGen
 
             // Store instance specific values
             _epoch = epoch;
-            _generatorId = generatorId;
+            _generatorId = (int)(generatorId & GetMask(maskConfig.GeneratorIdBits));
         }
 
         /// <summary>
@@ -127,11 +130,11 @@ namespace IdGen
                 //_sequence = timestamp == _lastgen ? _sequence + 1 : 0;
                 //_lastgen = timestamp;
                 //=================
-                
+
                 unchecked
                 {
                     return ((timestamp & MASK_TIME) << SHIFT_TIME)
-                        + ((_generatorId & MASK_GENERATOR) << SHIFT_GENERATOR)
+                        + (_generatorId << SHIFT_GENERATOR)         // GeneratorId is already masked, we only need to shift
                         + (_sequence & MASK_SEQUENCE);
                 }
             }
@@ -150,7 +153,7 @@ namespace IdGen
         /// <summary>
         /// Gets a hashcode based on the <see cref="Environment.MachineName"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns a hashcode based on the <see cref="Environment.MachineName"/>.</returns>
         private static int GetMachineHash()
         {
             return Environment.MachineName.GetHashCode();
