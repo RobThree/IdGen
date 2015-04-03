@@ -5,7 +5,7 @@ namespace IdGen
     /// <summary>
     /// Provides the interface for Id-generators.
     /// </summary>
-    interface IIdGenerator<T> : IEnumerable<long>
+    interface IIdGenerator<T> : IEnumerable<T>
     {
         /// <summary>
         /// Creates a new Id.
