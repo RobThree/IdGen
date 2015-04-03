@@ -202,17 +202,29 @@ namespace IdGen
             return (1L << bits) - 1;
         }
 
+        /// <summary>
+        /// Returns a 'never ending' stream of Id's.
+        /// </summary>
+        /// <returns>A 'never ending' stream of Id's.</returns>
         private IEnumerable<long> IdStream()
         {
             while (true)
                 yield return this.CreateId();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates over Id's.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator&lt;T&gt;"/> object that can be used to iterate over Id's.</returns>
         public IEnumerator<long> GetEnumerator()
         {
             return this.IdStream().GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates over Id's.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate over Id's.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
