@@ -152,6 +152,12 @@ namespace IdGen
         /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.
         /// </summary>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name</returns>
+        /// <remarks>
+        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
+        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
+        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
+        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetMachineSpecificGenerator()
         {
             return GetMachineSpecificGenerator(defaultepoch);
@@ -162,6 +168,12 @@ namespace IdGen
         /// </summary>
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name</returns>
+        /// <remarks>
+        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
+        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
+        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
+        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetMachineSpecificGenerator(DateTime epoch)
         {
             return GetMachineSpecificGenerator(epoch, MaskConfig.Default);
@@ -173,6 +185,12 @@ namespace IdGen
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name</returns>
+        /// <remarks>
+        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
+        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
+        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
+        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetMachineSpecificGenerator(DateTime epoch, MaskConfig maskConfig)
         {
             return GetMachineSpecificGenerator(epoch, maskConfig, defaulttimesource);
@@ -185,6 +203,12 @@ namespace IdGen
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <param name="timeSource">The time-source to use when acquiring time data.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name</returns>
+        /// <remarks>
+        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
+        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
+        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
+        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetMachineSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
             return new IdGenerator(GetMachineHash() & maskConfig.GeneratorIdBits, epoch, maskConfig, timeSource);
@@ -194,6 +218,11 @@ namespace IdGen
         /// Returns a new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.
         /// </summary>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
+        /// <remarks>
+        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
+        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
+        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetThreadSpecificGenerator()
         {
             return GetThreadSpecificGenerator(defaultepoch);
@@ -204,6 +233,11 @@ namespace IdGen
         /// </summary>
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
+        /// <remarks>
+        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
+        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
+        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetThreadSpecificGenerator(DateTime epoch)
         {
             return GetThreadSpecificGenerator(epoch, MaskConfig.Default);
@@ -215,6 +249,11 @@ namespace IdGen
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
+        /// <remarks>
+        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
+        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
+        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetThreadSpecificGenerator(DateTime epoch, MaskConfig maskConfig)
         {
             return GetThreadSpecificGenerator(epoch, maskConfig, defaulttimesource);
@@ -227,6 +266,11 @@ namespace IdGen
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <param name="timeSource">The time-source to use when acquiring time data.</param>
         /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
+        /// <remarks>
+        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
+        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
+        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
+        /// </remarks>
         public static IdGenerator GetThreadSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
             return new IdGenerator(GetThreadId() & maskConfig.GeneratorIdBits, epoch, maskConfig, timeSource);
