@@ -43,12 +43,12 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        public void GeneratorId_ShouldBePresent_InID()
+        public void GeneratorId_ShouldBePresent_InID1()
         {
             // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
             // are set for the generator.
             var ts = new MockTimeSource(TESTEPOCH);
-            var m = MaskConfig.Default;
+            var m = MaskConfig.Default;             // We use a default mask-config with 11 bits for the generator this time
             var g = new IdGenerator(-1, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
@@ -61,7 +61,7 @@ namespace IdGenTests
             // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
             // are set for the generator.
             var ts = new MockTimeSource(TESTEPOCH);
-            var m = new MaskConfig(40, 12, 11);
+            var m = new MaskConfig(40, 12, 11);     // We use a custom mask-config with 12 bits for the generator this time
             var g = new IdGenerator(-1, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
