@@ -15,6 +15,7 @@ namespace IdGen
         private long _lastgen = -1;
 
         private readonly DateTime _epoch;
+        private readonly MaskConfig _maskconfig;
         private readonly int _generatorId;
 
         private readonly long MASK_SEQUENCE;
@@ -41,6 +42,11 @@ namespace IdGen
         /// Gets the epoch for the <see cref="IdGenerator"/>.
         /// </summary>
         public DateTime Epoch { get { return _epoch; } }
+
+        /// <summary>
+        /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
+        /// </summary>
+        public MaskConfig MaskConfig { get { return _maskconfig; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
@@ -118,6 +124,7 @@ namespace IdGen
             SHIFT_GENERATOR = maskConfig.SequenceBits;
 
             // Store instance specific values
+            _maskconfig = maskConfig;
             _timesource = timeSource;
             _epoch = epoch;
             _generatorId = (int)(generatorId & GetMask(maskConfig.GeneratorIdBits));
