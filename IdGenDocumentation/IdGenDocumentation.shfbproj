@@ -98,6 +98,12 @@
   <ItemGroup>
     <Content Include="icons\Help.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Media\structure.png">
+      <ImageId>structure</ImageId>
+      <AlternateText>structure</AlternateText>
+    </Image>
+  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>
