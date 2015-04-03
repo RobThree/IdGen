@@ -5,6 +5,10 @@ Twitter Snowflake-alike ID generator
 
 `// TODO...`
 
+An Id generated with a Default MaskConfig is structured as follows: 
+
+![Id structure](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/Media/structure.png)
+
 ## Getting started
 
 `// TODO...`
