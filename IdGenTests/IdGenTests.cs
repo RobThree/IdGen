@@ -45,11 +45,11 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBePresent_InID1()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
+            // We setup our generator so that the time (current - epoch) results in 0, generator id 1023 so that all 10 bits
             // are set for the generator.
             var ts = new MockTimeSource(TESTEPOCH);
             var m = MaskConfig.Default;             // We use a default mask-config with 11 bits for the generator this time
-            var g = new IdGenerator(-1, TESTEPOCH, m, ts);
+            var g = new IdGenerator(1023, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual((1 << m.GeneratorIdBits) - 1 << m.SequenceBits, g.CreateId());
@@ -58,11 +58,11 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBePresent_InID2()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
+            // We setup our generator so that the time (current - epoch) results in 0, generator id 4095 so that all 12 bits
             // are set for the generator.
             var ts = new MockTimeSource(TESTEPOCH);
             var m = new MaskConfig(40, 12, 11);     // We use a custom mask-config with 12 bits for the generator this time
-            var g = new IdGenerator(-1, TESTEPOCH, m, ts);
+            var g = new IdGenerator(4095, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual(-1 & ((1 << 12) - 1), g.Id);
@@ -72,11 +72,11 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBeMasked_WhenReadFromProperty()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
-            // are set for the generator.
+            // We setup our generator so that the time (current - epoch) results in 0, generator id 1023 so that all 10
+            // bits are set for the generator.
             var ts = new MockTimeSource(TESTEPOCH);
             var m = MaskConfig.Default;
-            var g = new IdGenerator(-1, TESTEPOCH, m, ts);
+            var g = new IdGenerator(1023, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual((1 << m.GeneratorIdBits) - 1, g.Id);
@@ -107,16 +107,48 @@ namespace IdGenTests
         public void Constructor_UsesCorrect_Values()
         {
             Assert.AreEqual(123, new IdGenerator(123).Id);  //Make sure the test-value is not masked so it matches the expected value!
-            Assert.AreEqual(TESTEPOCH, new IdGenerator(TESTEPOCH).Epoch);
+            Assert.AreEqual(TESTEPOCH, new IdGenerator(0, TESTEPOCH).Epoch);
         }
 
         [TestMethod]
         public void Enumerable_ShoudReturn_Ids()
         {
-            var g = new IdGenerator();
+            var g = new IdGenerator(0);
             var ids = g.Take(1000).ToArray();
 
             Assert.AreEqual(1000, ids.Distinct().Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidSystemClockException))]
+        public void CreateId_Throws_OnClockBackwards()
+        {
+            var ts = new MockTimeSource(TESTEPOCH);
+            var m = MaskConfig.Default;
+            var g = new IdGenerator(0, TESTEPOCH, m, ts);
+
+            g.CreateId();
+            ts.PreviousTick(); //Set clock back 1 'tick' (ms)
+            g.CreateId();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Throws_OnInvalidGeneratorId()
+        {
+            new IdGenerator(1024);
+        }
+
+        [TestMethod]
+        public void GetMachineSpecificGenerator_Returns_IdGenerator()
+        {
+            var g = IdGenerator.GetMachineSpecificGenerator();
+        }
+
+        [TestMethod]
+        public void GetThreadSpecificGenerator_Returns_IdGenerator()
+        {
+            var g = IdGenerator.GetThreadSpecificGenerator();
         }
     }
 }

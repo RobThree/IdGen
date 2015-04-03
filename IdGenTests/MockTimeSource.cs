@@ -24,5 +24,10 @@ namespace IdGenTests
         {
             _current = _current.AddMilliseconds(1);
         }
+
+        public void PreviousTick()
+        {
+            _current = _current.AddMilliseconds(-1);
+        }
     }
 }
