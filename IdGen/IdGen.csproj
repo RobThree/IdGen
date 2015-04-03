@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="DefaultTimeSource.cs" />
     <Compile Include="IdGenerator.cs" />
+    <Compile Include="IIdGenerator.cs" />
     <Compile Include="ITimeSource.cs" />
     <Compile Include="MaskConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

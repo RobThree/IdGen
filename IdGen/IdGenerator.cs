@@ -9,7 +9,7 @@ namespace IdGen
     /// <summary>
     /// Generates Id's inspired by Twitter's (late) Snowflake project.
     /// </summary>
-    public class IdGenerator : IEnumerable<long>
+    public class IdGenerator : IIdGenerator<long>
     {
         private int _sequence = 0;
         private long _lastgen = -1;
