@@ -39,7 +39,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultTimeSource.cs" />
     <Compile Include="IdGenerator.cs" />
+    <Compile Include="ITimeSource.cs" />
     <Compile Include="MaskConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

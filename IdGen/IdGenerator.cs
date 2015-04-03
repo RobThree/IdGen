@@ -20,6 +20,8 @@ namespace IdGen
         private readonly int SHIFT_TIME;
         private readonly int SHIFT_GENERATOR;
 
+        private readonly ITimeSource _timesource;
+
         // Object to lock() on while generating Id's
         private object genlock = new object();
 
@@ -36,14 +38,16 @@ namespace IdGen
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
         /// automatically assigned based on the machinename, 2015-01-01 0:00:00Z is used as default epoch and the
-        /// <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>.
+        /// <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         public IdGenerator()
             : this(GetMachineHash()) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>.
+        /// epoch and the <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
         public IdGenerator(int generatorId)
@@ -52,7 +56,8 @@ namespace IdGen
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
         /// automatically assigned based on the machinename and the <see cref="MaskConfig.Default"/> value is used for
-        /// the <see cref="MaskConfig"/>.
+        /// the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve timestamp
+        /// information.
         /// </summary>
         /// <param name="epoch">The Epoch of the generator.</param>
         public IdGenerator(DateTime epoch)
@@ -60,7 +65,8 @@ namespace IdGen
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="MaskConfig.Default"/> 
-        /// value is used for the <see cref="MaskConfig"/>.
+        /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
+        /// timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="epoch">The Epoch of the generator.</param>
@@ -68,17 +74,34 @@ namespace IdGen
             : this(generatorId, epoch, MaskConfig.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
+        /// used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig)
+            : this(generatorId, epoch, maskConfig, new DefaultTimeSource()) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
+        /// </summary>
+        /// <param name="generatorId">The Id of the generator.</param>
+        /// <param name="epoch">The Epoch of the generator.</param>
+        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
+        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
+        public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
+            if (maskConfig == null)
+                throw new ArgumentNullException("maskConfig");
+
+            if (timeSource == null)
+                throw new ArgumentNullException("timeSource");
+
             if (maskConfig.TimestampBits + maskConfig.GeneratorIdBits + maskConfig.SequenceBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate ID's is not equal to 63");
 
-            //TODO: Sanity-check mask-config for sane ranges...
+            //TODO: Sanity-check mask-config for sane ranges + unittests...
 
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
@@ -88,6 +111,7 @@ namespace IdGen
             SHIFT_GENERATOR = maskConfig.SequenceBits;
 
             // Store instance specific values
+            _timesource = timeSource;
             _epoch = epoch;
             _generatorId = (int)(generatorId & GetMask(maskConfig.GeneratorIdBits));
         }
@@ -147,7 +171,7 @@ namespace IdGen
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private long GetTimestamp()
         {
-            return (long)(DateTime.UtcNow - _epoch).TotalMilliseconds;
+            return (long)(_timesource.GetTime() - _epoch).TotalMilliseconds;
         }
 
         /// <summary>

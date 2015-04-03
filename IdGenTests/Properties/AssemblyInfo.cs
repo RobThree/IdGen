@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IdGen")]
+[assembly: AssemblyTitle("IdGenTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Devcorner.nl")]
-[assembly: AssemblyProduct("IdGen")]
-[assembly: AssemblyCopyright("Copyright © 2015 Rob Janssen")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("IdGenTests")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("54b45da4-da7a-4feb-9125-9f3109037c9c")]
+[assembly: Guid("9f42a03d-69a6-4550-9c3d-0ef2fe310fea")]
 
 // Version information for an assembly consists of the following four values:
 //

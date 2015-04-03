@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGen", "IdGen\IdGen.csproj
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IdGenDocumentation", "IdGenDocumentation\IdGenDocumentation.shfbproj", "{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGenTests", "IdGenTests\IdGenTests.csproj", "{12E4642B-A533-400C-987B-67B21DB80EC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
