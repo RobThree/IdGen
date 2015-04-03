@@ -8,7 +8,7 @@ namespace IdGen
     public class InvalidSystemClockException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the<see cref="InvalidSystemClockException"/> class with a message that describes the error.
+        /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class with a message that describes the error.
         /// </summary>
         /// <param name="message">
         /// The message that describes the exception. The caller of this constructor is required to ensure that this 
