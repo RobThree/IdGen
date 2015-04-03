@@ -98,7 +98,7 @@ namespace IdGen
             if (timeSource == null)
                 throw new ArgumentNullException("timeSource");
 
-            if (maskConfig.TimestampBits + maskConfig.GeneratorIdBits + maskConfig.SequenceBits != 63)
+            if (maskConfig.TotalBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate ID's is not equal to 63");
 
             //TODO: Sanity-check mask-config for sane ranges + unittests...

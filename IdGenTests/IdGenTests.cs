@@ -55,6 +55,20 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        public void GeneratorId_ShouldBePresent_InID2()
+        {
+            // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
+            // are set for the generator.
+            var ts = new MockTimeSource(TESTEPOCH);
+            var m = new MaskConfig(40, 12, 11);
+            var g = new IdGenerator(-1, TESTEPOCH, m, ts);
+
+            // Make sure all expected bits are set
+            Assert.AreEqual(-1 & ((1 << 12) - 1), g.Id);
+            Assert.AreEqual((1 << 12) - 1 << 11, g.CreateId());
+        }
+
+        [TestMethod]
         public void GeneratorId_ShouldBeMasked_WhenReadFromProperty()
         {
             // We setup our generator so that the time (current - epoch) results in 0, generator id -1 so that all 32 bits
@@ -85,7 +99,7 @@ namespace IdGenTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_Throws_OnMaskConfigNotExactly63Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig { TimestampBits = 41, GeneratorIdBits = 10, SequenceBits = 11 });
+            new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 10, 11));
         }
     }
 }
