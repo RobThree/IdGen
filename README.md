@@ -11,4 +11,6 @@ Twitter Snowflake-alike ID generator
 
 <hr>
 
+[![Build status](https://ci.appveyor.com/api/projects/status/24wqqq91u0arkf5t)](https://ci.appveyor.com/project/RobIII/idgen)
+
 Icons made by [Freepik](http://www.flaticon.com/authors/freepik) from [www.flaticon.com](http://www.flaticon.com) are licensed by [CC 3.0](http://creativecommons.org/licenses/by/3.0/).
