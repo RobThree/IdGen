@@ -34,7 +34,7 @@ namespace IdGen
         /// <remarks>
         /// The returned value MAY not be the generatorId passed into one of the <see cref="IdGenerator"/>'s 
         /// constructors; the Id will be masked by the <see cref="MaskConfig"/>'s
-        /// <see cref="MaskConfig.GeneratorIdBits"/>-mask.
+        /// <see cref="P:IdGen.MaskConfig.GeneratorIdBits"/>-mask.
         /// </remarks>
         public int Id { get { return _generatorId; } }
 
@@ -51,7 +51,7 @@ namespace IdGen
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
         /// automatically assigned based on the machinename, 2015-01-01 0:00:00Z is used as default epoch and the
-        /// <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// <see cref="P:IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
         /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         public IdGenerator()
@@ -59,7 +59,7 @@ namespace IdGen
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// epoch and the <see cref="P:IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
         /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
@@ -68,7 +68,7 @@ namespace IdGen
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
-        /// automatically assigned based on the machinename and the <see cref="MaskConfig.Default"/> value is used for
+        /// automatically assigned based on the machinename and the <see cref="P:IdGen.MaskConfig.Default"/> value is used for
         /// the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve timestamp
         /// information.
         /// </summary>
@@ -77,7 +77,7 @@ namespace IdGen
             : this(GetMachineHash(), epoch) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="MaskConfig.Default"/> 
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="P:IdGen.MaskConfig.Default"/> 
         /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
         /// timestamp information.
         /// </summary>
