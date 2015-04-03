@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>IdGen</id>
+    <title>IdGen</title>
+    <version>1.0.0-alpha</version>
+    <authors>RobIII</authors>
+    <owners>RobIII</owners>
+    <projectUrl>https://github.com/RobThree/IdGen</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/RobThree/IdGen/master/LICENSE</licenseUrl>
+    <description>Twitter Snowflake-alike ID generator for .Net</description>
+    <copyright>(C)2015 Devcorner.nl</copyright>
+    <summary>
+      A library that provides a decentralized, k-ordered id generation
+    </summary>
+    <releaseNotes>
+      * Alpha pre-release
+    </releaseNotes>
+    <tags>scalable unique id generator distributed</tags>
+  </metadata>
+  <files>
+    <file src="IdGen\bin\Release\IdGen.dll" target="lib\net45" />
+    <file src="IdGen\bin\Release\IdGen.XML" target="lib\net45" />
+    <file src="IdGenDocumentation\Help\IdGenHelp.chm" target="content" />
+  </files>
+</package>
