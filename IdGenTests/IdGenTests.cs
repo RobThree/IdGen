@@ -1,6 +1,7 @@
 ﻿using IdGen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace IdGenTests
 {
@@ -107,6 +108,15 @@ namespace IdGenTests
         {
             Assert.AreEqual(123, new IdGenerator(123).Id);  //Make sure the test-value is not masked so it matches the expected value!
             Assert.AreEqual(TESTEPOCH, new IdGenerator(TESTEPOCH).Epoch);
+        }
+
+        [TestMethod]
+        public void Enumerable_ShoudReturn_Ids()
+        {
+            var g = new IdGenerator();
+            var ids = g.Take(1000).ToArray();
+
+            Assert.AreEqual(1000, ids.Distinct().Count());
         }
     }
 }

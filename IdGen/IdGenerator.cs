@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -7,7 +9,7 @@ namespace IdGen
     /// <summary>
     /// Generates Id's inspired by Twitter's (late) Snowflake project.
     /// </summary>
-    public class IdGenerator
+    public class IdGenerator : IEnumerable<long>
     {
         private int _sequence = 0;
         private long _lastgen = -1;
@@ -198,6 +200,22 @@ namespace IdGen
         private static long GetMask(byte bits)
         {
             return (1L << bits) - 1;
+        }
+
+        private IEnumerable<long> IdStream()
+        {
+            while (true)
+                yield return this.CreateId();
+        }
+
+        public IEnumerator<long> GetEnumerator()
+        {
+            return this.IdStream().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }
