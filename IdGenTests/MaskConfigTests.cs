@@ -26,9 +26,9 @@ namespace IdGenTests
             // 40 bits of Timestamp should give us about 34 years worth of Id's
             Assert.AreEqual(34, (int)(new MaskConfig(40, 11, 12).WraparoundInterval().TotalDays / 365.25));
             // 41 bits of Timestamp should give us about 69 years worth of Id's
-            Assert.AreEqual(69, (int)(new MaskConfig(41, 11, 12).WraparoundInterval().TotalDays / 365.25));
+            Assert.AreEqual(69, (int)(new MaskConfig(41, 11, 11).WraparoundInterval().TotalDays / 365.25));
             // 42 bits of Timestamp should give us about 139 years worth of Id's
-            Assert.AreEqual(139, (int)(new MaskConfig(42, 11, 12).WraparoundInterval().TotalDays / 365.25));
+            Assert.AreEqual(139, (int)(new MaskConfig(42, 11, 10).WraparoundInterval().TotalDays / 365.25));
         }
     }
 }
