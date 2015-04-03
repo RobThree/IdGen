@@ -1,5 +1,6 @@
 ﻿using IdGen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace IdGenTests
 {
@@ -29,6 +30,14 @@ namespace IdGenTests
             Assert.AreEqual(69, (int)(new MaskConfig(41, 11, 11).WraparoundInterval().TotalDays / 365.25));
             // 42 bits of Timestamp should give us about 139 years worth of Id's
             Assert.AreEqual(139, (int)(new MaskConfig(42, 11, 10).WraparoundInterval().TotalDays / 365.25));
+        }
+
+        [TestMethod]
+        public void MaskConfig_CalculatesWraparoundDate_Correctly()
+        {
+            var m = MaskConfig.Default;
+            var d = m.WraparoundDate(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc));
+            Assert.AreEqual(new DateTime(643346200555520000, DateTimeKind.Utc), d);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace IdGenTests
     [TestClass]
     public class IdGenTests
     {
-        private readonly DateTime TESTEPOCH = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateTime TESTEPOCH = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         [TestMethod]
         public void Sequence_ShouldIncrease_EveryInvocation()
@@ -100,6 +100,13 @@ namespace IdGenTests
         public void Constructor_Throws_OnMaskConfigNotExactly63Bits()
         {
             new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 10, 11));
+        }
+
+        [TestMethod]
+        public void Constructor_UsesCorrect_Values()
+        {
+            Assert.AreEqual(123, new IdGenerator(123).Id);  //Make sure the test-value is not masked so it matches the expected value!
+            Assert.AreEqual(TESTEPOCH, new IdGenerator(TESTEPOCH).Epoch);
         }
     }
 }

@@ -36,6 +36,11 @@ namespace IdGen
         public int Id { get { return _generatorId; } }
 
         /// <summary>
+        /// Gets the epoch for the <see cref="IdGenerator"/>.
+        /// </summary>
+        public DateTime Epoch { get { return _epoch; } }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. A deterministic <see cref="Id"/> is
         /// automatically assigned based on the machinename, 2015-01-01 0:00:00Z is used as default epoch and the
         /// <see cref="MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
@@ -134,6 +139,7 @@ namespace IdGen
                     _sequence++;
                     if (_sequence > MASK_SEQUENCE)
                     {
+                        //TODO: Do we actually want to wait? Or should we simply throw some "Can't generate Id" exception?
                         while (_lastgen == this.GetTimestamp())
                             Thread.Sleep(0);
                         _sequence = 0;
