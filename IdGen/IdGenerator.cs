@@ -19,7 +19,7 @@ namespace IdGen
 
         private readonly DateTime _epoch;
         private readonly MaskConfig _maskconfig;
-        private readonly int _generatorId;
+        private readonly long _generatorId;
 
         private readonly long MASK_SEQUENCE;
         private readonly long MASK_TIME;
@@ -36,7 +36,7 @@ namespace IdGen
         /// <summary>
         /// Gets the Id of the generator.
         /// </summary>
-        public int Id { get { return _generatorId; } }
+        public int Id { get { return (int)_generatorId; } }
 
         /// <summary>
         /// Gets the epoch for the <see cref="IdGenerator"/>.
@@ -95,6 +95,12 @@ namespace IdGen
             if (maskConfig.TotalBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
 
+            if (maskConfig.GeneratorIdBits > 31)
+                throw new ArgumentOutOfRangeException("GeneratorId cannot have more than 31 bits");
+
+            if (maskConfig.SequenceBits > 31)
+                throw new ArgumentOutOfRangeException("Sequence cannot have more than 31 bits");
+
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
             MASK_GENERATOR = GetMask(maskConfig.GeneratorIdBits);
@@ -128,7 +134,7 @@ namespace IdGen
 
                 if (timestamp == _lastgen)
                 {
-                    if (_sequence <= MASK_SEQUENCE)
+                    if (_sequence < MASK_SEQUENCE)
                         _sequence++;
                     else
                         throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of millisecond.");

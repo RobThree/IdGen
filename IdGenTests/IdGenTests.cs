@@ -104,6 +104,68 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Throws_OnGeneratorIdMoreThan31Bits()
+        {
+            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 32, 10));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Throws_OnSequenceMoreThan31Bits()
+        {
+            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 10, 32));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SequenceOverflowException))]
+        public void CreateId_Throws_OnSequenceOverflow()
+        {
+            var ts = new MockTimeSource(TESTEPOCH);
+            var g = new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 20, 2), ts);
+
+            // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
+            for (int i = 0; i < 4; i++)
+                Assert.AreEqual(i, g.CreateId());
+
+            // However, if we invoke once more we should get an SequenceOverflowException
+            g.CreateId();
+        }
+
+        //[TestMethod]
+        //public void CheckAllCombinationsForMaskConfigs()
+        //{
+        //    var ts = new MockTimeSource(TESTEPOCH);
+
+        //    for (byte i = 0; i < 32; i++)
+        //    {
+        //        var genid = (long)(1L << i) - 1;
+        //        for (byte j = 2; j < 32; j++)
+        //        {
+        //            var g = new IdGenerator((int)genid, TESTEPOCH, new MaskConfig((byte)(63 - i - j), i, j), ts);
+        //            var id = g.CreateId();
+        //            Assert.AreEqual(genid << j, id);
+
+        //            var id2 = g.CreateId();
+        //            Assert.AreEqual((genid << j) + 1, id2);
+
+        //            ts.NextTick();
+
+        //            var id3 = g.CreateId();
+        //            var id4 = g.CreateId();
+
+        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id, 2).PadLeft(64, '0'));
+        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id2, 2).PadLeft(64, '0'));
+        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id3, 2).PadLeft(64, '0'));
+        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id4, 2).PadLeft(64, '0'));
+
+        //            ts.PreviousTick();
+        //        }
+
+        //    }
+        //}
+
+        [TestMethod]
         public void Constructor_UsesCorrect_Values()
         {
             Assert.AreEqual(123, new IdGenerator(123).Id);  //Make sure the test-value is not masked so it matches the expected value!
@@ -149,6 +211,16 @@ namespace IdGenTests
         public void GetThreadSpecificGenerator_Returns_IdGenerator()
         {
             var g = IdGenerator.GetThreadSpecificGenerator();
+        }
+
+        [TestMethod]
+        public void MaskConfigProperty_Returns_CorrectValue()
+        {
+            var md = MaskConfig.Default;
+            var mc = new MaskConfig(21, 21, 21);
+
+            Assert.ReferenceEquals(md, new IdGenerator(0, TESTEPOCH, md).MaskConfig);
+            Assert.ReferenceEquals(mc, new IdGenerator(0, TESTEPOCH, mc).MaskConfig);
         }
     }
 }
