@@ -84,6 +84,11 @@ namespace IdGen
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <param name="timeSource">The time-source to use when acquiring time data.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId or Sequence masks are >31 bit or GeneratorId exceeds maximum value.
+        /// </exception>
         public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
             if (maskConfig == null)
@@ -123,6 +128,8 @@ namespace IdGen
         /// Creates a new Id.
         /// </summary>
         /// <returns>Returns an Id based on the <see cref="IdGenerator"/>'s epoch, generatorid and sequence.</returns>
+        /// <exception cref="InvalidSystemClockException">Thrown when clock going backwards is detected.</exception>
+        /// <exception cref="SequenceOverflowException">Thrown when sequence overflows.</exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public long CreateId()
         {
@@ -137,7 +144,7 @@ namespace IdGen
                     if (_sequence < MASK_SEQUENCE)
                         _sequence++;
                     else
-                        throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of millisecond.");
+                        throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of millisecond");
                 }
                 else
                 {
