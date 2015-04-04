@@ -202,6 +202,14 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Throws_OnEpochInFuture()
+        {
+            var ts = new MockTimeSource(TESTEPOCH);
+            new IdGenerator(0, TESTEPOCH.AddTicks(1), MaskConfig.Default, ts);
+        }
+
+        [TestMethod]
         public void GetMachineSpecificGenerator_Returns_IdGenerator()
         {
             var g = IdGenerator.GetMachineSpecificGenerator();

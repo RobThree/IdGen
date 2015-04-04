@@ -54,6 +54,7 @@ namespace IdGen
         /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
         public IdGenerator(int generatorId)
             : this(generatorId, defaultepoch) { }
 
@@ -64,6 +65,9 @@ namespace IdGen
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="epoch">The Epoch of the generator.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId exceeds maximum value or epoch in future.
+        /// </exception>
         public IdGenerator(int generatorId, DateTime epoch)
             : this(generatorId, epoch, MaskConfig.Default) { }
 
@@ -74,6 +78,11 @@ namespace IdGen
         /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
+        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
+        /// </exception>
         public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig)
             : this(generatorId, epoch, maskConfig, defaulttimesource) { }
 
@@ -87,7 +96,7 @@ namespace IdGen
         /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit or GeneratorId exceeds maximum value.
+        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
         public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
@@ -105,6 +114,9 @@ namespace IdGen
 
             if (maskConfig.SequenceBits > 31)
                 throw new ArgumentOutOfRangeException("Sequence cannot have more than 31 bits");
+
+            if (epoch > timeSource.GetTime())
+                throw new ArgumentOutOfRangeException("Epoch in future");
 
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
