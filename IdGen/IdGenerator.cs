@@ -147,9 +147,9 @@ namespace IdGen
         {
             lock (genlock)
             {
-                var timestamp = this.GetTimestamp();
+                var timestamp = this.GetTimestamp() & MASK_TIME;
                 if (timestamp < _lastgen)
-                    throw new InvalidSystemClockException(string.Format("Clock moved backwards. Refusing to generate id for {0} milliseconds", _lastgen - timestamp));
+                    throw new InvalidSystemClockException(string.Format("Clock moved backwards or wrapped around. Refusing to generate id for {0} milliseconds", _lastgen - timestamp));
 
                 if (timestamp == _lastgen)
                 {
@@ -166,7 +166,7 @@ namespace IdGen
 
                 unchecked
                 {
-                    return ((timestamp & MASK_TIME) << SHIFT_TIME)
+                    return (timestamp << SHIFT_TIME)
                         + (_generatorId << SHIFT_GENERATOR)         // GeneratorId is already masked, we only need to shift
                         + _sequence;
                 }

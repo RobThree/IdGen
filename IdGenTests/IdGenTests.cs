@@ -185,7 +185,7 @@ namespace IdGenTests
         [ExpectedException(typeof(InvalidSystemClockException))]
         public void CreateId_Throws_OnClockBackwards()
         {
-            var ts = new MockTimeSource(TESTEPOCH);
+            var ts = new MockTimeSource(DateTime.UtcNow);
             var m = MaskConfig.Default;
             var g = new IdGenerator(0, TESTEPOCH, m, ts);
 
@@ -207,6 +207,19 @@ namespace IdGenTests
         {
             var ts = new MockTimeSource(TESTEPOCH);
             new IdGenerator(0, TESTEPOCH.AddTicks(1), MaskConfig.Default, ts);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidSystemClockException))]
+        public void Constructor_Throws_TimestampWraparound()
+        {
+            var mc = MaskConfig.Default;
+            var ts = new MockTimeSource(mc.WraparoundDate(TESTEPOCH).AddMilliseconds(-1));  //Set clock to 1 ms before epoch
+            var g = new IdGenerator(0, TESTEPOCH, MaskConfig.Default, ts);
+
+            Assert.IsTrue(g.CreateId() > 0);   //Should succeed;
+            ts.NextTick();
+            g.CreateId();   //Should fail
         }
 
         [TestMethod]
