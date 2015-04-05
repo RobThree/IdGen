@@ -211,7 +211,7 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidSystemClockException))]
-        public void Constructor_Throws_TimestampWraparound()
+        public void Constructor_Throws_OnTimestampWraparound()
         {
             var mc = MaskConfig.Default;
             var ts = new MockTimeSource(mc.WraparoundDate(TESTEPOCH).AddMilliseconds(-1));  //Set clock to 1 ms before epoch
