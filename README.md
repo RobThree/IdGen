@@ -1,15 +1,33 @@
 # ![Logo](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png) IdGen
 Twitter Snowflake-alike ID generator for .Net. Available as [Nuget package](https://www.nuget.org/packages/IdGen)
 
+## Why
+
+In certain situations you need a low-latency uncoordinated, (roughly) time ordered, compact and highly available Id generation system. This project was inspirect by [Twitter's Snowflake](https://github.com/twitter/snowflake) project which has been retired. Note that this project was inspired by Snowflake but is not an *exact* implementation. This library provides a basis for Id generation; it does **not** provide a service for handing out these Id's nor does it provide generator-id ('worker-id') coordination.
+
 ## How it works
 
-`// TODO...`
+IdGen generates, like Snowflake, 64 bit Id's. The [Sign Bit](https://en.wikipedia.org/wiki/Sign_bit) is unused since this can cause incorrect ordering on some systems that cannot use unsigned types and/or make it hard to get correct ordering. So, in effect, IdGen generates 63 bit Id's. An Id consists of 3 parts:
+
+* Timestamp
+* Generator-id
+* Sequence 
 
 An Id generated with a **Default** `MaskConfig` is structured as follows: 
 
 ![Id structure](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/Media/structure.png)
 
 However, using the `MaskConfig` class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp (≈1114 years), 2 bits for the generator-id and 16 bits for the sequence to allow, for example, generating 65536 id's per millisecond per generator distributed over 4 hosts/threads giving you a total of 262144 id's per millisecond. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
+
+The **timestamp**-part of the Id should speak for itselft; this is incremented every millisecond and represents the number of milliseconds since a certain epoch. By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch.
+
+The **generator-id**-part of the Id is the part that you 'configure'; it could correspond to a host, thread, datacenter or continent: it's up to you. However, the generator-id should be unique in the system: if you have several hosts generating Id's, each host should have it's own generator-id. This could be based on the hostname, a config-file value or even be retrieved from an coordinating service. Remember: a generator-id should be unique within the entire system to avoid collisions!
+
+The **sequence**-part is simply a value that is incremented each time a new Id is generated within the same millisecond timespan; it is reset every time the timestamp changes. Speaking of this:
+
+## System Clock Dependency
+
+We recommend you use NTP to keep your system clock accurate. IdGen protects from non-monotonic clocks, i.e. clocks that run backwards. If your clock is running fast and NTP tells it to repeat a few milliseconds, IdGen will refuse to generate Id's until a time that is after the last time IdGen generated an Id. Whenever possible, run in a mode where NTP won't correct the clock backwards. See http://wiki.dovecot.org/TimeMovedBackwards#Time_synchronization for tips on how to do this.
 
 ## Getting started
 
