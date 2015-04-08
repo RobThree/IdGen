@@ -3,7 +3,7 @@
   <metadata>
     <id>IdGen</id>
     <title>IdGen</title>
-    <version>1.0.0-beta</version>
+    <version>1.0.0</version>
     <authors>RobIII</authors>
     <owners>RobIII</owners>
     <projectUrl>https://github.com/RobThree/IdGen</projectUrl>
@@ -16,7 +16,7 @@
       A library that provides a decentralized, k-ordered id generation
     </summary>
     <releaseNotes>
-      * Alpha pre-release
+      * Initial release
     </releaseNotes>
     <tags>scalable unique id generator distributed</tags>
   </metadata>
