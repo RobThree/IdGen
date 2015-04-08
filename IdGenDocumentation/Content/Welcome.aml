@@ -115,6 +115,7 @@
             var id = generator.CreateId();
           ]]>
         </code>
+        <para>write:</para>
         <code language="cs">
           <![CDATA[
             var id = generator.Take(100);
