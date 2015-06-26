@@ -19,7 +19,7 @@ An Id generated with a **Default** `MaskConfig` is structured as follows:
 
 However, using the `MaskConfig` class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp (≈1114 years), 2 bits for the generator-id and 16 bits for the sequence to allow, for example, generating 65536 id's per millisecond per generator distributed over 4 hosts/threads giving you a total of 262144 id's per millisecond. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
 
-The **timestamp**-part of the Id should speak for itself; this is incremented every millisecond<sup>[1](#note1)</sup> and represents the number of milliseconds since a certain epoch. By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch.
+The **timestamp**-part of the Id should speak for itself; this is incremented every millisecond and represents the number of milliseconds since a certain epoch. By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch.
 
 The **generator-id**-part of the Id is the part that you 'configure'; it could correspond to a host, thread, datacenter or continent: it's up to you. However, the generator-id should be unique in the system: if you have several hosts generating Id's, each host should have it's own generator-id. This could be based on the hostname, a config-file value or even be retrieved from an coordinating service. Remember: a generator-id should be unique within the entire system to avoid collisions!
 
@@ -27,7 +27,7 @@ The **sequence**-part is simply a value that is incremented each time a new Id i
 
 ## System Clock Dependency
 
-IdGen protects from non-monotonic clocks, i.e. clocks that run backwards. The [DefaultTimeSource](https://github.com/RobThree/IdGen/blob/master/IdGen/DefaultTimeSource.cs) relies on a 64bit system counter that is incremented since the system booted<sup>[2](#note2)</sup>. However, we still recommend you use NTP to keep your system clock accurate; this will prevent duplicate Id's between system restarts.
+IdGen protects from non-monotonic clocks, i.e. clocks that run backwards. The [DefaultTimeSource](https://github.com/RobThree/IdGen/blob/master/IdGen/DefaultTimeSource.cs) relies on a [64bit system counter](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx) that is only incremented<sup>[1](#note1)</sup>. However, we still recommend you use NTP to keep your system clock accurate; this will prevent duplicate Id's between system restarts.
 
 ## Getting started
 
@@ -139,6 +139,4 @@ These methods (and their overloads that allow you to specify the epoch, `MaskCon
 
 Icon made by [Freepik](http://www.flaticon.com/authors/freepik) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0](http://creativecommons.org/licenses/by/3.0/).
 
-<sup><a name="note1">1</a></sup> Actually; whereever you read 1ms you *should* read ~10-16ms since that is [the best Windows can do for us](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724411.aspx) without using high-resolution timers that ["leap" suddenly](https://support.microsoft.com/en-us/kb/274323/en-gb). See [#1](https://github.com/RobThree/IdGen/issues/1) where we try to move from (more than 10) "millisecond resolution" to something more accurate and also more abstract (e.g. "ms" to "ticks").
-
-<sup><a name="note2">2</a></sup> On Windows versions below Vista (e.g. XP) we rely on an 32bit value internally; as long as at least one Id is generated every ~49.7 days you should be OK.
+<sup><a name="note1">1</a></sup> It is possible for this counter to ['leap' sometimes](https://support.microsoft.com/en-us/kb/274323/en-gb); however this shouldn't be a problem for generating Id's.
