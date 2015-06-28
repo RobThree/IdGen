@@ -24,7 +24,6 @@ namespace IdGen
             QueryPerformanceFrequency(out _frequency);
             QueryPerformanceCounter(out _offset);
             _start = DateTime.UtcNow;
-            _frequency /= 1000; //We want millisecond resolution
         }
         
 
