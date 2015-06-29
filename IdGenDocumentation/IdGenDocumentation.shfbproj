@@ -62,6 +62,11 @@
     <NamespaceSummaries>
       <NamespaceSummaryItem name="IdGen" isDocumented="True" xmlns="">&lt;para&gt;The IdGen namespace contains classes that allow generating unique (distributed) ID's.&lt;/para&gt;</NamespaceSummaryItem>
     </NamespaceSummaries>
+    <HelpFileVersion>1.1.0.0</HelpFileVersion>
+    <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
+    <CollectionTocStyle>Hierarchical</CollectionTocStyle>
+    <MSHelp2SdkLinkType>Msdn</MSHelp2SdkLinkType>
+    <IncludeStopWordList>True</IncludeStopWordList>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
