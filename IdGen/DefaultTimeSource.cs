@@ -19,6 +19,9 @@ namespace IdGen
         private long _offset;
         private DateTime _start;
 
+        /// <summary>
+        /// alizes a new instance of the <see cref="DefaultTimeSource"/>.
+        /// </summary>
         public DefaultTimeSource()
         {
             QueryPerformanceFrequency(out _frequency);
