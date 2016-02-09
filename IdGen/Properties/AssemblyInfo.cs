@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Devcorner.nl")]
 [assembly: AssemblyProduct("IdGen")]
-[assembly: AssemblyCopyright("Copyright © 2015 - 2016 Rob Janssen")]
+[assembly: AssemblyCopyright("Copyright © 2015 - 2016 Devcorner.nl")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

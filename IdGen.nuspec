@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.githubusercontent.com/RobThree/IdGen/master/LICENSE</licenseUrl>
     <description>Twitter Snowflake-alike ID generator for .Net</description>
-    <copyright>(C)2015 Devcorner.nl</copyright>
+    <copyright>(C)2015-2016 Devcorner.nl</copyright>
     <summary>
       A library that provides a decentralized, k-ordered id generation
     </summary>
