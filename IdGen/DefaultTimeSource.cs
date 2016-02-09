@@ -20,7 +20,7 @@ namespace IdGen
         private DateTime _start;
 
         /// <summary>
-        /// alizes a new instance of the <see cref="DefaultTimeSource"/>.
+        /// Initializes a new instance of the <see cref="DefaultTimeSource"/>.
         /// </summary>
         public DefaultTimeSource()
         {
