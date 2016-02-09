@@ -37,7 +37,7 @@
     <HelpTitle>IdGen documentation</HelpTitle>
     <FeedbackEMailLinkText>Rob Janssen</FeedbackEMailLinkText>
     <FeedbackEMailAddress>rob%40robiii.me</FeedbackEMailAddress>
-    <CopyrightText>%28c%29 2015 Rob janssen</CopyrightText>
+    <CopyrightText>%28c%29 2015 - 2016 Rob janssen</CopyrightText>
     <CopyrightHref>https://github.com/RobThree/IdGen</CopyrightHref>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CatalogName>VisualStudio11</CatalogName>
@@ -62,7 +62,7 @@
     <NamespaceSummaries>
       <NamespaceSummaryItem name="IdGen" isDocumented="True" xmlns="">&lt;para&gt;The IdGen namespace contains classes that allow generating unique (distributed) ID's.&lt;/para&gt;</NamespaceSummaryItem>
     </NamespaceSummaries>
-    <HelpFileVersion>1.1.0.0</HelpFileVersion>
+    <HelpFileVersion>1.2.0.0</HelpFileVersion>
     <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
     <CollectionTocStyle>Hierarchical</CollectionTocStyle>
     <MSHelp2SdkLinkType>Msdn</MSHelp2SdkLinkType>

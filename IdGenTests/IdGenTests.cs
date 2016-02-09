@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IdGenTests
 {
@@ -226,12 +227,25 @@ namespace IdGenTests
         public void GetMachineSpecificGenerator_Returns_IdGenerator()
         {
             var g = IdGenerator.GetMachineSpecificGenerator();
+            Assert.IsNotNull(g);
         }
 
         [TestMethod]
         public void GetThreadSpecificGenerator_Returns_IdGenerator()
         {
-            var g = IdGenerator.GetThreadSpecificGenerator();
+            if (Environment.ProcessorCount > 1)
+            {
+                const int gcount = 100;  //Create a fair amount of generators
+                var tasks = new Task<IdGenerator>[gcount];
+                for (int i = 0; i < gcount; i++)
+                    tasks[i] = Task.Run(() => IdGenerator.GetThreadSpecificGenerator());
+                Task.WaitAll(tasks);
+
+                // Get all unique generator ID's in an array
+                var generatorids = tasks.Select(t => t.Result.Id).Distinct().ToArray();
+                // Make sure there's at least more than 1 different Id
+                Assert.IsTrue(generatorids.Length > 1);
+            }
         }
 
         [TestMethod]

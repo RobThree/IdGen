@@ -236,7 +236,7 @@ namespace IdGen
         /// </remarks>
         public static IdGenerator GetMachineSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
-            return new IdGenerator(GetMachineHash() & maskConfig.GeneratorIdBits, epoch, maskConfig, timeSource);
+            return new IdGenerator(GetMachineHash() & (int)GetMask(maskConfig.GeneratorIdBits), epoch, maskConfig, timeSource);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace IdGen
         /// </remarks>
         public static IdGenerator GetThreadSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
-            return new IdGenerator(GetThreadId() & maskConfig.GeneratorIdBits, epoch, maskConfig, timeSource);
+            return new IdGenerator(GetThreadId() & (int)GetMask(maskConfig.GeneratorIdBits), epoch, maskConfig, timeSource);
         }
 
         /// <summary>
