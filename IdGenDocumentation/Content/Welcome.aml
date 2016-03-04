@@ -220,11 +220,11 @@
           All properties are read-only to prevent changes once an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> has been instantiated.
         </para>
         <para>
-          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides two 'factory methods' to quickly create a <codeEntityReference linkText="machine-specific">M:IdGen.IdGenerator.GetMachineSpecificGenerator</codeEntityReference> (based on the hostname) or <codeEntityReference linkText="thread-specific">M:IdGen.IdGenerator.GetThreadSpecificGenerator</codeEntityReference> IdGenerator:
+          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides two 'factory methods' to quickly create a <codeEntityReference linkText="machine-specific">M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> (based on the hostname) or <codeEntityReference linkText="thread-specific">M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> IdGenerator:
         </para>
         <code language="cs">
           <![CDATA[
-          var generator = IdGenerator.GetMachineSpecificGenerator();
+          var generator = IdGenerator.CreateMachineSpecificGenerator();
           ]]>
         </code>
         <para>
@@ -232,7 +232,7 @@
         </para>
         <code language="cs">
           <![CDATA[
-          var generator = IdGenerator.GetThreadSpecificGenerator();
+          var generator = IdGenerator.CreateThreadSpecificGenerator();
           ]]>
         </code>
         <para>

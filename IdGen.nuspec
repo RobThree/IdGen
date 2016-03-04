@@ -3,7 +3,7 @@
   <metadata>
     <id>IdGen</id>
     <title>IdGen</title>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <authors>RobIII</authors>
     <owners>RobIII</owners>
     <projectUrl>https://github.com/RobThree/IdGen</projectUrl>
@@ -16,7 +16,8 @@
       A library that provides a decentralized, k-ordered id generation
     </summary>
     <releaseNotes>
-      * GetMachineSpecificGenerator() and GetThreadSpecificGenerator() didn't use the GeneratorIdBits as bitmask resulting in incorrect generator ID's
+      * Added config file support
+      * GetMachineSpecificGenerator &amp; GetThreadSpecificGenerator renamed to CreateMachineSpecificGenerator &amp; CreateThreadSpecificGenerator respectively to better convey that each invokation creates a new instance.
     </releaseNotes>
     <tags>scalable unique id generator distributed</tags>
   </metadata>

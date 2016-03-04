@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConfigTests.cs" />
     <Compile Include="IdGenTests.cs" />
     <Compile Include="MaskConfigTests.cs" />
     <Compile Include="MockTimeSource.cs" />
@@ -60,6 +61,12 @@
       <Project>{e6856e0a-523f-4451-9c95-621156a1b9f4}</Project>
       <Name>IdGen</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

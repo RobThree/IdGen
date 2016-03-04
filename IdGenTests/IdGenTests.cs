@@ -224,21 +224,21 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        public void GetMachineSpecificGenerator_Returns_IdGenerator()
+        public void CreateMachineSpecificGenerator_Returns_IdGenerator()
         {
-            var g = IdGenerator.GetMachineSpecificGenerator();
+            var g = IdGenerator.CreateMachineSpecificGenerator();
             Assert.IsNotNull(g);
         }
 
         [TestMethod]
-        public void GetThreadSpecificGenerator_Returns_IdGenerator()
+        public void CreateThreadSpecificGenerator_Returns_IdGenerator()
         {
             if (Environment.ProcessorCount > 1)
             {
                 const int gcount = 100;  //Create a fair amount of generators
                 var tasks = new Task<IdGenerator>[gcount];
                 for (int i = 0; i < gcount; i++)
-                    tasks[i] = Task.Run(() => IdGenerator.GetThreadSpecificGenerator());
+                    tasks[i] = Task.Run(() => IdGenerator.CreateThreadSpecificGenerator());
                 Task.WaitAll(tasks);
 
                 // Get all unique generator ID's in an array

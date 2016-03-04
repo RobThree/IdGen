@@ -125,11 +125,11 @@ All properties are read-only to prevent changes once an `IdGenerator` has been i
 
 The `IdGenerator` class provides two 'factory methods' to quickly create a machine-specific (based on the hostname) or thread-specific `IdGenerator`:
 
-`var generator = IdGenerator.GetMachineSpecificGenerator();`
+`var generator = IdGenerator.CreateMachineSpecificGenerator();`
 
 or:
 
-`var generator = IdGenerator.GetThreadSpecificGenerator();`
+`var generator = IdGenerator.CreateThreadSpecificGenerator();`
 
 These methods (and their overloads that allow you to specify the epoch, `MaskConfig` and `TimeSource`) create an `IdGenerator` based on hostname or (managed) thread-id. However, it is recommended you explicitly set / configure a generator-id since these two methods could cause 'collisions' when machinenames' hashes result in the same id's or when thread-id's collide with thread-id's on other machines.
 
