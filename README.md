@@ -110,7 +110,7 @@ Wraparound interval   : 407226.12:41:28.8320000 (about 1114 years)
 Wraparound date       : 3130-03-13T12:41:28.8320000Z
 ```
 
-IdGen also provides an `ITimeSouce` interface; this can be handy for [unittesting](IdGenTests/IdGenTests.cs) purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. By default the IdGenerator uses the `DefaultTimeSource` which, internally, uses [`QueryPerformanceCounter`](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx). For unittesting we use our own [MockTimeSource](IdGenTests/MockTimeSource.cs).
+IdGen also provides an `ITimeSouce` interface; this can be handy for [unittesting](IdGenTests/IdGenTests.cs) purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. By default the IdGenerator uses the `DefaultTimeSource` which, internally, uses [QueryPerformanceCounter](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx). For unittesting we use our own [MockTimeSource](IdGenTests/MockTimeSource.cs).
 
 The following constructor overloads are available:
 
