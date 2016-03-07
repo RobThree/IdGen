@@ -187,7 +187,10 @@
             <linkText>unittesting</linkText>
             <linkUri>https://github.com/RobThree/IdGen/blob/master/IdGenTests/IdGenTests.cs</linkUri>
           </externalLink>
-          purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. By default the <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> uses the <codeEntityReference linkText="DefaultTimeSource">T:IdGen.DefaultTimeSource</codeEntityReference> which, internally, simply uses <codeEntityReference linkText="DateTime.UtcNow">P:System.DateTime.UtcNow</codeEntityReference>. For unittesting we use our own
+          purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. By default the <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> uses the <codeEntityReference linkText="DefaultTimeSource">T:IdGen.DefaultTimeSource</codeEntityReference> which, internally, uses <externalLink>
+            <linkText>QueryPerformanceCounter</linkText>
+            <linkUri>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx</linkUri>
+          </externalLink>. For unittesting we use our own
           <externalLink>
             <linkText>MockTimeSource</linkText>
             <linkUri>https://github.com/RobThree/IdGen/blob/master/IdGenTests/MockTimeSource.cs</linkUri>
@@ -220,7 +223,7 @@
           All properties are read-only to prevent changes once an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> has been instantiated.
         </para>
         <para>
-          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides two 'factory methods' to quickly create a <codeEntityReference linkText="machine-specific">M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> (based on the hostname) or <codeEntityReference linkText="thread-specific">M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> IdGenerator:
+          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides three 'factory methods' to quickly create a <codeEntityReference linkText="machine-specific">M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> (based on the hostname), <codeEntityReference linkText="thread-specific">M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> or <codeEntityReference linkText="based on configuration file">M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference> IdGenerator:
         </para>
         <code language="cs">
           <![CDATA[
@@ -238,6 +241,53 @@
         <para>
           These methods (and their overloads that allow you to specify the epoch, <codeEntityReference linkText="MaskConfig">T:IdGen.MaskConfig</codeEntityReference> and <codeEntityReference linkText="TimeSource">T:IdGen.ITimeSource</codeEntityReference>) create an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> based on hostname or (managed) thread-id. However, it is recommended you explicitly set / configure a generator-id since these two methods could cause 'collisions' when machinenames' hashes result in the same id's or when thread-id's collide with thread-id's on other machines.
         </para>
+        <para>
+          Then we have <codeEntityReference>M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference>; it differs in a subtle way (besides using values from the configuration file) with the previous two methods: <codeEntityReference>M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> and <codeEntityReference>M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> both create a new instance every call whereas <codeEntityReference>M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference> returns the same instance with the same name every time. You can add the following to your configuration:
+        </para>
+        <code language="xml">
+          <![CDATA[
+<configuration>
+  <configSections>
+    <section name="idGenSection" type="IdGen.Configuration.IdGeneratorsSection, IdGen" />
+  </configSections>
+
+  <idGenSection>
+    <idGenerators>
+      <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" />
+      <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
+      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
+    </idGenerators>
+  </idGenSection>
+  
+</configuration>
+          ]]>
+        </code>
+        <para>
+          All attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. Valid DateTime notations for the epoch are:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              <codeInline>yyyy-MM-ddTHH:mm:ss</codeInline>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeInline>yyyy-MM-dd HH:mm:ss</codeInline>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeInline>yyyy-MM-dd</codeInline>
+            </para>
+          </listItem>
+        </list>
+        <para>You can get the IdGenerator from the config using the following code:</para>
+        <code language="cs">
+          <![CDATA[
+          var generator = IdGenerator.GetFromConfig("foo");
+          ]]>
+        </code>
       </content>
     </section>
 

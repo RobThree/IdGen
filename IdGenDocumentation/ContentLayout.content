@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="3a4a831b-1e7b-4e68-b614-319e3097162a" visible="True" isDefault="true" isSelected="true" title="Welcome to the IdGen library">
+  <Topic id="3a4a831b-1e7b-4e68-b614-319e3097162a" visible="True" isDefault="true" title="Welcome to the IdGen library">
     <HelpKeywords>
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
@@ -12,6 +12,16 @@
     <Topic id="6fb2aaba-f81f-4d5e-8565-d7e105269931" visible="True" title="Version 1.0.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 1.0.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="0cff3c97-36aa-4751-aef7-a4c3d3e10b6e" visible="True" title="Version 1.1.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 1.1.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="552c416b-7374-4f42-80a0-3e157b2a5411" visible="True" isSelected="true" title="Version 1.2.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 1.2.0.0" />
       </HelpKeywords>
     </Topic>
   </Topic>
