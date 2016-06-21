@@ -195,4 +195,7 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
+# .Net Core files
+project.lock.json
+
 *.chm

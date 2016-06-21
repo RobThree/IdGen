@@ -1,4 +1,5 @@
-﻿using IdGen;
+﻿#if NET451
+using IdGen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -21,32 +22,41 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void IdGenerator_GetFromConfig_IsCaseSensitive()
         {
-            var target = IdGenerator.GetFromConfig("Foo");
+            Assert.ThrowsException<KeyNotFoundException>(() =>
+            {
+                var target = IdGenerator.GetFromConfig("Foo");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void IdGenerator_GetFromConfig_ThrowsOnNonExisting()
         {
-            var target = IdGenerator.GetFromConfig("xxx");
+            Assert.ThrowsException<KeyNotFoundException>(() =>
+            {
+                var target = IdGenerator.GetFromConfig("xxx");
+            });
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void IdGenerator_GetFromConfig_ThrowsOnInvalidMask()
         {
-            var target = IdGenerator.GetFromConfig("e1");
+            Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                var target = IdGenerator.GetFromConfig("e1");
+            });
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
         public void IdGenerator_GetFromConfig_ThrowsOnInvalidEpoch()
         {
-            var target = IdGenerator.GetFromConfig("e2");
+            Assert.ThrowsException<FormatException>(() =>
+            {
+                var target = IdGenerator.GetFromConfig("e2");
+            });
         }
 
         [TestMethod]
@@ -67,3 +77,4 @@ namespace IdGenTests
         }
     }
 }
+#endif

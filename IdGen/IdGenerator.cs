@@ -1,12 +1,17 @@
-﻿using IdGen.Configuration;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if NET45
+using System.Collections.Concurrent;
 using System.Configuration;
+using System.Linq;
+#endif
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Collections.Concurrent;
+
+#if NET45
+using IdGen.Configuration;
+#endif
 
 namespace IdGen
 {
@@ -17,7 +22,9 @@ namespace IdGen
     {
         private static readonly DateTime defaultepoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static readonly ITimeSource defaulttimesource = new DefaultTimeSource();
+#if NET45
         private static readonly ConcurrentDictionary<string, IdGenerator> _namedgenerators = new ConcurrentDictionary<string, IdGenerator>();
+#endif
 
         private int _sequence = 0;
         private long _lastgen = -1;
@@ -178,6 +185,7 @@ namespace IdGen
             }
         }
 
+#if NET45
         /// <summary>
         /// Returns an instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
         /// element in the idGenSection of the configuration file. The <see cref="DefaultTimeSource"/> is used to
@@ -220,6 +228,7 @@ namespace IdGen
 
             return result;
         }
+#endif
 
         /// <summary>
         /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.

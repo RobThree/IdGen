@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿#if NET45
+using System.Configuration;
 
 namespace IdGen.Configuration
 {
@@ -27,3 +28,4 @@ namespace IdGen.Configuration
         }
     }
 }
+#endif

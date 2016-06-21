@@ -84,42 +84,40 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_Throws_OnNullMaskConfig()
         {
-            new IdGenerator(0, TESTEPOCH, null);
+            Assert.ThrowsException<ArgumentNullException>(() => new IdGenerator(0, TESTEPOCH, null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_Throws_OnNullTimeSource()
         {
-            new IdGenerator(0, TESTEPOCH, MaskConfig.Default, null);
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new IdGenerator(0, TESTEPOCH, MaskConfig.Default, null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_Throws_OnMaskConfigNotExactly63Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 10, 11));
+            Assert.ThrowsException<InvalidOperationException>(
+                () => new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 10, 11)));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnGeneratorIdMoreThan31Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 32, 10));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 32, 10)));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnSequenceMoreThan31Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 10, 32));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 10, 32)));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SequenceOverflowException))]
         public void CreateId_Throws_OnSequenceOverflow()
         {
             var ts = new MockTimeSource(TESTEPOCH);
@@ -130,7 +128,7 @@ namespace IdGenTests
                 Assert.AreEqual(i, g.CreateId());
 
             // However, if we invoke once more we should get an SequenceOverflowException
-            g.CreateId();
+            Assert.ThrowsException<SequenceOverflowException>(() => g.CreateId());
         }
 
         //[TestMethod]
@@ -183,7 +181,6 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidSystemClockException))]
         public void CreateId_Throws_OnClockBackwards()
         {
             var ts = new MockTimeSource(DateTime.UtcNow);
@@ -192,26 +189,27 @@ namespace IdGenTests
 
             g.CreateId();
             ts.PreviousTick(); //Set clock back 1 'tick' (ms)
-            g.CreateId();
+            Assert.ThrowsException<InvalidSystemClockException>(() =>
+                g.CreateId());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnInvalidGeneratorId()
         {
-            new IdGenerator(1024);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                new IdGenerator(1024));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnEpochInFuture()
         {
             var ts = new MockTimeSource(TESTEPOCH);
-            new IdGenerator(0, TESTEPOCH.AddTicks(1), MaskConfig.Default, ts);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(
+                () => new IdGenerator(0, TESTEPOCH.AddTicks(1), MaskConfig.Default, ts));
+
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidSystemClockException))]
         public void Constructor_Throws_OnTimestampWraparound()
         {
             var mc = MaskConfig.Default;
@@ -220,7 +218,8 @@ namespace IdGenTests
 
             Assert.IsTrue(g.CreateId() > 0);   //Should succeed;
             ts.NextTick();
-            g.CreateId();   //Should fail
+            Assert.ThrowsException<InvalidSystemClockException>(() =>
+                g.CreateId()); //Should fail
         }
 
         [TestMethod]
