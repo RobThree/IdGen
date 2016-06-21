@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGen", "IdGen\IdGen.csproj", "{E6856E0A-523F-4451-9C95-621156A1B9F4}"
-EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IdGenDocumentation", "IdGenDocumentation\IdGenDocumentation.shfbproj", "{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGenTests", "IdGenTests\IdGenTests.csproj", "{12E4642B-A533-400C-987B-67B21DB80EC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C45A326F-DC4A-4653-B5EB-BCC306D7492D}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,10 +15,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51E6E025-F554-453A-8850-32378CA48C38}"
 	ProjectSection(SolutionItems) = preProject
 		buildnugetpackage.cmd = buildnugetpackage.cmd
+		global.json = global.json
 		IdGen.nuspec = IdGen.nuspec
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IdGen", "IdGen\IdGen.xproj", "{F491511E-E586-43AF-8087-364A9A474844}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IdGenTests", "IdGenTests\IdGenTests.xproj", "{2E260CC6-A249-4F9A-B11E-19343952EE15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,17 +31,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E6856E0A-523F-4451-9C95-621156A1B9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6856E0A-523F-4451-9C95-621156A1B9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6856E0A-523F-4451-9C95-621156A1B9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6856E0A-523F-4451-9C95-621156A1B9F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F491511E-E586-43AF-8087-364A9A474844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F491511E-E586-43AF-8087-364A9A474844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F491511E-E586-43AF-8087-364A9A474844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F491511E-E586-43AF-8087-364A9A474844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E260CC6-A249-4F9A-B11E-19343952EE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E260CC6-A249-4F9A-B11E-19343952EE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E260CC6-A249-4F9A-B11E-19343952EE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E260CC6-A249-4F9A-B11E-19343952EE15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

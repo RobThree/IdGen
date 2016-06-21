@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿#if NET45
+using System.Configuration;
 
 namespace IdGen.Configuration
 {
@@ -26,3 +27,4 @@ namespace IdGen.Configuration
         public IdGeneratorsCollection IdGenerators { get { return (IdGeneratorsCollection)base[IdGensCollectionName]; } }
     }
 }
+#endif
