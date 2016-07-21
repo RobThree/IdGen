@@ -63,7 +63,7 @@
       <NamespaceSummaryItem name="IdGen" isDocumented="True">&lt;para&gt;The IdGen namespace contains classes that allow generating unique (distributed) ID's.&lt;/para&gt;</NamespaceSummaryItem>
       <NamespaceSummaryItem name="IdGen.Configuration" isDocumented="True">&lt;para&gt;The IdGen.Configuration namespace contains the types that provide the programming model for handling configuration data.&lt;/para&gt;</NamespaceSummaryItem>
     </NamespaceSummaries>
-    <HelpFileVersion>1.3.1.0</HelpFileVersion>
+    <HelpFileVersion>2.0.0.0</HelpFileVersion>
     <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
     <CollectionTocStyle>Hierarchical</CollectionTocStyle>
     <MSHelp2SdkLinkType>Msdn</MSHelp2SdkLinkType>
@@ -97,6 +97,7 @@
     <None Include="Content\VersionHistory\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\v1.1.0.0.aml" />
     <None Include="Content\VersionHistory\v1.2.0.0.aml" />
+    <None Include="Content\VersionHistory\v2.0.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

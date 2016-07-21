@@ -77,5 +77,15 @@ namespace IdGen.Configuration
             get { return (byte)this["sequenceBits"]; }
             set { this["sequenceBits"] = value; }
         }
+
+        /// <summary>
+        /// Gets/sets the <see cref="ITimeSource.TickDuration"/> of the <see cref="IdGeneratorElement"/>.
+        /// </summary>
+        [ConfigurationProperty("tickDuration", IsRequired = false)]
+        public TimeSpan TickDuration
+        {
+            get { return (TimeSpan)this["tickDuration"]; }
+            set { this["tickDuration"] = value; }
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace IdGenTests
             Assert.AreEqual(39, target.MaskConfig.TimestampBits);
             Assert.AreEqual(11, target.MaskConfig.GeneratorIdBits);
             Assert.AreEqual(13, target.MaskConfig.SequenceBits);
+            Assert.AreEqual(TimeSpan.FromMilliseconds(50), target.TimeSource.TickDuration);
         }
 
         [TestMethod]
@@ -64,6 +65,10 @@ namespace IdGenTests
             Assert.AreEqual(new DateTime(2016, 1, 2, 12, 34, 56, DateTimeKind.Utc), IdGenerator.GetFromConfig("foo").Epoch);
             Assert.AreEqual(new DateTime(2016, 2, 1, 1, 23, 45, DateTimeKind.Utc), IdGenerator.GetFromConfig("bar").Epoch);
             Assert.AreEqual(new DateTime(2016, 2, 29, 0, 0, 0, DateTimeKind.Utc), IdGenerator.GetFromConfig("baz").Epoch);
+
+            Assert.AreEqual(TimeSpan.FromMilliseconds(50), IdGenerator.GetFromConfig("foo").TimeSource.TickDuration);
+            Assert.AreEqual(new TimeSpan(1, 2, 3), IdGenerator.GetFromConfig("bar").TimeSource.TickDuration);
+            Assert.AreEqual(TimeSpan.FromTicks(7), IdGenerator.GetFromConfig("baz").TimeSource.TickDuration);
         }
     }
 }

@@ -1,74 +1,42 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 
 namespace IdGen
 {
     /// <summary>
-    /// Provides time data to an <see cref="IdGenerator"/>. Uses the current date and time on this computer.
+    /// Provides time data to an <see cref="IdGenerator"/>.
     /// </summary>
-    public class DefaultTimeSource : ITimeSource
+    /// <remarks>
+    /// Unless specified the default duration of a tick for a <see cref="DefaultTimeSource"/> is 1 millisecond.
+    /// </remarks>
+    public class DefaultTimeSource : StopwatchTimeSource
     {
-        [DllImport("Kernel32.dll")]
-        private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
-
-        [DllImport("Kernel32.dll")]
-        private static extern bool QueryPerformanceFrequency(out long lpFrequency);
-
-        private long _frequency;
-        private long _offset;
-        private DateTime _start;
+        /// <summary>
+        /// Initializes a new <see cref="DefaultTimeSource"/> object.
+        /// </summary>
+        /// <param name="epoch">The epoch to use as an offset from now,</param>
+        /// <remarks>The default tickduration is 1 millisecond.</remarks>
+        public DefaultTimeSource(DateTimeOffset epoch)
+            : this(epoch, TimeSpan.FromMilliseconds(1)) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultTimeSource"/>.
+        /// Initializes a new <see cref="DefaultTimeSource"/> object.
         /// </summary>
-        public DefaultTimeSource()
-        {
-            QueryPerformanceFrequency(out _frequency);
-            QueryPerformanceCounter(out _offset);
-            _start = DateTime.UtcNow;
-        }
-        
+        /// <param name="epoch">The epoch to use as an offset from now,</param>
+        /// <param name="tickDuration">The duration of a tick for this timesource.</param>
+        public DefaultTimeSource(DateTimeOffset epoch, TimeSpan tickDuration)
+            : base(epoch, tickDuration) { }
 
         /// <summary>
-        /// Returns a <see cref="DateTime"/> object that is (close to) the current date and time on this computer, expressed
-        /// as the Coordinated Universal Time (UTC).
+        /// Returns the current number of ticks for the <see cref="DefaultTimeSource"/>.
         /// </summary>
-        /// <returns>
-        /// A <see cref="DateTime"/> object that is (close to) the current date and time on this computer, expressed as the
-        /// Coordinated Universal Time (UTC).
-        /// </returns>
+        /// <returns>The current number of ticks to be used by an <see cref="IdGenerator"/> when creating an Id.</returns>
         /// <remarks>
-        /// The resolution of this value depends on the system. It does *not* rely on the system- or wall-clock time but
-        /// on QueryPerformanceCounter and *may* (and *will*) drift ahead of time over time.
+        /// Note that a 'tick' is a period defined by the timesource; this may be any valid <see cref="TimeSpan"/>; be
+        /// it a millisecond, an hour, 2.5 seconds or any other value.
         /// </remarks>
-        public DateTime GetTime()
+        public override long GetTicks()
         {
-            return _start.AddSeconds(GetSecondsSinceStart());
-        }
-
-        /// <summary>
-        /// Returns a <see cref="DateTime"/> object that is (close to) the current date and time on this computer, expressed
-        /// as the Coordinated Universal Time (UTC).
-        /// </summary>
-        /// <returns>
-        /// A <see cref="DateTime"/> object that is (close to) the current date and time on this computer, expressed as the
-        /// Coordinated Universal Time (UTC).
-        /// </returns>
-        /// <remarks>
-        /// The resolution of this value depends on the system. It does *not* rely on the system- or wall-clock time but
-        /// on QueryPerformanceCounter and *may* (and *will*) drift ahead of time over time.
-        /// </remarks>
-        DateTime ITimeSource.GetTime()
-        {
-            return this.GetTime();
-        }
-
-        private double GetSecondsSinceStart()
-        {
-            long t;
-            QueryPerformanceCounter(out t);
-            return (double)(t - _offset) / _frequency;
+            return (this.Offset.Ticks + this.Elapsed.Ticks) / this.TickDuration.Ticks;
         }
     }
 }

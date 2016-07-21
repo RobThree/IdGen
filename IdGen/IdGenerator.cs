@@ -1,12 +1,12 @@
 ﻿using IdGen.Configuration;
 using System;
-using System.Linq;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Collections.Concurrent;
 
 namespace IdGen
 {
@@ -16,13 +16,14 @@ namespace IdGen
     public class IdGenerator : IIdGenerator<long>
     {
         private static readonly DateTime defaultepoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource();
+        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(defaultepoch);
         private static readonly ConcurrentDictionary<string, IdGenerator> _namedgenerators = new ConcurrentDictionary<string, IdGenerator>();
 
         private int _sequence = 0;
         private long _lastgen = -1;
 
-        private readonly DateTime _epoch;
+        private readonly ITimeSource _timesource;
+        private readonly DateTimeOffset _epoch;
         private readonly MaskConfig _maskconfig;
         private readonly long _generatorId;
 
@@ -33,7 +34,6 @@ namespace IdGen
         private readonly int SHIFT_TIME;
         private readonly int SHIFT_GENERATOR;
 
-        private readonly ITimeSource _timesource;
 
         // Object to lock() on while generating Id's
         private object genlock = new object();
@@ -46,12 +46,17 @@ namespace IdGen
         /// <summary>
         /// Gets the epoch for the <see cref="IdGenerator"/>.
         /// </summary>
-        public DateTime Epoch { get { return _epoch; } }
+        public DateTimeOffset Epoch { get { return _epoch; } }
 
         /// <summary>
         /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
         /// </summary>
         public MaskConfig MaskConfig { get { return _maskconfig; } }
+
+        /// <summary>
+        /// Gets the <see cref="ITimeSource"/> for the <see cref="IdGenerator"/>.
+        /// </summary>
+        public ITimeSource TimeSource { get { return _timesource; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
@@ -64,6 +69,17 @@ namespace IdGen
             : this(generatorId, defaultepoch) { }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
+        /// epoch and the <see cref="P:IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
+        /// </summary>
+        /// <param name="generatorId">The Id of the generator.</param>
+        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
+        public IdGenerator(int generatorId, ITimeSource timeSource)
+            : this(generatorId, defaultepoch, timeSource) { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="P:IdGen.MaskConfig.Default"/> 
         /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
         /// timestamp information.
@@ -73,7 +89,7 @@ namespace IdGen
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
-        public IdGenerator(int generatorId, DateTime epoch)
+        public IdGenerator(int generatorId, DateTimeOffset epoch)
             : this(generatorId, epoch, MaskConfig.Default) { }
 
         /// <summary>
@@ -88,8 +104,23 @@ namespace IdGen
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
-        public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig)
+        public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)
             : this(generatorId, epoch, maskConfig, defaulttimesource) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
+        /// used to retrieve timestamp information.
+        /// </summary>
+        /// <param name="generatorId">The Id of the generator.</param>
+        /// <param name="epoch">The Epoch of the generator.</param>
+        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
+        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
+        /// </exception>
+        public IdGenerator(int generatorId, DateTimeOffset epoch, ITimeSource timeSource)
+            : this(generatorId, epoch, MaskConfig.Default, defaulttimesource) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class.
@@ -103,7 +134,7 @@ namespace IdGen
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
-        public IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
+        public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, ITimeSource timeSource)
         {
             if (maskConfig == null)
                 throw new ArgumentNullException("maskConfig");
@@ -119,9 +150,6 @@ namespace IdGen
 
             if (maskConfig.SequenceBits > 31)
                 throw new ArgumentOutOfRangeException("Sequence cannot have more than 31 bits");
-
-            if (epoch > timeSource.GetTime())
-                throw new ArgumentOutOfRangeException("Epoch in future");
 
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
@@ -152,16 +180,17 @@ namespace IdGen
         {
             lock (genlock)
             {
-                var timestamp = this.GetTimestamp() & MASK_TIME;
-                if (timestamp < _lastgen)
-                    throw new InvalidSystemClockException(string.Format("Clock moved backwards or wrapped around. Refusing to generate id for {0} milliseconds", _lastgen - timestamp));
+                var ticks = this.GetTicks();
+                var timestamp = ticks & MASK_TIME;
+                if (timestamp < _lastgen || ticks < 0)
+                    throw new InvalidSystemClockException(string.Format("Clock moved backwards or wrapped around. Refusing to generate id for {0} ticks", _lastgen - timestamp));
 
                 if (timestamp == _lastgen)
                 {
                     if (_sequence < MASK_SEQUENCE)
                         _sequence++;
                     else
-                        throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of millisecond");
+                        throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
                 }
                 else
                 {
@@ -192,29 +221,25 @@ namespace IdGen
         /// </remarks>
         public static IdGenerator GetFromConfig(string name)
         {
-            return GetFromConfig(name, defaulttimesource);
-        }
-
-        /// <summary>
-        /// Returns an instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
-        /// element in the idGenSection of the configuration file.
-        /// </summary>
-        /// <param name="name">The name of the <see cref="IdGenerator"/> in the idGenSection.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <returns>An instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
-        /// element in the idGenSection of the configuration file.</returns>
-        /// <remarks>
-        /// When the <see cref="IdGenerator"/> doesn't exist it is created; any consequent calls to this method with
-        /// the same name will return the same instance.
-        /// </remarks>
-        public static IdGenerator GetFromConfig(string name, ITimeSource timeSource)
-        {
             var result = _namedgenerators.GetOrAdd(name, (n) =>
             {
                 var idgenerators = (ConfigurationManager.GetSection(IdGeneratorsSection.SectionName) as IdGeneratorsSection).IdGenerators;
                 var idgen = idgenerators.OfType<IdGeneratorElement>().FirstOrDefault(e => e.Name.Equals(n));
                 if (idgen != null)
-                    return new IdGenerator(idgen.Id, idgen.Epoch, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), timeSource);
+                {
+                    ITimeSource ts = null;
+                    if (idgen.TickDuration == TimeSpan.Zero)
+                    {
+                        ts = new DefaultTimeSource(DateTimeOffset.UtcNow);
+                    }
+                    else
+                    {
+                        ts = new DefaultTimeSource(DateTimeOffset.UtcNow, idgen.TickDuration);
+                    }
+
+                    return new IdGenerator(idgen.Id, idgen.Epoch, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
+                }
+
                 throw new KeyNotFoundException();
             });
 
@@ -222,159 +247,13 @@ namespace IdGen
         }
 
         /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.
+        /// Gets the number of ticks since the <see cref="ITimeSource"/>'s epoch.
         /// </summary>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name.</returns>
-        /// <remarks>
-        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
-        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
-        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
-        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateMachineSpecificGenerator()
-        {
-            return CreateMachineSpecificGenerator(defaultepoch);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name.</returns>
-        /// <remarks>
-        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
-        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
-        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
-        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateMachineSpecificGenerator(DateTime epoch)
-        {
-            return CreateMachineSpecificGenerator(epoch, MaskConfig.Default);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name.</returns>
-        /// <remarks>
-        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
-        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
-        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
-        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateMachineSpecificGenerator(DateTime epoch, MaskConfig maskConfig)
-        {
-            return CreateMachineSpecificGenerator(epoch, maskConfig, defaulttimesource);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the machine-name.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the machine-name.</returns>
-        /// <remarks>
-        /// Note: be very careful using this method; it is recommended to explicitly set an generatorId instead since
-        /// a hash of the machinename could result in a collision (especially when the bitmask for the generator is
-        /// very small) of the generator-id's across machines. Only use this in small setups (few hosts) and if you have
-        /// no other choice. Prefer to specify generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateMachineSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
-        {
-            return new IdGenerator(GetMachineHash() & (int)GetMask(maskConfig.GeneratorIdBits), epoch, maskConfig, timeSource);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.
-        /// </summary>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
-        /// <remarks>
-        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
-        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
-        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateThreadSpecificGenerator()
-        {
-            return CreateThreadSpecificGenerator(defaultepoch);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
-        /// <remarks>
-        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
-        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
-        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateThreadSpecificGenerator(DateTime epoch)
-        {
-            return CreateThreadSpecificGenerator(epoch, MaskConfig.Default);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
-        /// <remarks>
-        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
-        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
-        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateThreadSpecificGenerator(DateTime epoch, MaskConfig maskConfig)
-        {
-            return CreateThreadSpecificGenerator(epoch, maskConfig, defaulttimesource);
-        }
-
-        /// <summary>
-        /// Returns a new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.
-        /// </summary>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <returns>A new instance of an <see cref="IdGenerator"/> based on the (managed) thread this method is invoked on.</returns>
-        /// <remarks>
-        /// Note: This method can be used when using several threads on a single machine to get thread-specific generators;
-        /// if this method is used across machines there's a high probability of collisions in generator-id's. In that
-        /// case prefer to explicitly set the generator id's via configuration file or other means instead.
-        /// </remarks>
-        public static IdGenerator CreateThreadSpecificGenerator(DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)
-        {
-            return new IdGenerator(GetThreadId() & (int)GetMask(maskConfig.GeneratorIdBits), epoch, maskConfig, timeSource);
-        }
-
-        /// <summary>
-        /// Gets a unique identifier for the current managed thread.
-        /// </summary>
-        /// <returns>An integer that represents a unique identifier for this managed thread.</returns>
-        private static int GetThreadId()
-        {
-            return Thread.CurrentThread.ManagedThreadId;
-        }
-
-        /// <summary>
-        /// Gets a hashcode based on the <see cref="Environment.MachineName"/>.
-        /// </summary>
-        /// <returns>Returns a hashcode based on the <see cref="Environment.MachineName"/>.</returns>
-        private static int GetMachineHash()
-        {
-            return Environment.MachineName.GetHashCode();
-        }
-
-        /// <summary>
-        /// Gets the number of milliseconds since the <see cref="IdGenerator"/>'s epoch.
-        /// </summary>
-        /// <returns>Returns the number of milliseconds since the <see cref="IdGenerator"/>'s epoch.</returns>
+        /// <returns>Returns the number of ticks since the <see cref="ITimeSource"/>'s epoch.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private long GetTimestamp()
+        private long GetTicks()
         {
-            return (long)(_timesource.GetTime() - _epoch).TotalMilliseconds;
+            return _timesource.GetTicks();
         }
 
         /// <summary>

@@ -58,13 +58,13 @@
           However, using the <codeEntityReference linkText="MaskConfig">T:IdGen.MaskConfig</codeEntityReference> class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp (≈1114 years), 2 bits for the generator-id and 16 bits for the sequence to allow, for example, generating 65536 id's per millisecond per generator distributed over 4 hosts/threads giving you a total of 262144 id's per millisecond. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
         </para>
         <para>
-          The <codeInline>timestamp</codeInline>-part of the Id should speak for itselft; this is incremented every millisecond and represents the number of milliseconds since a certain epoch. By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch.
+          The <codeInline>timestamp</codeInline>-part of the Id should speak for itself; by default this is incremented every millisecond and represents the number of milliseconds since a certain epoch. However, IdGen relies on an <codeEntityReference>T:IdGen.ITimeSource</codeEntityReference> which uses a 'tick' that can be defined to be anything; be it a millisecond (default), a second or even a day or nanosecond (hardware support etc. permitting). By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch too.
         </para>
         <para>
           The <codeInline>generator-id</codeInline>-part of the Id is the part that you 'configure'; it could correspond to a host, thread, datacenter or continent: it's up to you. However, the generator-id should be unique in the system: if you have several hosts generating Id's, each host should have it's own generator-id. This could be based on the hostname, a config-file value or even be retrieved from an coordinating service. Remember: a generator-id should be unique within the entire system to avoid collisions!
-      </para>
+        </para>
         <para>
-          The <codeInline>sequence</codeInline>-part is simply a value that is incremented each time a new Id is generated within the same millisecond timespan; it is reset every time the timestamp changes. Speaking of this:
+          The <codeInline>sequence</codeInline>-part is simply a value that is incremented each time a new Id is generated within the same tick (again, by default, a millisecond but can be anything); it is reset every time the tick changes.
         </para>
       </content>
     </section>
@@ -73,15 +73,10 @@
       <title>System Clock Dependency</title>
       <content>
         <para>
-          We recommend you use NTP to keep your system clock accurate. IdGen protects from non-monotonic clocks, i.e. clocks that run backwards. The <codeEntityReference linkText="DefaultTimeSource">T:IdGen.DefaultTimeSource</codeEntityReference> relies on a <externalLink>
-            <linkText>64bit system counter</linkText>
-            <linkUri>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx</linkUri>
-          </externalLink> that is only incremented <legacyItalic>
-            (it is possible for this counter to <externalLink>
-              <linkText>'leap' sometimes</linkText>
-              <linkUri>https://support.microsoft.com/en-us/kb/274323/en-gb</linkUri>
-            </externalLink>; however this shouldn't be a problem for generating Id's)
-          </legacyItalic>. However, we still recommend you use NTP to keep your system clock accurate; this will prevent duplicate Id's between system restarts.
+          We recommend you use NTP to keep your system clock accurate. IdGen protects from non-monotonic clocks, i.e. clocks that run backwards. The <codeEntityReference linkText="DefaultTimeSource">T:IdGen.DefaultTimeSource</codeEntityReference> relies on a 64bit monotonic, increasing only, system counter. However, we still recommend you use NTP to keep your system clock accurate; this will prevent duplicate Id's between system restarts for example.
+        </para>
+        <para>
+          The <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference> relies on a <codeEntityReference>T:System.Diagnostics.Stopwatch</codeEntityReference> for calculating the 'ticks' but you can implement your own time source by simply implementing the <codeEntityReference>T:IdGen.ITimeSource</codeEntityReference> interface.
         </para>
       </content>
     </section>
@@ -125,10 +120,10 @@
           ]]>
         </code>
         <para>
-          This is because the <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> implements <codeEntityReference linkText="IEnumerable">T:System.Collections.IEnumerable</codeEntityReference> providing you with a never-ending stream of Id's (so you might want to be careful doing a <codeInline>.Select(...)</codeInline> on it!).
+          This is because the <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> implements <codeEntityReference linkText="IEnumerable">T:System.Collections.IEnumerable</codeEntityReference> providing you with a never-ending stream of Id's (so you might want to be careful doing a <codeInline>.Select(...)</codeInline> or <codeInline>.Count()</codeInline> on it!).
         </para>
         <para>
-          The above example creates a default <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> with the <codeEntityReference linkText="GeneratorId">P:IdGen.IdGenerator.Id</codeEntityReference> (or: 'Worker Id') set to 0. If you're using multiple generators (across machines or in separate threads or...) you'll want to make sure each generator is assigned it's own unique Id. One way of doing this is by simply storing a value in your configuration file for example, another way may involve a service handing out GeneratorId's to machines/threads. IdGen <legacyBold>does not</legacyBold> provide a solution for this since each project or setup may have different requirements or infrastructure to provide these generator-id's.
+          The above example creates a default <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> with the <codeEntityReference linkText="GeneratorId">P:IdGen.IdGenerator.Id</codeEntityReference> (or: 'Worker Id') set to 0 and using a <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference>. If you're using multiple generators (across machines or in separate threads or...) you'll want to make sure each generator is assigned it's own unique Id (and same timesource/epoch configuration). One way of doing this is by simply storing a value in your configuration file for example, another way may involve a service handing out GeneratorId's to machines/threads. IdGen <legacyBold>does not</legacyBold> provide a solution for this since each project or setup may have different requirements or infrastructure to provide these generator-id's.
         </para>
         <para>
           The below sample is a bit more complicated; we set a custom epoch, define our own (bit)mask configuration for generated Id's and then display some information about the setup:
@@ -165,11 +160,11 @@
 
                     // Let's ask the mask configuration for how long we could generate Id's before
                     // we experience a 'wraparound' of the timestamp
-                    Console.WriteLine("Wraparound interval   : {0}", mc.WraparoundInterval());
+                    Console.WriteLine("Wraparound interval   : {0}", mc.WraparoundInterval(generator.TimeSource));
 
                     // And finally: let's ask the mask configuration when this wraparound will happen
                     // (we'll have to tell it the generator's epoch)
-                    Console.WriteLine("Wraparound date       : {0}", mc.WraparoundDate(generator.Epoch).ToString("O"));
+                    Console.WriteLine("Wraparound date       : {0}", mc.WraparoundDate(generator.Epoch, generator.TimeSource).ToString("O"));
                 }
             }
           ]]>
@@ -185,15 +180,12 @@
           ]]>
         </code>
         <para>
-          IdGen also provides an <codeEntityReference linkText="ITimeSource">T:IdGen.ITimeSource</codeEntityReference> interface; this can be handy for
+          The <codeEntityReference linkText="ITimeSource">T:IdGen.ITimeSource</codeEntityReference> interface can be handy for
           <externalLink>
             <linkText>unittesting</linkText>
             <linkUri>https://github.com/RobThree/IdGen/blob/master/IdGenTests/IdGenTests.cs</linkUri>
           </externalLink>
-          purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. By default the <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> uses the <codeEntityReference linkText="DefaultTimeSource">T:IdGen.DefaultTimeSource</codeEntityReference> which, internally, uses <externalLink>
-            <linkText>QueryPerformanceCounter</linkText>
-            <linkUri>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644904.aspx</linkUri>
-          </externalLink>. For unittesting we use our own
+          purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on milliseconds (or even (system)time at all). For unittesting we use our own
           <externalLink>
             <linkText>MockTimeSource</linkText>
             <linkUri>https://github.com/RobThree/IdGen/blob/master/IdGenTests/MockTimeSource.cs</linkUri>
@@ -208,17 +200,27 @@
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTime epoch)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTime)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.ITimeSource)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTime,IdGen.MaskConfig)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTime epoch, MaskConfig maskConfig, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTime,IdGen.MaskConfig,IdGen.ITimeSource)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.ITimeSource)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig,IdGen.ITimeSource)</codeEntityReference>
             </para>
           </listItem>
         </list>
@@ -226,26 +228,7 @@
           All properties are read-only to prevent changes once an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> has been instantiated.
         </para>
         <para>
-          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides three 'factory methods' to quickly create a <codeEntityReference linkText="machine-specific">M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> (based on the hostname), <codeEntityReference linkText="thread-specific">M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> or <codeEntityReference linkText="based on configuration file">M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference> IdGenerator:
-        </para>
-        <code language="cs">
-          <![CDATA[
-          var generator = IdGenerator.CreateMachineSpecificGenerator();
-          ]]>
-        </code>
-        <para>
-          or:
-        </para>
-        <code language="cs">
-          <![CDATA[
-          var generator = IdGenerator.CreateThreadSpecificGenerator();
-          ]]>
-        </code>
-        <para>
-          These methods (and their overloads that allow you to specify the epoch, <codeEntityReference linkText="MaskConfig">T:IdGen.MaskConfig</codeEntityReference> and <codeEntityReference linkText="TimeSource">T:IdGen.ITimeSource</codeEntityReference>) create an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> based on hostname or (managed) thread-id. However, it is recommended you explicitly set / configure a generator-id since these two methods could cause 'collisions' when machinenames' hashes result in the same id's or when thread-id's collide with thread-id's on other machines.
-        </para>
-        <para>
-          Then we have <codeEntityReference>M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference>; it differs in a subtle way (besides using values from the configuration file) with the previous two methods: <codeEntityReference>M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> and <codeEntityReference>M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> both create a new instance every call whereas <codeEntityReference>M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference> returns the same instance with the same name every time. You can add the following to your configuration:
+          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides a 'factory method' to quickly create an <codeEntityReference linkText="IdGenerator based on configuration file">M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference>. To use this, add the following to your configuration:
         </para>
         <code language="xml">
           <![CDATA[
@@ -256,7 +239,7 @@
 
   <idGenSection>
     <idGenerators>
-      <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" />
+      <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" tickDuration="0:00:00.001" />
       <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
       <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
     </idGenerators>
@@ -266,7 +249,7 @@
           ]]>
         </code>
         <para>
-          All attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. Valid DateTime notations for the epoch are:
+          The attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. The <codeInline>tickDuration</codeInline> is optional and defaults to the default tickduration from a <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference>. Valid DateTime notations for the epoch are:
         </para>
         <list class="bullet">
           <listItem>

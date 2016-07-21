@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdGenTests
 {
@@ -14,11 +13,11 @@ namespace IdGenTests
         [TestMethod]
         public void Sequence_ShouldIncrease_EveryInvocation()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id 0 and we're only
-            // left with the sequence increasing each invocation of CreateId();
-            var ts = new MockTimeSource(TESTEPOCH);
+            // We setup our generator so that the time is 0, generator id 0 and we're only left with the sequence
+            // increasing each invocation of CreateId();
+            var ts = new MockTimeSource(0);
             var m = MaskConfig.Default;
-            var g = new IdGenerator(0, TESTEPOCH, MaskConfig.Default, ts);
+            var g = new IdGenerator(0, TESTEPOCH, m, ts);
 
             Assert.AreEqual(0, g.CreateId());
             Assert.AreEqual(1, g.CreateId());
@@ -28,17 +27,17 @@ namespace IdGenTests
         [TestMethod]
         public void Sequence_ShouldReset_EveryNewTick()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id 0 and we're only
-            // left with the sequence increasing each invocation of CreateId();
-            var ts = new MockTimeSource(TESTEPOCH);
+            // We setup our generator so that the time is 0, generator id 0 and we're only left with the sequence
+            // increasing each invocation of CreateId();
+            var ts = new MockTimeSource(0);
             var m = MaskConfig.Default;
             var g = new IdGenerator(0, TESTEPOCH, m, ts);
 
             Assert.AreEqual(0, g.CreateId());
             Assert.AreEqual(1, g.CreateId());
             ts.NextTick();
-            // Since the timestamp has increased, we should now have a much higher value (since the timestamp is shifted
-            // left a number of bits (specifically GeneratorIdBits + SequenceBits)
+            // Since the timestamp has increased, we should now have a much higher value (since the timestamp is
+            // shifted left a number of bits (specifically GeneratorIdBits + SequenceBits)
             Assert.AreEqual((1 << (m.GeneratorIdBits + m.SequenceBits)) + 0, g.CreateId());
             Assert.AreEqual((1 << (m.GeneratorIdBits + m.SequenceBits)) + 1, g.CreateId());
         }
@@ -46,10 +45,10 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBePresent_InID1()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id 1023 so that all 10 bits
-            // are set for the generator.
-            var ts = new MockTimeSource(TESTEPOCH);
-            var m = MaskConfig.Default;             // We use a default mask-config with 11 bits for the generator this time
+            // We setup our generator so that the time is 0 and generator id equals 1023 so that all 10 bits are set
+            // for the generator.
+            var ts = new MockTimeSource();
+            var m = MaskConfig.Default;     // We use a default mask-config with 11 bits for the generator this time
             var g = new IdGenerator(1023, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
@@ -59,10 +58,10 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBePresent_InID2()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id 4095 so that all 12 bits
-            // are set for the generator.
-            var ts = new MockTimeSource(TESTEPOCH);
-            var m = new MaskConfig(40, 12, 11);     // We use a custom mask-config with 12 bits for the generator this time
+            // We setup our generator so that the time is 0 and generator id equals 4095 so that all 12 bits are set
+            // for the generator.
+            var ts = new MockTimeSource();
+            var m = new MaskConfig(40, 12, 11); // We use a custom mask-config with 12 bits for the generator this time
             var g = new IdGenerator(4095, TESTEPOCH, m, ts);
 
             // Make sure all expected bits are set
@@ -73,9 +72,9 @@ namespace IdGenTests
         [TestMethod]
         public void GeneratorId_ShouldBeMasked_WhenReadFromProperty()
         {
-            // We setup our generator so that the time (current - epoch) results in 0, generator id 1023 so that all 10
-            // bits are set for the generator.
-            var ts = new MockTimeSource(TESTEPOCH);
+            // We setup our generator so that the time is 0 and generator id equals 1023 so that all 10 bits are set
+            // for the generator.
+            var ts = new MockTimeSource();
             var m = MaskConfig.Default;
             var g = new IdGenerator(1023, TESTEPOCH, m, ts);
 
@@ -87,7 +86,7 @@ namespace IdGenTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_Throws_OnNullMaskConfig()
         {
-            new IdGenerator(0, TESTEPOCH, null);
+            new IdGenerator(0, TESTEPOCH, (MaskConfig)null);
         }
 
         [TestMethod]
@@ -122,7 +121,7 @@ namespace IdGenTests
         [ExpectedException(typeof(SequenceOverflowException))]
         public void CreateId_Throws_OnSequenceOverflow()
         {
-            var ts = new MockTimeSource(TESTEPOCH);
+            var ts = new MockTimeSource();
             var g = new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 20, 2), ts);
 
             // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
@@ -136,7 +135,7 @@ namespace IdGenTests
         //[TestMethod]
         //public void CheckAllCombinationsForMaskConfigs()
         //{
-        //    var ts = new MockTimeSource(TESTEPOCH);
+        //    var ts = new MockTimeSource(0);
 
         //    for (byte i = 0; i < 32; i++)
         //    {
@@ -155,10 +154,10 @@ namespace IdGenTests
         //            var id3 = g.CreateId();
         //            var id4 = g.CreateId();
 
-        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id, 2).PadLeft(64, '0'));
-        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id2, 2).PadLeft(64, '0'));
-        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id3, 2).PadLeft(64, '0'));
-        ////            System.Diagnostics.Trace.WriteLine(Convert.ToString(id4, 2).PadLeft(64, '0'));
+        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id, 2).PadLeft(64, '0'));
+        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id2, 2).PadLeft(64, '0'));
+        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id3, 2).PadLeft(64, '0'));
+        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id4, 2).PadLeft(64, '0'));
 
         //            ts.PreviousTick();
         //        }
@@ -169,7 +168,7 @@ namespace IdGenTests
         [TestMethod]
         public void Constructor_UsesCorrect_Values()
         {
-            Assert.AreEqual(123, new IdGenerator(123).Id);  //Make sure the test-value is not masked so it matches the expected value!
+            Assert.AreEqual(123, new IdGenerator(123).Id);  // Make sure the test-value is not masked so it matches the expected value!
             Assert.AreEqual(TESTEPOCH, new IdGenerator(0, TESTEPOCH).Epoch);
         }
 
@@ -186,12 +185,12 @@ namespace IdGenTests
         [ExpectedException(typeof(InvalidSystemClockException))]
         public void CreateId_Throws_OnClockBackwards()
         {
-            var ts = new MockTimeSource(DateTime.UtcNow);
+            var ts = new MockTimeSource(100);
             var m = MaskConfig.Default;
             var g = new IdGenerator(0, TESTEPOCH, m, ts);
 
             g.CreateId();
-            ts.PreviousTick(); //Set clock back 1 'tick' (ms)
+            ts.PreviousTick(); // Set clock back 1 'tick', this results in the time going from "100" to "99"
             g.CreateId();
         }
 
@@ -203,49 +202,16 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnEpochInFuture()
-        {
-            var ts = new MockTimeSource(TESTEPOCH);
-            new IdGenerator(0, TESTEPOCH.AddTicks(1), MaskConfig.Default, ts);
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(InvalidSystemClockException))]
         public void Constructor_Throws_OnTimestampWraparound()
         {
-            var mc = MaskConfig.Default;
-            var ts = new MockTimeSource(mc.WraparoundDate(TESTEPOCH).AddMilliseconds(-1));  //Set clock to 1 ms before epoch
-            var g = new IdGenerator(0, TESTEPOCH, MaskConfig.Default, ts);
+            var m = MaskConfig.Default;
+            var ts = new MockTimeSource(long.MaxValue);  // Set clock to 1 'tick' before wraparound
+            var g = new IdGenerator(0, TESTEPOCH, m, ts);
 
-            Assert.IsTrue(g.CreateId() > 0);   //Should succeed;
+            Assert.IsTrue(g.CreateId() > 0);    // Should succeed;
             ts.NextTick();
-            g.CreateId();   //Should fail
-        }
-
-        [TestMethod]
-        public void CreateMachineSpecificGenerator_Returns_IdGenerator()
-        {
-            var g = IdGenerator.CreateMachineSpecificGenerator();
-            Assert.IsNotNull(g);
-        }
-
-        [TestMethod]
-        public void CreateThreadSpecificGenerator_Returns_IdGenerator()
-        {
-            if (Environment.ProcessorCount > 1)
-            {
-                const int gcount = 100;  //Create a fair amount of generators
-                var tasks = new Task<IdGenerator>[gcount];
-                for (int i = 0; i < gcount; i++)
-                    tasks[i] = Task.Run(() => IdGenerator.CreateThreadSpecificGenerator());
-                Task.WaitAll(tasks);
-
-                // Get all unique generator ID's in an array
-                var generatorids = tasks.Select(t => t.Result.Id).Distinct().ToArray();
-                // Make sure there's at least more than 1 different Id
-                Assert.IsTrue(generatorids.Length > 1);
-            }
+            g.CreateId();                       // Should fail
         }
 
         [TestMethod]

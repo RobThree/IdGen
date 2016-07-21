@@ -16,7 +16,7 @@
             <para>Added support for config section.</para>
           </listItem>
           <listItem>
-            <para>GetMachineSpecificGenerator &amp; GetThreadSpecificGenerator renamed to <codeEntityReference>M:IdGen.IdGenerator.CreateMachineSpecificGenerator</codeEntityReference> &amp; <codeEntityReference>M:IdGen.IdGenerator.CreateThreadSpecificGenerator</codeEntityReference> respectively to better convey that each invocation creates a new instance.</para>
+            <para>GetMachineSpecificGenerator &amp; GetThreadSpecificGenerator renamed to <codeInline>CreateMachineSpecificGenerator</codeInline> &amp; <codeInline>CreateThreadSpecificGenerator</codeInline> respectively to better convey that each invocation creates a new instance.</para>
           </listItem>
           <listItem>
             <para>Explicitly check for negative generator-id's.</para>

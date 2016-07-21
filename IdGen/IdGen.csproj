@@ -50,6 +50,7 @@
     <Compile Include="MaskConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceOverflowException.cs" />
+    <Compile Include="StopwatchTimeSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IdGeneratorElement.cs" />
