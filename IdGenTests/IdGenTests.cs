@@ -1,6 +1,7 @@
 ﻿using IdGen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
 using System.Linq;
 
 namespace IdGenTests
@@ -93,7 +94,7 @@ namespace IdGenTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_Throws_OnNullTimeSource()
         {
-            new IdGenerator(0, TESTEPOCH, MaskConfig.Default, null);
+            new IdGenerator(0, (ITimeSource)null);
         }
 
         [TestMethod]
@@ -182,6 +183,14 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        public void Enumerable_ShoudReturn_Ids_InterfaceExplicit()
+        {
+            var g = (IEnumerable)new IdGenerator(0);
+            var ids = g.OfType<long>().Take(1000).ToArray();
+            Assert.AreEqual(1000, ids.Distinct().Count());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidSystemClockException))]
         public void CreateId_Throws_OnClockBackwards()
         {
@@ -196,9 +205,16 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnInvalidGeneratorId()
+        public void Constructor_Throws_OnInvalidGeneratorId_Positive()
         {
             new IdGenerator(1024);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Throws_OnInvalidGeneratorId_Negative()
+        {
+            new IdGenerator(-1);
         }
 
         [TestMethod]
@@ -222,6 +238,28 @@ namespace IdGenTests
 
             Assert.ReferenceEquals(md, new IdGenerator(0, TESTEPOCH, md).MaskConfig);
             Assert.ReferenceEquals(mc, new IdGenerator(0, TESTEPOCH, mc).MaskConfig);
+        }
+
+        [TestMethod]
+        public void Constructor_Overloads()
+        {
+            var ts = new MockTimeSource();
+            var m = MaskConfig.Default;
+
+            // Check all constructor overload variations
+            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH).Epoch);
+
+            Assert.ReferenceEquals(ts, new IdGenerator(0, ts).TimeSource);
+
+            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, ts).Epoch);
+            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, ts).TimeSource);
+
+            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH, m).MaskConfig);
+            Assert.ReferenceEquals(m, new IdGenerator(0, TESTEPOCH, m).MaskConfig);
+
+            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH, m, ts).Epoch);
+            Assert.ReferenceEquals(m, new IdGenerator(0, TESTEPOCH, m, ts).MaskConfig);
+            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, m, ts).TimeSource);
         }
     }
 }

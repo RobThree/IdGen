@@ -120,7 +120,7 @@ namespace IdGen
         /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
         public IdGenerator(int generatorId, DateTimeOffset epoch, ITimeSource timeSource)
-            : this(generatorId, epoch, MaskConfig.Default, defaulttimesource) { }
+            : this(generatorId, epoch, MaskConfig.Default, timeSource) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class.
@@ -227,16 +227,7 @@ namespace IdGen
                 var idgen = idgenerators.OfType<IdGeneratorElement>().FirstOrDefault(e => e.Name.Equals(n));
                 if (idgen != null)
                 {
-                    ITimeSource ts = null;
-                    if (idgen.TickDuration == TimeSpan.Zero)
-                    {
-                        ts = new DefaultTimeSource(DateTimeOffset.UtcNow);
-                    }
-                    else
-                    {
-                        ts = new DefaultTimeSource(DateTimeOffset.UtcNow, idgen.TickDuration);
-                    }
-
+                    var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(DateTimeOffset.UtcNow, idgen.TickDuration);
                     return new IdGenerator(idgen.Id, idgen.Epoch, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
                 }
 

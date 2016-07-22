@@ -13,7 +13,7 @@ namespace IdGen
         /// <summary>
         /// Initializes a new <see cref="DefaultTimeSource"/> object.
         /// </summary>
-        /// <param name="epoch">The epoch to use as an offset from now,</param>
+        /// <param name="epoch">The epoch to use as an offset from now.</param>
         /// <remarks>The default tickduration is 1 millisecond.</remarks>
         public DefaultTimeSource(DateTimeOffset epoch)
             : this(epoch, TimeSpan.FromMilliseconds(1)) { }
