@@ -3,7 +3,7 @@
   <metadata>
     <id>IdGen</id>
     <title>IdGen</title>
-    <version>2.0.0-rc</version>
+    <version>2.0.1-rc</version>
     <authors>RobIII</authors>
     <owners>RobIII</owners>
     <projectUrl>https://github.com/RobThree/IdGen</projectUrl>
@@ -24,8 +24,8 @@
     <tags>scalable unique id generator distributed</tags>
   </metadata>
   <files>
-    <file src="IdGen\bin\Release\IdGen.dll" target="lib\net45" />
-    <file src="IdGen\bin\Release\IdGen.XML" target="lib\net45" />
+    <file src="IdGen\bin\Release\IdGen.dll" target="lib\net451" />
+    <file src="IdGen\bin\Release\IdGen.XML" target="lib\net451" />
     <file src="IdGenDocumentation\Help\IdGenHelp.chm" target="content" />
   </files>
 </package>

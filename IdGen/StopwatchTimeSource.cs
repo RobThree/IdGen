@@ -11,6 +11,11 @@ namespace IdGen
         private static readonly Stopwatch _sw = Stopwatch.StartNew();
 
         /// <summary>
+        /// Gets the epoch of the <see cref="ITimeSource"/>.
+        /// </summary>
+        public DateTimeOffset Epoch { get; private set; }
+
+        /// <summary>
         /// Gets the elapsed time since this <see cref="ITimeSource"/> was initialized.
         /// </summary>
         protected TimeSpan Elapsed { get { return _sw.Elapsed; } }
@@ -28,7 +33,8 @@ namespace IdGen
         /// <param name="tickDuration">The duration of a single tick for this timesource.</param>
         public StopwatchTimeSource(DateTimeOffset epoch, TimeSpan tickDuration)
         {
-            this.Offset = (DateTimeOffset.UtcNow - epoch);
+            this.Epoch = epoch;
+            this.Offset = (DateTimeOffset.UtcNow - this.Epoch);
             this.TickDuration = tickDuration;
         }
 

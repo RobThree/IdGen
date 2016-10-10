@@ -15,15 +15,18 @@ namespace IdGen
     /// </summary>
     public class IdGenerator : IIdGenerator<long>
     {
-        private static readonly DateTime defaultepoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(defaultepoch);
+        /// <summary>
+        /// Returns the default epoch.
+        /// </summary>
+        public static readonly DateTime DefaultEpoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(DefaultEpoch);
         private static readonly ConcurrentDictionary<string, IdGenerator> _namedgenerators = new ConcurrentDictionary<string, IdGenerator>();
 
         private int _sequence = 0;
         private long _lastgen = -1;
 
         private readonly ITimeSource _timesource;
-        private readonly DateTimeOffset _epoch;
         private readonly MaskConfig _maskconfig;
         private readonly long _generatorId;
 
@@ -46,7 +49,7 @@ namespace IdGen
         /// <summary>
         /// Gets the epoch for the <see cref="IdGenerator"/>.
         /// </summary>
-        public DateTimeOffset Epoch { get { return _epoch; } }
+        public DateTimeOffset Epoch { get { return _timesource.Epoch; } }
 
         /// <summary>
         /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
@@ -66,18 +69,7 @@ namespace IdGen
         /// <param name="generatorId">The Id of the generator.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
         public IdGenerator(int generatorId)
-            : this(generatorId, defaultepoch) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="P:IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
-        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
-        public IdGenerator(int generatorId, ITimeSource timeSource)
-            : this(generatorId, defaultepoch, timeSource) { }
+            : this(generatorId, DefaultEpoch) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="P:IdGen.MaskConfig.Default"/> 
@@ -97,6 +89,20 @@ namespace IdGen
         /// used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
+        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
+        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
+        /// </exception>
+        public IdGenerator(int generatorId, MaskConfig maskConfig)
+            : this(generatorId, maskConfig, new DefaultTimeSource(DefaultEpoch)) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
+        /// used to retrieve timestamp information.
+        /// </summary>
+        /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="epoch">The Epoch of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
@@ -105,28 +111,25 @@ namespace IdGen
         /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
         public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)
-            : this(generatorId, epoch, maskConfig, defaulttimesource) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
-        /// used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch, ITimeSource timeSource)
-            : this(generatorId, epoch, MaskConfig.Default, timeSource) { }
+            : this(generatorId, maskConfig, new DefaultTimeSource(epoch)) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
+        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
+        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
+        /// </exception>
+        public IdGenerator(int generatorId, ITimeSource timeSource)
+            : this(generatorId, MaskConfig.Default, timeSource) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
+        /// </summary>
+        /// <param name="generatorId">The Id of the generator.</param>
         /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
         /// <param name="timeSource">The time-source to use when acquiring time data.</param>
         /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
@@ -134,7 +137,7 @@ namespace IdGen
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
         /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, ITimeSource timeSource)
+        public IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
         {
             if (maskConfig == null)
                 throw new ArgumentNullException("maskConfig");
@@ -165,7 +168,6 @@ namespace IdGen
             // Store instance specific values
             _maskconfig = maskConfig;
             _timesource = timeSource;
-            _epoch = epoch;
             _generatorId = generatorId;
         }
 
@@ -227,8 +229,8 @@ namespace IdGen
                 var idgen = idgenerators.OfType<IdGeneratorElement>().FirstOrDefault(e => e.Name.Equals(n));
                 if (idgen != null)
                 {
-                    var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(DateTimeOffset.UtcNow, idgen.TickDuration);
-                    return new IdGenerator(idgen.Id, idgen.Epoch, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
+                    var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(idgen.Epoch, idgen.TickDuration);
+                    return new IdGenerator(idgen.Id, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
                 }
 
                 throw new KeyNotFoundException();

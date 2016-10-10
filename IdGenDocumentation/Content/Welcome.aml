@@ -200,27 +200,27 @@
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.ITimeSource)</codeEntityReference>
-            </para>
-          </listItem>
-          <listItem>
-            <para>
               <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.ITimeSource)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfi)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.ITimeSource)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig,IdGen.ITimeSource)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig,IdGen.ITimeSource)</codeEntityReference>
             </para>
           </listItem>
         </list>

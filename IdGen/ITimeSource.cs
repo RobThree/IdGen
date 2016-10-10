@@ -8,6 +8,11 @@ namespace IdGen
     public interface ITimeSource
     {
         /// <summary>
+        /// Gets the epoch of the <see cref="ITimeSource"/>.
+        /// </summary>
+        DateTimeOffset Epoch { get; }
+
+        /// <summary>
         /// Returns the duration of a single tick.
         /// </summary>
         /// <remarks>

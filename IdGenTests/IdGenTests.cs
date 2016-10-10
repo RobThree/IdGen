@@ -9,8 +9,6 @@ namespace IdGenTests
     [TestClass]
     public class IdGenTests
     {
-        private readonly DateTime TESTEPOCH = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         [TestMethod]
         public void Sequence_ShouldIncrease_EveryInvocation()
         {
@@ -18,7 +16,7 @@ namespace IdGenTests
             // increasing each invocation of CreateId();
             var ts = new MockTimeSource(0);
             var m = MaskConfig.Default;
-            var g = new IdGenerator(0, TESTEPOCH, m, ts);
+            var g = new IdGenerator(0, m, ts);
 
             Assert.AreEqual(0, g.CreateId());
             Assert.AreEqual(1, g.CreateId());
@@ -32,7 +30,7 @@ namespace IdGenTests
             // increasing each invocation of CreateId();
             var ts = new MockTimeSource(0);
             var m = MaskConfig.Default;
-            var g = new IdGenerator(0, TESTEPOCH, m, ts);
+            var g = new IdGenerator(0, m, ts);
 
             Assert.AreEqual(0, g.CreateId());
             Assert.AreEqual(1, g.CreateId());
@@ -50,7 +48,7 @@ namespace IdGenTests
             // for the generator.
             var ts = new MockTimeSource();
             var m = MaskConfig.Default;     // We use a default mask-config with 11 bits for the generator this time
-            var g = new IdGenerator(1023, TESTEPOCH, m, ts);
+            var g = new IdGenerator(1023, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual((1 << m.GeneratorIdBits) - 1 << m.SequenceBits, g.CreateId());
@@ -63,7 +61,7 @@ namespace IdGenTests
             // for the generator.
             var ts = new MockTimeSource();
             var m = new MaskConfig(40, 12, 11); // We use a custom mask-config with 12 bits for the generator this time
-            var g = new IdGenerator(4095, TESTEPOCH, m, ts);
+            var g = new IdGenerator(4095, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual(-1 & ((1 << 12) - 1), g.Id);
@@ -77,7 +75,7 @@ namespace IdGenTests
             // for the generator.
             var ts = new MockTimeSource();
             var m = MaskConfig.Default;
-            var g = new IdGenerator(1023, TESTEPOCH, m, ts);
+            var g = new IdGenerator(1023, m, ts);
 
             // Make sure all expected bits are set
             Assert.AreEqual((1 << m.GeneratorIdBits) - 1, g.Id);
@@ -87,7 +85,7 @@ namespace IdGenTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_Throws_OnNullMaskConfig()
         {
-            new IdGenerator(0, TESTEPOCH, (MaskConfig)null);
+            new IdGenerator(0, (MaskConfig)null);
         }
 
         [TestMethod]
@@ -101,21 +99,21 @@ namespace IdGenTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_Throws_OnMaskConfigNotExactly63Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 10, 11));
+            new IdGenerator(0, new MaskConfig(41, 10, 11));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnGeneratorIdMoreThan31Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 32, 10));
+            new IdGenerator(0, new MaskConfig(21, 32, 10));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnSequenceMoreThan31Bits()
         {
-            new IdGenerator(0, TESTEPOCH, new MaskConfig(21, 10, 32));
+            new IdGenerator(0, new MaskConfig(21, 10, 32));
         }
 
         [TestMethod]
@@ -123,7 +121,7 @@ namespace IdGenTests
         public void CreateId_Throws_OnSequenceOverflow()
         {
             var ts = new MockTimeSource();
-            var g = new IdGenerator(0, TESTEPOCH, new MaskConfig(41, 20, 2), ts);
+            var g = new IdGenerator(0, new MaskConfig(41, 20, 2), ts);
 
             // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
             for (int i = 0; i < 4; i++)
@@ -133,44 +131,11 @@ namespace IdGenTests
             g.CreateId();
         }
 
-        //[TestMethod]
-        //public void CheckAllCombinationsForMaskConfigs()
-        //{
-        //    var ts = new MockTimeSource(0);
-
-        //    for (byte i = 0; i < 32; i++)
-        //    {
-        //        var genid = (long)(1L << i) - 1;
-        //        for (byte j = 2; j < 32; j++)
-        //        {
-        //            var g = new IdGenerator((int)genid, TESTEPOCH, new MaskConfig((byte)(63 - i - j), i, j), ts);
-        //            var id = g.CreateId();
-        //            Assert.AreEqual(genid << j, id);
-
-        //            var id2 = g.CreateId();
-        //            Assert.AreEqual((genid << j) + 1, id2);
-
-        //            ts.NextTick();
-
-        //            var id3 = g.CreateId();
-        //            var id4 = g.CreateId();
-
-        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id, 2).PadLeft(64, '0'));
-        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id2, 2).PadLeft(64, '0'));
-        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id3, 2).PadLeft(64, '0'));
-        //            //System.Diagnostics.Trace.WriteLine(Convert.ToString(id4, 2).PadLeft(64, '0'));
-
-        //            ts.PreviousTick();
-        //        }
-
-        //    }
-        //}
-
         [TestMethod]
         public void Constructor_UsesCorrect_Values()
         {
             Assert.AreEqual(123, new IdGenerator(123).Id);  // Make sure the test-value is not masked so it matches the expected value!
-            Assert.AreEqual(TESTEPOCH, new IdGenerator(0, TESTEPOCH).Epoch);
+            Assert.AreEqual(IdGenerator.DefaultEpoch, new IdGenerator(0).Epoch);
         }
 
         [TestMethod]
@@ -196,7 +161,7 @@ namespace IdGenTests
         {
             var ts = new MockTimeSource(100);
             var m = MaskConfig.Default;
-            var g = new IdGenerator(0, TESTEPOCH, m, ts);
+            var g = new IdGenerator(0, m, ts);
 
             g.CreateId();
             ts.PreviousTick(); // Set clock back 1 'tick', this results in the time going from "100" to "99"
@@ -223,7 +188,7 @@ namespace IdGenTests
         {
             var m = MaskConfig.Default;
             var ts = new MockTimeSource(long.MaxValue);  // Set clock to 1 'tick' before wraparound
-            var g = new IdGenerator(0, TESTEPOCH, m, ts);
+            var g = new IdGenerator(0, m, ts);
 
             Assert.IsTrue(g.CreateId() > 0);    // Should succeed;
             ts.NextTick();
@@ -236,30 +201,42 @@ namespace IdGenTests
             var md = MaskConfig.Default;
             var mc = new MaskConfig(21, 21, 21);
 
-            Assert.ReferenceEquals(md, new IdGenerator(0, TESTEPOCH, md).MaskConfig);
-            Assert.ReferenceEquals(mc, new IdGenerator(0, TESTEPOCH, mc).MaskConfig);
+            Assert.ReferenceEquals(md, new IdGenerator(0, md).MaskConfig);
+            Assert.ReferenceEquals(mc, new IdGenerator(0, mc).MaskConfig);
         }
 
         [TestMethod]
         public void Constructor_Overloads()
         {
+            var i = 99;
             var ts = new MockTimeSource();
             var m = MaskConfig.Default;
 
+            var epoch = DateTimeOffset.UtcNow;
+
             // Check all constructor overload variations
-            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH).Epoch);
+            Assert.AreEqual(i, new IdGenerator(i).Id);
+            Assert.AreEqual(IdGenerator.DefaultEpoch, new IdGenerator(i).Epoch);
 
-            Assert.ReferenceEquals(ts, new IdGenerator(0, ts).TimeSource);
+            Assert.AreEqual(i, new IdGenerator(i, epoch).Id);
+            Assert.AreEqual(epoch, new IdGenerator(i, epoch).Epoch);
 
-            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, ts).Epoch);
-            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, ts).TimeSource);
+            Assert.AreEqual(i, new IdGenerator(i, ts).Id);
+            Assert.AreSame(ts, new IdGenerator(i, ts).TimeSource);
+            Assert.AreEqual(DateTimeOffset.MinValue, new IdGenerator(i, ts).Epoch);
 
-            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH, m).MaskConfig);
-            Assert.ReferenceEquals(m, new IdGenerator(0, TESTEPOCH, m).MaskConfig);
+            Assert.AreEqual(i, new IdGenerator(i, m).Id);
+            Assert.AreSame(m, new IdGenerator(i, m).MaskConfig);
+            Assert.AreEqual(IdGenerator.DefaultEpoch, new IdGenerator(i, m).Epoch);
 
-            Assert.ReferenceEquals(TESTEPOCH, new IdGenerator(0, TESTEPOCH, m, ts).Epoch);
-            Assert.ReferenceEquals(m, new IdGenerator(0, TESTEPOCH, m, ts).MaskConfig);
-            Assert.ReferenceEquals(ts, new IdGenerator(0, TESTEPOCH, m, ts).TimeSource);
+            Assert.AreEqual(i, new IdGenerator(i, epoch, m).Id);
+            Assert.AreSame(m, new IdGenerator(i, epoch, m).MaskConfig);
+            Assert.AreEqual(epoch, new IdGenerator(i, epoch, m).Epoch);
+
+            Assert.AreEqual(i, new IdGenerator(i, m, ts).Id);
+            Assert.AreSame(ts, new IdGenerator(i, m, ts).TimeSource);
+            Assert.AreSame(m, new IdGenerator(i, m, ts).MaskConfig);
+            Assert.AreEqual(DateTimeOffset.MinValue, new IdGenerator(i, m, ts).Epoch);
         }
     }
 }
