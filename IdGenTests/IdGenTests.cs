@@ -201,8 +201,8 @@ namespace IdGenTests
             var md = MaskConfig.Default;
             var mc = new MaskConfig(21, 21, 21);
 
-            Assert.ReferenceEquals(md, new IdGenerator(0, md).MaskConfig);
-            Assert.ReferenceEquals(mc, new IdGenerator(0, mc).MaskConfig);
+            Assert.IsTrue(ReferenceEquals(md, new IdGenerator(0, md).MaskConfig));
+            Assert.IsTrue(ReferenceEquals(mc, new IdGenerator(0, mc).MaskConfig));
         }
 
         [TestMethod]

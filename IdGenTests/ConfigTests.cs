@@ -57,7 +57,7 @@ namespace IdGenTests
             var target1 = IdGenerator.GetFromConfig("foo");
             var target2 = IdGenerator.GetFromConfig("foo");
 
-            Assert.ReferenceEquals(target1, target2);
+            Assert.IsTrue(ReferenceEquals(target1, target2));
         }
 
         [TestMethod]
