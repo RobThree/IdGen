@@ -33,7 +33,7 @@ namespace IdGen.Configuration
 
 
         [ConfigurationProperty("epoch", IsRequired = true)]
-        private string stringepoch
+        private string StringEpoch
         {
             get { return (string)this["epoch"]; }
             set { this["epoch"] = value; }
@@ -44,8 +44,8 @@ namespace IdGen.Configuration
         /// </summary>
         public DateTime Epoch
         {
-            get { return DateTime.SpecifyKind(DateTime.ParseExact(this.stringepoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc); }
-            set { this.stringepoch = value.ToString(DATETIMEFORMATS[0]); }
+            get { return DateTime.SpecifyKind(DateTime.ParseExact(this.StringEpoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc); }
+            set { this.StringEpoch = value.ToString(DATETIMEFORMATS[0]); }
         }
 
         /// <summary>

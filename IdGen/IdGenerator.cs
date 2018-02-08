@@ -142,8 +142,10 @@ namespace IdGen
             if (maskConfig == null)
                 throw new ArgumentNullException("maskConfig");
 
+#pragma warning disable IDE0016
             if (timeSource == null)
                 throw new ArgumentNullException("timeSource");
+#pragma warning restore IDE0016
 
             if (maskConfig.TotalBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
