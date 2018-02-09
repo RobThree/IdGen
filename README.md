@@ -129,7 +129,7 @@ IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
 
 All properties are read-only to prevent changes once an `IdGenerator` has been instantiated.
 
-The `IdGenerator` class provides a 'factory method' to quickly create an IdGenerator based on configuration file. To use this, add the following to your configuration: 
+The `IdGenerator` class provides a 'factory method' to quickly create an IdGenerator based on configuration file (.Net Framework only, not for .Net Core). To use this, add the following to your configuration: 
 
 ```xml
 <configuration>
