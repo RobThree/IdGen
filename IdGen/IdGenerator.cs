@@ -1,4 +1,6 @@
-﻿using IdGen.Configuration;
+﻿#if !NETSTANDARD2_0 && !NETCOREAPP2_0
+using IdGen.Configuration;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -211,6 +213,7 @@ namespace IdGen
             }
         }
 
+#if !NETSTANDARD2_0 && !NETCOREAPP2_0
         /// <summary>
         /// Returns an instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
         /// element in the idGenSection of the configuration file. The <see cref="DefaultTimeSource"/> is used to
@@ -240,6 +243,7 @@ namespace IdGen
 
             return result;
         }
+#endif
 
         /// <summary>
         /// Gets the number of ticks since the <see cref="ITimeSource"/>'s epoch.
