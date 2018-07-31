@@ -256,8 +256,8 @@ namespace IdGenTests
             var target = idgen.FromId(id);
 
 
-            Assert.AreEqual(34, target.Sequence);   // We generated 35 id's in the same tick, so sequence should be at 34.
-            Assert.AreEqual(234, target.Generator); // With generator id 234
+            Assert.AreEqual(34, target.SequenceNumber);                                     // We generated 35 id's in the same tick, so sequence should be at 34.
+            Assert.AreEqual(234, target.GeneratorId);                                       // With generator id 234
             Assert.AreEqual(epoch.Add(TimeSpan.FromSeconds(5 * 7)), target.DateTimeOffset); // And the clock was at 5 ticks, with each tick being
                                                                                             // 7 seconds (so 35 seconds from epoch)
                                                                                             // And epoch was 2018-7-31 14:48:02 +02:00...

@@ -24,9 +24,24 @@
         <HelpKeyword index="K" term="version, 1.2.0.0" />
       </HelpKeywords>
     </Topic>
-    <Topic id="7da456d6-5501-4813-bc39-f5208b4a519f" visible="True" isSelected="true" title="Version 2.0.0.0">
+    <Topic id="7da456d6-5501-4813-bc39-f5208b4a519f" visible="True" title="Version 2.0.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 2.0.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="da6a574e-4652-41ab-a0a8-4d86e8d088b5" visible="True" title="Version 2.0.1.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.0.1.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="1e9bfb0b-386d-4d4a-bbbb-a9b106b01c7b" visible="True" title="Version 2.0.2.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.0.2.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="faea072d-4f00-4589-b4f2-6b224b3d3d81" visible="True" isSelected="true" title="Version 2.0.3.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.0.3.0" />
       </HelpKeywords>
     </Topic>
   </Topic>
