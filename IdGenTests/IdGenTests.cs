@@ -238,5 +238,30 @@ namespace IdGenTests
             Assert.AreSame(m, new IdGenerator(i, m, ts).MaskConfig);
             Assert.AreEqual(DateTimeOffset.MinValue, new IdGenerator(i, m, ts).Epoch);
         }
+
+
+        [TestMethod]
+        public void FromId_Returns_CorrectValue()
+        {
+            var mc = new MaskConfig(42, 8, 13);
+            var epoch = new DateTimeOffset(2018, 7, 31, 14, 48, 2, TimeSpan.FromHours(2));  // Just some "random" epoch...
+            var ts = new MockTimeSource(5, TimeSpan.FromSeconds(7), epoch);                 // Set clock at 5 ticks; each tick being 7 seconds...
+            var idgen = new IdGenerator(234, mc, ts);                                       // Set generator id to 234
+
+            // Generate a bunch of id's
+            long id = 0;
+            for (int i = 0; i < 35; i++)
+                id = idgen.CreateId();
+
+            var target = idgen.FromId(id);
+
+
+            Assert.AreEqual(34, target.Sequence);   // We generated 35 id's in the same tick, so sequence should be at 34.
+            Assert.AreEqual(234, target.Generator); // With generator id 234
+            Assert.AreEqual(epoch.Add(TimeSpan.FromSeconds(5 * 7)), target.DateTimeOffset); // And the clock was at 5 ticks, with each tick being
+                                                                                            // 7 seconds (so 35 seconds from epoch)
+                                                                                            // And epoch was 2018-7-31 14:48:02 +02:00...
+        }
+
     }
 }

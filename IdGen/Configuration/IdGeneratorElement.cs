@@ -45,8 +45,8 @@ namespace IdGen.Configuration
         /// </summary>
         public DateTime Epoch
         {
-            get { return DateTime.SpecifyKind(DateTime.ParseExact(this.StringEpoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc); }
-            set { this.StringEpoch = value.ToString(DATETIMEFORMATS[0]); }
+            get { return DateTime.SpecifyKind(DateTime.ParseExact(StringEpoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc); }
+            set { StringEpoch = value.ToString(DATETIMEFORMATS[0]); }
         }
 
         /// <summary>

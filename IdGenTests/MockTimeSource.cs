@@ -8,31 +8,24 @@ namespace IdGenTests
     {
         private long _current;
 
-        private TimeSpan _tickduration;
-
         public MockTimeSource()
             : this(0) { }
 
+        public DateTimeOffset Epoch { get; private set; }
+
+        public TimeSpan TickDuration { get; }
+
         public MockTimeSource(long current)
-            : this(current, TimeSpan.FromMilliseconds(1)) { }
+            : this(current, TimeSpan.FromMilliseconds(1), DateTimeOffset.MinValue) { }
 
         public MockTimeSource(TimeSpan tickDuration)
-            : this(0, tickDuration) { }
+            : this(0, tickDuration, DateTimeOffset.MinValue) { }
 
-        public MockTimeSource(long current, TimeSpan tickDuration)
+        public MockTimeSource(long current, TimeSpan tickDuration, DateTimeOffset epoch)
         {
             _current = current;
-            _tickduration = tickDuration;
-        }
-
-        public DateTimeOffset Epoch
-        {
-            get { return DateTimeOffset.MinValue; }
-        }
-
-        public TimeSpan TickDuration
-        {
-            get { return _tickduration; }
+            TickDuration = tickDuration;
+            Epoch = epoch;
         }
 
         public long GetTicks()

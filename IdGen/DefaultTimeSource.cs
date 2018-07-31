@@ -36,7 +36,7 @@ namespace IdGen
         /// </remarks>
         public override long GetTicks()
         {
-            return (this.Offset.Ticks + this.Elapsed.Ticks) / this.TickDuration.Ticks;
+            return (Offset.Ticks + Elapsed.Ticks) / TickDuration.Ticks;
         }
     }
 }

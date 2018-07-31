@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace IdGen
 {
@@ -27,9 +26,6 @@ namespace IdGen
 
         private int _sequence = 0;
         private long _lastgen = -1;
-
-        private readonly ITimeSource _timesource;
-        private readonly MaskConfig _maskconfig;
         private readonly long _generatorId;
 
         private readonly long MASK_SEQUENCE;
@@ -41,7 +37,7 @@ namespace IdGen
 
 
         // Object to lock() on while generating Id's
-        private object genlock = new object();
+        private readonly object genlock = new object();
 
         /// <summary>
         /// Gets the Id of the generator.
@@ -51,17 +47,17 @@ namespace IdGen
         /// <summary>
         /// Gets the epoch for the <see cref="IdGenerator"/>.
         /// </summary>
-        public DateTimeOffset Epoch { get { return _timesource.Epoch; } }
+        public DateTimeOffset Epoch { get { return TimeSource.Epoch; } }
 
         /// <summary>
         /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
         /// </summary>
-        public MaskConfig MaskConfig { get { return _maskconfig; } }
+        public MaskConfig MaskConfig { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ITimeSource"/> for the <see cref="IdGenerator"/>.
         /// </summary>
-        public ITimeSource TimeSource { get { return _timesource; } }
+        public ITimeSource TimeSource { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
@@ -164,14 +160,14 @@ namespace IdGen
             MASK_SEQUENCE = GetMask(maskConfig.SequenceBits);
 
             if (generatorId < 0 || generatorId > MASK_GENERATOR)
-                throw new ArgumentOutOfRangeException(string.Format("GeneratorId must be between 0 and {0} (inclusive).", MASK_GENERATOR));
+                throw new ArgumentOutOfRangeException($"GeneratorId must be between 0 and {MASK_GENERATOR} (inclusive).");
 
             SHIFT_TIME = maskConfig.GeneratorIdBits + maskConfig.SequenceBits;
             SHIFT_GENERATOR = maskConfig.SequenceBits;
 
             // Store instance specific values
-            _maskconfig = maskConfig;
-            _timesource = timeSource;
+            MaskConfig = maskConfig;
+            TimeSource = timeSource;
             _generatorId = generatorId;
         }
 
@@ -186,10 +182,10 @@ namespace IdGen
         {
             lock (genlock)
             {
-                var ticks = this.GetTicks();
+                var ticks = GetTicks();
                 var timestamp = ticks & MASK_TIME;
                 if (timestamp < _lastgen || ticks < 0)
-                    throw new InvalidSystemClockException(string.Format("Clock moved backwards or wrapped around. Refusing to generate id for {0} ticks", _lastgen - timestamp));
+                    throw new InvalidSystemClockException($"Clock moved backwards or wrapped around. Refusing to generate id for {_lastgen - timestamp} ticks");
 
                 if (timestamp == _lastgen)
                 {
@@ -211,6 +207,25 @@ namespace IdGen
                         + _sequence;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns information about an Id such as the sequence number, generator id and date/time the Id was generated
+        /// based on the current mask config of the generator.
+        /// </summary>
+        /// <param name="id">The Id to extract information from.</param>
+        /// <returns>Returns an <see cref="ID" /> that contains information about the 'decoded' Id.</returns>
+        /// <remarks>
+        /// IMPORTANT: note that this method relies on the mask config; if the id was generated with a diffferent mask
+        /// config than the current one the 'decoded' ID will NOT contain correct information.
+        /// </remarks>
+        public ID FromId(long id)
+        {
+            return ID.Create(
+                (int)(id & MASK_SEQUENCE),
+                (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
+                TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * TimeSource.TickDuration.Ticks))
+            );
         }
 
 #if !NETSTANDARD2_0 && !NETCOREAPP2_0
@@ -252,7 +267,7 @@ namespace IdGen
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private long GetTicks()
         {
-            return _timesource.GetTicks();
+            return TimeSource.GetTicks();
         }
 
         /// <summary>
@@ -273,7 +288,7 @@ namespace IdGen
         private IEnumerable<long> IdStream()
         {
             while (true)
-                yield return this.CreateId();
+                yield return CreateId();
         }
 
         /// <summary>
@@ -282,7 +297,7 @@ namespace IdGen
         /// <returns>An <see cref="IEnumerator&lt;T&gt;"/> object that can be used to iterate over Id's.</returns>
         public IEnumerator<long> GetEnumerator()
         {
-            return this.IdStream().GetEnumerator();
+            return IdStream().GetEnumerator();
         }
 
         /// <summary>
@@ -291,7 +306,7 @@ namespace IdGen
         /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate over Id's.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

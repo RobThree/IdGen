@@ -33,9 +33,9 @@ namespace IdGen
         /// <param name="tickDuration">The duration of a single tick for this timesource.</param>
         public StopwatchTimeSource(DateTimeOffset epoch, TimeSpan tickDuration)
         {
-            this.Epoch = epoch;
-            this.Offset = (DateTimeOffset.UtcNow - this.Epoch);
-            this.TickDuration = tickDuration;
+            Epoch = epoch;
+            Offset = (DateTimeOffset.UtcNow - Epoch);
+            TickDuration = tickDuration;
         }
 
         /// <summary>

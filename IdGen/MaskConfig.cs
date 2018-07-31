@@ -24,23 +24,23 @@ namespace IdGen
         /// <summary>
         /// Gets the total number of bits for the <see cref="MaskConfig"/>.
         /// </summary>
-        public int TotalBits { get { return this.TimestampBits + this.GeneratorIdBits + this.SequenceBits; } }
+        public int TotalBits { get { return TimestampBits + GeneratorIdBits + SequenceBits; } }
 
         /// <summary>
         /// Returns the maximum number of intervals for this mask configuration.
         /// </summary>
-        public long MaxIntervals { get { return (1L << this.TimestampBits); } }
+        public long MaxIntervals { get { return (1L << TimestampBits); } }
 
         /// <summary>
         /// Returns the maximum number of generators available for this mask configuration.
         /// </summary>
-        public long MaxGenerators { get { return (1L << this.GeneratorIdBits); } }
+        public long MaxGenerators { get { return (1L << GeneratorIdBits); } }
 
         /// <summary>
         /// Returns the maximum number of sequential Id's for a time-interval (e.g. max. number of Id's generated 
         /// within a single interval).
         /// </summary>
-        public long MaxSequenceIds { get { return (1L << this.SequenceBits); } }
+        public long MaxSequenceIds { get { return (1L << SequenceBits); } }
 
         /// <summary>
         /// Gets a default <see cref="MaskConfig"/> with 41 bits for the timestamp part, 10 bits for the generator-id 
@@ -56,9 +56,9 @@ namespace IdGen
         /// <param name="sequenceBits">Number of bits to use for the sequence-part of Id's.</param>
         public MaskConfig(byte timestampBits, byte generatorIdBits, byte sequenceBits)
         {
-            this.TimestampBits = timestampBits;
-            this.GeneratorIdBits = generatorIdBits;
-            this.SequenceBits = sequenceBits;
+            TimestampBits = timestampBits;
+            GeneratorIdBits = generatorIdBits;
+            SequenceBits = sequenceBits;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace IdGen
         /// </exception>
         public DateTimeOffset WraparoundDate(DateTimeOffset epoch, ITimeSource timeSource)
         {
-            return epoch.AddDays(timeSource.TickDuration.TotalDays * this.MaxIntervals);
+            return epoch.AddDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace IdGen
         /// </exception>
         public TimeSpan WraparoundInterval(ITimeSource timeSource)
         {
-            return TimeSpan.FromDays(timeSource.TickDuration.TotalDays * this.MaxIntervals);
+            return TimeSpan.FromDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
     }
 }
