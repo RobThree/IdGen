@@ -37,7 +37,7 @@ namespace IdGen
 
 
         // Object to lock() on while generating Id's
-        private readonly object genlock = new object();
+        private readonly object _genlock = new object();
 
         /// <summary>
         /// Gets the Id of the generator.
@@ -177,16 +177,17 @@ namespace IdGen
         /// <returns>Returns an Id based on the <see cref="IdGenerator"/>'s epoch, generatorid and sequence.</returns>
         /// <exception cref="InvalidSystemClockException">Thrown when clock going backwards is detected.</exception>
         /// <exception cref="SequenceOverflowException">Thrown when sequence overflows.</exception>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public long CreateId()
         {
-            lock (genlock)
+            lock (_genlock)
             {
+                // Determine "timeslot" and make sure it's >= last timeslot (if any)
                 var ticks = GetTicks();
                 var timestamp = ticks & MASK_TIME;
                 if (timestamp < _lastgen || ticks < 0)
                     throw new InvalidSystemClockException($"Clock moved backwards or wrapped around. Refusing to generate id for {_lastgen - timestamp} ticks");
 
+                // If we're in the same "timeslot" as previous time we generated an Id, up the sequence number
                 if (timestamp == _lastgen)
                 {
                     if (_sequence < MASK_SEQUENCE)
@@ -194,7 +195,7 @@ namespace IdGen
                     else
                         throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
                 }
-                else
+                else // If we're in a new(er) "timeslot", so we can reset the sequence and store the new(er) "timeslot"
                 {
                     _sequence = 0;
                     _lastgen = timestamp;
@@ -202,8 +203,9 @@ namespace IdGen
 
                 unchecked
                 {
+                    // Build id by shifting all bits into their place
                     return (timestamp << SHIFT_TIME)
-                        + (_generatorId << SHIFT_GENERATOR)         // GeneratorId is already masked, we only need to shift
+                        + (_generatorId << SHIFT_GENERATOR)
                         + _sequence;
                 }
             }
@@ -216,11 +218,13 @@ namespace IdGen
         /// <param name="id">The Id to extract information from.</param>
         /// <returns>Returns an <see cref="ID" /> that contains information about the 'decoded' Id.</returns>
         /// <remarks>
-        /// IMPORTANT: note that this method relies on the mask config; if the id was generated with a diffferent mask
-        /// config than the current one the 'decoded' ID will NOT contain correct information.
+        /// IMPORTANT: note that this method relies on the mask config and timesource; if the id was generated with a 
+        /// diffferent mask config and/or timesource than the current one the 'decoded' ID will NOT contain correct 
+        /// information.
         /// </remarks>
         public ID FromId(long id)
         {
+            // Deconstruct Id by unshifting the bits into the proper parts
             return ID.Create(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
@@ -276,6 +280,7 @@ namespace IdGen
         /// </summary>
         /// <param name="bits">The number of bits to mask.</param>
         /// <returns>Returns the desired bitmask.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static long GetMask(byte bits)
         {
             return (1L << bits) - 1;
