@@ -55,7 +55,7 @@
         </mediaLink>
 
         <para>
-          However, using the <codeEntityReference linkText="MaskConfig">T:IdGen.MaskConfig</codeEntityReference> class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp (≈1114 years), 2 bits for the generator-id and 16 bits for the sequence to allow, for example, generating 65536 id's per millisecond per generator distributed over 4 hosts/threads giving you a total of 262144 id's per millisecond. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
+          However, using the <codeEntityReference linkText="MaskConfig">T:IdGen.MaskConfig</codeEntityReference> class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp, 2 bits for the generator-id and 16 bits for the sequence if you prefer. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
         </para>
         <para>
           The <codeInline>timestamp</codeInline>-part of the Id should speak for itself; by default this is incremented every millisecond and represents the number of milliseconds since a certain epoch. However, IdGen relies on an <codeEntityReference>T:IdGen.ITimeSource</codeEntityReference> which uses a 'tick' that can be defined to be anything; be it a millisecond (default), a second or even a day or nanosecond (hardware support etc. permitting). By default IdGen uses 2015-01-01 0:00:00Z as epoch, but you can specify a custom epoch too.
