@@ -23,6 +23,8 @@ The **timestamp**-part of the Id should speak for itself; by default this is inc
 
 The **generator-id**-part of the Id is the part that you 'configure'; it could correspond to a host, thread, datacenter or continent: it's up to you. However, the generator-id should be unique in the system: if you have several hosts or threads generating Id's, each host or thread should have it's own generator-id. This could be based on the hostname, a config-file value or even be retrieved from an coordinating service. Remember: a generator-id should be unique within the entire system to avoid collisions!
 
+> In case of a server application, having a singleton instance of an `IdGenerator` per node with a **generator-id** which is unique within the system should be sufficient since `IdGenerator.CreateId` is thread-safe.
+
 The **sequence**-part is simply a value that is incremented each time a new Id is generated within the same tick (again, by default, a millisecond but can be anything); it is reset every time the tick changes.
 
 ## System Clock Dependency
