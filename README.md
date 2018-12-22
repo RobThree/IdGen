@@ -1,5 +1,8 @@
+
+[![NuGet](https://img.shields.io/nuget/v/IdGen.svg)](https://www.nuget.org/packages/IdGen)
+
 # ![Logo](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png) IdGen
-Twitter Snowflake-alike ID generator for .Net. Available as [Nuget package](https://www.nuget.org/packages/IdGen)
+Twitter Snowflake-alike ID generator for .NET.
 
 ## Why
 
