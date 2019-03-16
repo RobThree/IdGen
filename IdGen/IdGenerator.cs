@@ -191,9 +191,14 @@ namespace IdGen
                 if (timestamp == _lastgen)
                 {
                     if (_sequence < MASK_SEQUENCE)
-                        _sequence++;
+                    { _sequence++; }
                     else
-                        throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
+                    {
+                        timestamp = GetNextTicks(_lastgen);
+                        _sequence = 0;
+                        _lastgen = timestamp;
+                    }
+                    //throw new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
                 }
                 else // If we're in a new(er) "timeslot", so we can reset the sequence and store the new(er) "timeslot"
                 {
@@ -209,6 +214,21 @@ namespace IdGen
                         + _sequence;
                 }
             }
+        }
+
+        /// <summary>
+        /// 阻塞到下一个毫秒，直到获得新的时间戳
+        /// </summary>
+        /// <param name="lastgen">上次生成 ID 的时间截</param>
+        /// <returns>当前时间戳</returns>
+        private long GetNextTicks(long lastgen)
+        {
+            long timestamp = GetTicks()& MASK_TIME;
+            while (timestamp <= lastgen)
+            {
+                timestamp = GetTicks() & MASK_TIME;
+            }
+            return timestamp;
         }
 
         /// <summary>

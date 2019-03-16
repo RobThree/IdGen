@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGenConsole", "IdGenConsole\IdGenConsole.csproj", "{42FC795B-BE4E-428C-B249-D4414D290FA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42FC795B-BE4E-428C-B249-D4414D290FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42FC795B-BE4E-428C-B249-D4414D290FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42FC795B-BE4E-428C-B249-D4414D290FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42FC795B-BE4E-428C-B249-D4414D290FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
