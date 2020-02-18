@@ -132,6 +132,35 @@ IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
 
 All properties are read-only to prevent changes once an `IdGenerator` has been instantiated.
 
+The `AppConfigFactory` class in the `IdGen.Configuration` package provides a 'factory method' to quickly create an IdGenerator based on configuration file (.Net Framework only, not for .Net Core). To use this, add the following to your configuration: 
+
+```xml
+<configuration>
+  <configSections>
+    <section name="idGenSection" type="IdGen.Configuration.IdGeneratorsSection, IdGen.Configuration" />
+  </configSections>
+
+  <idGenSection>
+    <idGenerators>
+      <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" tickDuration="0:00:00.001" />
+      <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
+      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
+    </idGenerators>
+  </idGenSection>
+
+</configuration>
+```
+
+The attributes (`name`, `id`, `epoch`, `timestampBits`, `generatorIdBits` and `sequenceBits`) are required. The tickDuration is optional and defaults to the default tickduration from a `DefaultTimeSource`. Valid DateTime notations for the epoch are:
+
+* `yyyy-MM-ddTHH:mm:ss`
+* `yyyy-MM-dd HH:mm:ss`
+* `yyyy-MM-dd`
+
+You can get the IdGenerator from the config using the following code:
+
+`var generator = AppConfigFactory.GetFromConfig("foo");`
+
 <hr>
 
 Icon made by [Freepik](http://www.flaticon.com/authors/freepik) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0](http://creativecommons.org/licenses/by/3.0/).

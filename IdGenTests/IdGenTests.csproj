@@ -50,12 +50,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConfigTests.cs" />
     <Compile Include="IdGenTests.cs" />
     <Compile Include="MaskConfigTests.cs" />
     <Compile Include="MockTimeSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IdGen.Configuration\IdGen.Configuration.csproj">
+      <Project>{651a0785-a880-4467-a92f-110c26f3fa28}</Project>
+      <Name>IdGen.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IdGen\IdGen.csproj">
       <Project>{e6856e0a-523f-4451-9c95-621156a1b9f4}</Project>
       <Name>IdGen</Name>

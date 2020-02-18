@@ -15,9 +15,15 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IdGenDocumentation", "IdGenDocumentation\IdGenDocumentation.shfbproj", "{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6856E0A-523F-4451-9C95-621156A1B9F4} = {E6856E0A-523F-4451-9C95-621156A1B9F4}
+		{651A0785-A880-4467-A92F-110C26F3FA28} = {651A0785-A880-4467-A92F-110C26F3FA28}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGenTests", "IdGenTests\IdGenTests.csproj", "{12E4642B-A533-400C-987B-67B21DB80EC7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{651A0785-A880-4467-A92F-110C26F3FA28} = {651A0785-A880-4467-A92F-110C26F3FA28}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdGen.Configuration", "IdGen.Configuration\IdGen.Configuration.csproj", "{651A0785-A880-4467-A92F-110C26F3FA28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +42,10 @@ Global
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12E4642B-A533-400C-987B-67B21DB80EC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{651A0785-A880-4467-A92F-110C26F3FA28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651A0785-A880-4467-A92F-110C26F3FA28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651A0785-A880-4467-A92F-110C26F3FA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651A0785-A880-4467-A92F-110C26F3FA28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

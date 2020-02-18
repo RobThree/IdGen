@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45</TargetFrameworks>
+    <Authors>RobIII</Authors>
+    <Company>Devcorner.nl</Company>
+    <PackageId>IdGen.Configuration</PackageId>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <Product>IdGen.Configuration</Product>
+    <Copyright>Copyright © 2015 - 2020 Devcorner.nl</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
+    <PackageTags>idgen configuration</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>Configuration support for IdGen</Description>
+    <Version>1.0</Version>
+    <RootNamespace>IdGen.Configuration</RootNamespace>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IdGen\IdGen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+</Project>
