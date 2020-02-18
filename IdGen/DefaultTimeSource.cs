@@ -34,9 +34,6 @@ namespace IdGen
         /// Note that a 'tick' is a period defined by the timesource; this may be any valid <see cref="TimeSpan"/>; be
         /// it a millisecond, an hour, 2.5 seconds or any other value.
         /// </remarks>
-        public override long GetTicks()
-        {
-            return (Offset.Ticks + Elapsed.Ticks) / TickDuration.Ticks;
-        }
+        public override long GetTicks() => (Offset.Ticks + Elapsed.Ticks) / TickDuration.Ticks;
     }
 }

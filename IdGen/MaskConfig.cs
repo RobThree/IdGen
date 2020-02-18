@@ -24,29 +24,29 @@ namespace IdGen
         /// <summary>
         /// Gets the total number of bits for the <see cref="MaskConfig"/>.
         /// </summary>
-        public int TotalBits { get { return TimestampBits + GeneratorIdBits + SequenceBits; } }
+        public int TotalBits => TimestampBits + GeneratorIdBits + SequenceBits;
 
         /// <summary>
         /// Returns the maximum number of intervals for this mask configuration.
         /// </summary>
-        public long MaxIntervals { get { return (1L << TimestampBits); } }
+        public long MaxIntervals => (1L << TimestampBits);
 
         /// <summary>
         /// Returns the maximum number of generators available for this mask configuration.
         /// </summary>
-        public long MaxGenerators { get { return (1L << GeneratorIdBits); } }
+        public long MaxGenerators => (1L << GeneratorIdBits);
 
         /// <summary>
         /// Returns the maximum number of sequential Id's for a time-interval (e.g. max. number of Id's generated 
         /// within a single interval).
         /// </summary>
-        public long MaxSequenceIds { get { return (1L << SequenceBits); } }
+        public long MaxSequenceIds => (1L << SequenceBits);
 
         /// <summary>
         /// Gets a default <see cref="MaskConfig"/> with 41 bits for the timestamp part, 10 bits for the generator-id 
         /// part and 12 bits for the sequence part of the id.
         /// </summary>
-        public static MaskConfig Default { get { return new MaskConfig(41, 10, 12); } }
+        public static MaskConfig Default => new MaskConfig(41, 10, 12);
 
         /// <summary>
         /// Initializes a bitmask configuration for <see cref="IdGenerator"/>s.
@@ -78,6 +78,8 @@ namespace IdGen
         /// </exception>
         public DateTimeOffset WraparoundDate(DateTimeOffset epoch, ITimeSource timeSource)
         {
+            if (timeSource == null)
+                throw new ArgumentNullException(nameof(timeSource));
             return epoch.AddDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
 
@@ -94,12 +96,17 @@ namespace IdGen
         /// Please note that for intervals exceeding the <see cref="TimeSpan.MaxValue"/> an
         /// <see cref="OverflowException"/> will be thrown.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="timeSource"/> is null.
+        /// </exception>
         /// <exception cref="OverflowException">
         /// Thrown when any combination of a <see cref="ITimeSource.TickDuration"/> and <see cref="MaxIntervals"/> 
         /// results in a TimeSpan exceeding the <see cref="TimeSpan.MaxValue"/> value.
         /// </exception>
         public TimeSpan WraparoundInterval(ITimeSource timeSource)
         {
+            if (timeSource == null)
+                throw new ArgumentNullException(nameof(timeSource));
             return TimeSpan.FromDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
     }

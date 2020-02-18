@@ -227,53 +227,6 @@
         <para>
           All properties are read-only to prevent changes once an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> has been instantiated.
         </para>
-        <para>
-          The <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> class provides a 'factory method' to quickly create an <codeEntityReference linkText="IdGenerator based on configuration file">M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference>. To use this, add the following to your configuration:
-        </para>
-        <code language="xml">
-          <![CDATA[
-<configuration>
-  <configSections>
-    <section name="idGenSection" type="IdGen.Configuration.IdGeneratorsSection, IdGen" />
-  </configSections>
-
-  <idGenSection>
-    <idGenerators>
-      <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" tickDuration="0:00:00.001" />
-      <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
-      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
-    </idGenerators>
-  </idGenSection>
-  
-</configuration>
-          ]]>
-        </code>
-        <para>
-          The attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. The <codeInline>tickDuration</codeInline> is optional and defaults to the default tickduration from a <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference>. Valid DateTime notations for the epoch are:
-        </para>
-        <list class="bullet">
-          <listItem>
-            <para>
-              <codeInline>yyyy-MM-ddTHH:mm:ss</codeInline>
-            </para>
-          </listItem>
-          <listItem>
-            <para>
-              <codeInline>yyyy-MM-dd HH:mm:ss</codeInline>
-            </para>
-          </listItem>
-          <listItem>
-            <para>
-              <codeInline>yyyy-MM-dd</codeInline>
-            </para>
-          </listItem>
-        </list>
-        <para>You can get the IdGenerator from the config using the following code:</para>
-        <code language="cs">
-          <![CDATA[
-          var generator = IdGenerator.GetFromConfig("foo");
-          ]]>
-        </code>
       </content>
     </section>
 

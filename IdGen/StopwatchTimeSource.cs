@@ -18,7 +18,7 @@ namespace IdGen
         /// <summary>
         /// Gets the elapsed time since this <see cref="ITimeSource"/> was initialized.
         /// </summary>
-        protected TimeSpan Elapsed { get { return _sw.Elapsed; } }
+        protected static TimeSpan Elapsed => _sw.Elapsed;
 
         /// <summary>
         /// Gets the offset for this <see cref="ITimeSource"/> which is defined as the difference of it's creationdate

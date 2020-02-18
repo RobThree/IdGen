@@ -1,59 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6856E0A-523F-4451-9C95-621156A1B9F4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IdGen</RootNamespace>
-    <AssemblyName>IdGen</AssemblyName>
-    <TargetFramework>net451</TargetFramework>
-    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;netstandard2.0;netcoreapp2.0</TargetFrameworks>
-    <FileAlignment>512</FileAlignment>
-    <Company>Devcorner.nl</Company>
-    <Copyright>Copyright © 2015 - 2018 Devcorner.nl</Copyright>
+    <TargetFrameworks>netstandard1.1</TargetFrameworks>
     <Authors>RobIII</Authors>
-    <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
-    <Version>2.0.3</Version>
-    <PackageIconUrl>https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png</PackageIconUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/RobThree/IdGen/master/LICENSE</PackageLicenseUrl>
-    <Description>Twitter Snowflake-alike ID generator for .Net</Description>
+    <Company>Devcorner.nl</Company>
+    <PackageId>IdGen</PackageId>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <Product>IdGen</Product>
+    <Copyright>Copyright © 2015 - 2020 Devcorner.nl</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>scalable unique id generator distributed</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>Twitter Snowflake-alike ID generator for .Net</Description>
+    <Version>2.1</Version>
+    <RootNamespace>IdGen</RootNamespace>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
+    <DocumentationFile>bin\Release\IdGen.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DocumentationFile>bin\Release\IdGen.XML</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

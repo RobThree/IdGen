@@ -1,12 +1,6 @@
-﻿#if !NETSTANDARD2_0 && !NETCOREAPP2_0
-using IdGen.Configuration;
-#endif
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace IdGen
@@ -14,15 +8,14 @@ namespace IdGen
     /// <summary>
     /// Generates Id's inspired by Twitter's (late) Snowflake project.
     /// </summary>
+#pragma warning disable CA1710 // Identifiers should have correct suffix
     public class IdGenerator : IIdGenerator<long>
+#pragma warning restore CA1710 // Identifiers should have correct suffix
     {
         /// <summary>
         /// Returns the default epoch.
         /// </summary>
         public static readonly DateTime DefaultEpoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(DefaultEpoch);
-        private static readonly ConcurrentDictionary<string, IdGenerator> _namedgenerators = new ConcurrentDictionary<string, IdGenerator>();
 
         private int _sequence = 0;
         private long _lastgen = -1;
@@ -42,12 +35,12 @@ namespace IdGen
         /// <summary>
         /// Gets the Id of the generator.
         /// </summary>
-        public int Id { get { return (int)_generatorId; } }
+        public int Id => (int)_generatorId;
 
         /// <summary>
         /// Gets the epoch for the <see cref="IdGenerator"/>.
         /// </summary>
-        public DateTimeOffset Epoch { get { return TimeSource.Epoch; } }
+        public DateTimeOffset Epoch => TimeSource.Epoch;
 
         /// <summary>
         /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
@@ -61,7 +54,7 @@ namespace IdGen
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="P:IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
+        /// epoch and the <see cref="IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
         /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
@@ -70,7 +63,7 @@ namespace IdGen
             : this(generatorId, DefaultEpoch) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="P:IdGen.MaskConfig.Default"/> 
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="IdGen.MaskConfig.Default"/> 
         /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
         /// timestamp information.
         /// </summary>
@@ -138,21 +131,19 @@ namespace IdGen
         public IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
         {
             if (maskConfig == null)
-                throw new ArgumentNullException("maskConfig");
+                throw new ArgumentNullException(nameof(maskConfig));
 
-#pragma warning disable IDE0016
             if (timeSource == null)
-                throw new ArgumentNullException("timeSource");
-#pragma warning restore IDE0016
+                throw new ArgumentNullException(nameof(timeSource));
 
             if (maskConfig.TotalBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
 
             if (maskConfig.GeneratorIdBits > 31)
-                throw new ArgumentOutOfRangeException("GeneratorId cannot have more than 31 bits");
+                throw new ArgumentOutOfRangeException("GeneratorIdBits", "GeneratorId cannot have more than 31 bits");
 
             if (maskConfig.SequenceBits > 31)
-                throw new ArgumentOutOfRangeException("Sequence cannot have more than 31 bits");
+                throw new ArgumentOutOfRangeException("SequenceBits", "Sequence cannot have more than 31 bits");
 
             // Precalculate some values
             MASK_TIME = GetMask(maskConfig.TimestampBits);
@@ -160,7 +151,7 @@ namespace IdGen
             MASK_SEQUENCE = GetMask(maskConfig.SequenceBits);
 
             if (generatorId < 0 || generatorId > MASK_GENERATOR)
-                throw new ArgumentOutOfRangeException($"GeneratorId must be between 0 and {MASK_GENERATOR} (inclusive).");
+                throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {MASK_GENERATOR} (inclusive).");
 
             SHIFT_TIME = maskConfig.GeneratorIdBits + maskConfig.SequenceBits;
             SHIFT_GENERATOR = maskConfig.SequenceBits;
@@ -222,57 +213,20 @@ namespace IdGen
         /// diffferent mask config and/or timesource than the current one the 'decoded' ID will NOT contain correct 
         /// information.
         /// </remarks>
-        public ID FromId(long id)
-        {
+        public ID FromId(long id) =>
             // Deconstruct Id by unshifting the bits into the proper parts
-            return ID.Create(
+            ID.Create(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
                 TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * TimeSource.TickDuration.Ticks))
             );
-        }
-
-#if !NETSTANDARD2_0 && !NETCOREAPP2_0
-        /// <summary>
-        /// Returns an instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
-        /// element in the idGenSection of the configuration file. The <see cref="DefaultTimeSource"/> is used to
-        /// retrieve timestamp information.
-        /// </summary>
-        /// <param name="name">The name of the <see cref="IdGenerator"/> in the idGenSection.</param>
-        /// <returns>An instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
-        /// element in the idGenSection of the configuration file.</returns>
-        /// <remarks>
-        /// When the <see cref="IdGenerator"/> doesn't exist it is created; any consequent calls to this method with
-        /// the same name will return the same instance.
-        /// </remarks>
-        public static IdGenerator GetFromConfig(string name)
-        {
-            var result = _namedgenerators.GetOrAdd(name, (n) =>
-            {
-                var idgenerators = (ConfigurationManager.GetSection(IdGeneratorsSection.SectionName) as IdGeneratorsSection).IdGenerators;
-                var idgen = idgenerators.OfType<IdGeneratorElement>().FirstOrDefault(e => e.Name.Equals(n));
-                if (idgen != null)
-                {
-                    var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(idgen.Epoch, idgen.TickDuration);
-                    return new IdGenerator(idgen.Id, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
-                }
-
-                throw new KeyNotFoundException();
-            });
-
-            return result;
-        }
-#endif
 
         /// <summary>
         /// Gets the number of ticks since the <see cref="ITimeSource"/>'s epoch.
         /// </summary>
         /// <returns>Returns the number of ticks since the <see cref="ITimeSource"/>'s epoch.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private long GetTicks()
-        {
-            return TimeSource.GetTicks();
-        }
+        private long GetTicks() => TimeSource.GetTicks();
 
         /// <summary>
         /// Returns a bitmask masking out the desired number of bits; a bitmask of 2 returns 000...000011, a bitmask of
@@ -281,10 +235,7 @@ namespace IdGen
         /// <param name="bits">The number of bits to mask.</param>
         /// <returns>Returns the desired bitmask.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static long GetMask(byte bits)
-        {
-            return (1L << bits) - 1;
-        }
+        private static long GetMask(byte bits) => (1L << bits) - 1;
 
         /// <summary>
         /// Returns a 'never ending' stream of Id's.
@@ -300,18 +251,12 @@ namespace IdGen
         /// Returns an enumerator that iterates over Id's.
         /// </summary>
         /// <returns>An <see cref="IEnumerator&lt;T&gt;"/> object that can be used to iterate over Id's.</returns>
-        public IEnumerator<long> GetEnumerator()
-        {
-            return IdStream().GetEnumerator();
-        }
+        public IEnumerator<long> GetEnumerator() => IdStream().GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates over Id's.
         /// </summary>
         /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate over Id's.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

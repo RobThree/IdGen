@@ -50,7 +50,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConfigTests.cs" />
     <Compile Include="IdGenTests.cs" />
     <Compile Include="MaskConfigTests.cs" />
     <Compile Include="MockTimeSource.cs" />

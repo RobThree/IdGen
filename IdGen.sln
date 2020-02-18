@@ -1,8 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51E6E025-F554-453A-8850-32378CA48C38}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdGen", "IdGen\IdGen.csproj", "{E6856E0A-523F-4451-9C95-621156A1B9F4}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IdGenDocumentation", "IdGenDocumentation\IdGenDocumentation.shfbproj", "{E2E02CC8-5CA2-4FA9-912F-3174152DE7D3}"
@@ -11,12 +18,6 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "IdGenDocumentation", "IdGen
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdGenTests", "IdGenTests\IdGenTests.csproj", "{12E4642B-A533-400C-987B-67B21DB80EC7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51E6E025-F554-453A-8850-32378CA48C38}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
