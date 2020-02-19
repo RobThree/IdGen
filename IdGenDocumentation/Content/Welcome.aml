@@ -228,7 +228,7 @@
           All properties are read-only to prevent changes once an <codeEntityReference linkText="IdGenerator">T:IdGen.IdGenerator</codeEntityReference> has been instantiated.
         </para>
         <para>
-          The <codeInline>AppConfigFactory</codeInline> class in the <codeInline>IdGen.Configuration</codeInline> package provides a 'factory method' to quickly create an <codeEntityReference linkText="IdGenerator based on configuration file">M:IdGen.IdGenerator.GetFromConfig(System.String)</codeEntityReference>. To use this, add the following to your configuration:
+          The <codeInline>AppConfigFactory</codeInline> class in the <codeInline>IdGen.Configuration</codeInline> package provides a 'factory method' to quickly create an IdGenerator based on configuration file. To use this, add the following to your configuration:
         </para>
         <code language="xml">
           <![CDATA[
