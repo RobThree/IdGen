@@ -5,3 +5,6 @@ dotnet_diagnostic.CA1303.severity = suggestion
 
 # CA2208: Instantiate argument exceptions correctly
 dotnet_diagnostic.CA2208.severity = suggestion
+
+# CA1010: Collection '<Some>Collection' directly or indirectly inherits 'ICollection' without implementing 'ICollection<T>'
+dotnet_diagnostic.CA1010.severity = suggestion

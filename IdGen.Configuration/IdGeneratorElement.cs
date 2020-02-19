@@ -17,8 +17,8 @@ namespace IdGen.Configuration
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name
         {
-            get { return (string)this["name"]; }
-            set { this["name"] = value; }
+            get => (string)this["name"];
+            set => this["name"] = value;
         }
 
         /// <summary>
@@ -27,16 +27,16 @@ namespace IdGen.Configuration
         [ConfigurationProperty("id", IsRequired = true)]
         public int Id
         {
-            get { return (int)this["id"]; }
-            set { this["id"] = value; }
+            get => (int)this["id"];
+            set => this["id"] = value;
         }
 
 
         [ConfigurationProperty("epoch", IsRequired = true)]
         private string StringEpoch
         {
-            get { return (string)this["epoch"]; }
-            set { this["epoch"] = value; }
+            get => (string)this["epoch"];
+            set => this["epoch"] = value;
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace IdGen.Configuration
         /// </summary>
         public DateTime Epoch
         {
-            get { return DateTime.SpecifyKind(DateTime.ParseExact(StringEpoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc); }
-            set { StringEpoch = value.ToString(DATETIMEFORMATS[0]); }
+            get => DateTime.SpecifyKind(DateTime.ParseExact(StringEpoch, DATETIMEFORMATS, CultureInfo.InvariantCulture, DateTimeStyles.None), DateTimeKind.Utc);
+            set => StringEpoch = value.ToString(DATETIMEFORMATS[0], CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace IdGen.Configuration
         [ConfigurationProperty("timestampBits", IsRequired = true)]
         public byte TimestampBits
         {
-            get { return (byte)this["timestampBits"]; }
-            set { this["timestampBits"] = value; }
+            get => (byte)this["timestampBits"];
+            set => this["timestampBits"] = value;
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace IdGen.Configuration
         [ConfigurationProperty("generatorIdBits", IsRequired = true)]
         public byte GeneratorIdBits
         {
-            get { return (byte)this["generatorIdBits"]; }
-            set { this["generatorIdBits"] = value; }
+            get => (byte)this["generatorIdBits"];
+            set => this["generatorIdBits"] = value;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace IdGen.Configuration
         [ConfigurationProperty("sequenceBits", IsRequired = true)]
         public byte SequenceBits
         {
-            get { return (byte)this["sequenceBits"]; }
-            set { this["sequenceBits"] = value; }
+            get => (byte)this["sequenceBits"];
+            set => this["sequenceBits"] = value;
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace IdGen.Configuration
         [ConfigurationProperty("tickDuration", IsRequired = false)]
         public TimeSpan TickDuration
         {
-            get { return (TimeSpan)this["tickDuration"]; }
-            set { this["tickDuration"] = value; }
+            get => (TimeSpan)this["tickDuration"];
+            set => this["tickDuration"] = value;
         }
     }
 }
