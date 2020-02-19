@@ -8,7 +8,7 @@ namespace IdGen
     /// </summary>
     public abstract class StopwatchTimeSource : ITimeSource
     {
-        private static readonly Stopwatch _sw = Stopwatch.StartNew();
+        private static readonly Stopwatch _sw = new Stopwatch();
 
         /// <summary>
         /// Gets the epoch of the <see cref="ITimeSource"/>.
@@ -36,6 +36,9 @@ namespace IdGen
             Epoch = epoch;
             Offset = (DateTimeOffset.UtcNow - Epoch);
             TickDuration = tickDuration;
+            
+            // Start (or resume) stopwatch
+            _sw.Start();
         }
 
         /// <summary>
