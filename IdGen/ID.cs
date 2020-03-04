@@ -29,12 +29,12 @@ namespace IdGen
         /// <param name="generatorId">The generator id of the generator that generated the id.</param>
         /// <param name="dateTimeOffset">The date/time when the id was generated.</param>
         /// <returns></returns>
-        internal static ID Create(int sequenceNumber, int generatorId, DateTimeOffset dateTimeOffset) => new ID
+        internal ID(int sequenceNumber, int generatorId, DateTimeOffset dateTimeOffset)
         {
-            SequenceNumber = sequenceNumber,
-            GeneratorId = generatorId,
-            DateTimeOffset = dateTimeOffset
-        };
+            SequenceNumber = sequenceNumber;
+            GeneratorId = generatorId;
+            DateTimeOffset = dateTimeOffset;
+        }
 
         /// <summary>
         /// Returns a value that indicates whether this instance is equal to a specified object.

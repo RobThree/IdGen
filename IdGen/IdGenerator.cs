@@ -215,7 +215,7 @@ namespace IdGen
         /// </remarks>
         public ID FromId(long id) =>
             // Deconstruct Id by unshifting the bits into the proper parts
-            ID.Create(
+            new ID(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
                 TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * TimeSource.TickDuration.Ticks))
