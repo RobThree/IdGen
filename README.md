@@ -6,7 +6,7 @@ Twitter Snowflake-alike ID generator for .Net. Available as [Nuget package](http
 
 ## Why
 
-In certain situations you need a low-latency uncoordinated, (roughly) time ordered, compact and highly available Id generation system. This project was inspired by [Twitter's Snowflake](https://github.com/twitter/snowflake) project which has been retired. Note that this project was inspired by Snowflake but is not an *exact* implementation. This library provides a basis for Id generation; it does **not** provide a service for handing out these Id's nor does it provide generator-id ('worker-id') coordination.
+In certain situations you need a low-latency, distributed, uncoordinated, (roughly) time ordered, compact and highly available Id generation system. This project was inspired by [Twitter's Snowflake](https://github.com/twitter/snowflake) project which has been retired. Note that this project was inspired by Snowflake but is not an *exact* implementation. This library provides a basis for Id generation; it does **not** provide a service for handing out these Id's nor does it provide generator-id ('worker-id') coordination.
 
 ## How it works
 
