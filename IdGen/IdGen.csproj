@@ -12,9 +12,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>scalable unique id generator distributed</PackageTags>
-    <PackageReleaseNotes>Fixed a bug where the StopwatchTimeSource didn't share it's internal offset between instances causing unexpected behavior in the DefaultTimeSource which relies on the StopwatchTimeSource.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added a TryCreate() method that doesn't throw but rather indicates success or failure by return value.</PackageReleaseNotes>
     <Description>Twitter Snowflake-alike ID generator for .Net</Description>
-    <Version>2.2</Version>
+    <Version>2.3</Version>
     <RootNamespace>IdGen</RootNamespace>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />

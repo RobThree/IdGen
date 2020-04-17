@@ -51,6 +51,7 @@
     <CatalogProductId>VS</CatalogProductId>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\IdGen\IdGen.csproj" />
+      <DocumentationSource sourceFile="..\IdGen.Configuration\IdGen.Configuration.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
@@ -104,6 +105,7 @@
     <None Include="Content\VersionHistory\v2.0.3.0.aml" />
     <None Include="Content\VersionHistory\v2.1.0.0.aml" />
     <None Include="Content\VersionHistory\v2.2.0.0.aml" />
+    <None Include="Content\VersionHistory\v2.3.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

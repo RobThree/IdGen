@@ -49,10 +49,11 @@
         <HelpKeyword index="K" term="version, 2.1.0.0" />
       </HelpKeywords>
     </Topic>
-    <Topic id="16f482cc-83c4-4a8b-88ff-3e585a18cb44" visible="True" isSelected="true" title="Version 2.2.0.0">
+    <Topic id="16f482cc-83c4-4a8b-88ff-3e585a18cb44" visible="True" title="Version 2.2.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 2.2.0.0" />
       </HelpKeywords>
     </Topic>
+    <Topic id="ab92f7f6-9bd7-4725-8d05-4bc13a2af5e0" visible="True" isSelected="true" />
   </Topic>
 </Topics>

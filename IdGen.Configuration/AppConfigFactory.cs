@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace IdGen.Configuration
 {
+    /// <summary>
+    /// Helper class to get IdGen configuration from the application configuration.
+    /// </summary>
     public static class AppConfigFactory
     {
         private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(IdGenerator.DefaultEpoch);
@@ -17,8 +20,10 @@ namespace IdGen.Configuration
         /// retrieve timestamp information.
         /// </summary>
         /// <param name="name">The name of the <see cref="IdGenerator"/> in the idGenSection.</param>
-        /// <returns>An instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
-        /// element in the idGenSection of the configuration file.</returns>
+        /// <returns>
+        /// An instance of an <see cref="IdGenerator"/> based on the values in the corresponding idGenerator
+        /// element in the idGenSection of the configuration file.
+        /// </returns>
         /// <remarks>
         /// When the <see cref="IdGenerator"/> doesn't exist it is created; any consequent calls to this method with
         /// the same name will return the same instance.

@@ -132,6 +132,21 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        public void TryCreateId_Returns_False_OnSequenceOverflow()
+        {
+            var ts = new MockTimeSource();
+            var g = new IdGenerator(0, new MaskConfig(41, 20, 2), ts);
+
+            // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
+            for (int i = 0; i < 4; i++)
+                Assert.IsTrue(g.TryCreateId(out var _));
+
+            // However, if we invoke once more we should get an SequenceOverflowException
+            // which should be indicated by the false return value
+            Assert.IsFalse(g.TryCreateId(out var _));
+        }
+
+        [TestMethod]
         public void Constructor_UsesCorrect_Values()
         {
             Assert.AreEqual(123, new IdGenerator(123).Id);  // Make sure the test-value is not masked so it matches the expected value!
@@ -169,6 +184,18 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        public void TryCreateId_Returns_False_OnClockBackwards()
+        {
+            var ts = new MockTimeSource(100);
+            var m = MaskConfig.Default;
+            var g = new IdGenerator(0, m, ts);
+
+            Assert.IsTrue(g.TryCreateId(out var _));
+            ts.PreviousTick(); // Set clock back 1 'tick', this results in the time going from "100" to "99"
+            Assert.IsFalse(g.TryCreateId(out var _));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnInvalidGeneratorId_Positive()
         {
@@ -184,7 +211,7 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidSystemClockException))]
-        public void Constructor_Throws_OnTimestampWraparound()
+        public void CreateId_Throws_OnTimestampWraparound()
         {
             var m = MaskConfig.Default;
             var ts = new MockTimeSource(long.MaxValue);  // Set clock to 1 'tick' before wraparound
@@ -193,6 +220,18 @@ namespace IdGenTests
             Assert.IsTrue(g.CreateId() > 0);    // Should succeed;
             ts.NextTick();
             g.CreateId();                       // Should fail
+        }
+
+        [TestMethod]
+        public void TryCreateId_Returns_False_OnTimestampWraparound()
+        {
+            var m = MaskConfig.Default;
+            var ts = new MockTimeSource(long.MaxValue);  // Set clock to 1 'tick' before wraparound
+            var g = new IdGenerator(0, m, ts);
+
+            Assert.IsTrue(g.TryCreateId(out var _));    // Should succeed;
+            ts.NextTick();
+            Assert.IsFalse(g.TryCreateId(out var _));   // Should fail
         }
 
         [TestMethod]
