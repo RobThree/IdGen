@@ -13,7 +13,7 @@
     <RootNamespace>IdGenDocumentation</RootNamespace>
     <Name>IdGenDocumentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5.2</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>IdGenHelp</HtmlHelpName>
     <Language>en-US</Language>
