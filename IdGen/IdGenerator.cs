@@ -205,12 +205,12 @@ namespace IdGen
         /// <exception cref="SequenceOverflowException">Thrown when sequence overflows.</exception>
         private long CreateIdImpl(out Exception exception)
         {
-            // Determine "timeslot" and make sure it's >= last timeslot (if any)
-            var ticks = GetTicks();
-            var timestamp = ticks & MASK_TIME;
-
             lock (_genlock)
             {
+                // Determine "timeslot" and make sure it's >= last timeslot (if any)
+                var ticks = GetTicks();
+                var timestamp = ticks & MASK_TIME;
+
                 if (timestamp < _lastgen || ticks < 0)
                 {
                     exception = new InvalidSystemClockException($"Clock moved backwards or wrapped around. Refusing to generate id for {_lastgen - timestamp} ticks");
