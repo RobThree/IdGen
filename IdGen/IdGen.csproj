@@ -12,9 +12,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>scalable unique id generator distributed</PackageTags>
-    <PackageReleaseNotes>Added a TryCreate() method that doesn't throw but rather indicates success or failure by return value.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix concurrency issue (see PR #23)</PackageReleaseNotes>
     <Description>Twitter Snowflake-alike ID generator for .Net</Description>
-    <Version>2.3</Version>
+    <Version>2.4</Version>
     <RootNamespace>IdGen</RootNamespace>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
