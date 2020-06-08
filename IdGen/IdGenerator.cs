@@ -53,6 +53,14 @@ namespace IdGen
         public ITimeSource TimeSource { get; private set; }
 
         /// <summary>
+        /// If set to true the generator will spin (and block) till next time slot on
+        ///  exhausting all ids within current time slot
+        /// If set to false (dafault) it will throw in such a situation (or return false
+        ///  was the <see cref="TryCreateId"/> method called)
+        /// </summary>
+        public bool SpinOnTimeSlotExhausted { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
         /// epoch and the <see cref="IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
         /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
@@ -221,9 +229,22 @@ namespace IdGen
                 if (timestamp == _lastgen)
                 {
                     if (_sequence >= MASK_SEQUENCE)
-                    { 
-                        exception = new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
-                        return -1;
+                    {
+                        if (SpinOnTimeSlotExhausted)
+                        {
+                            do
+                            {
+                                //Thread.Yield() - would that be on netstandard 1.1
+                            } while (_lastgen == GetTicks());
+                            _lastgen = GetTicks();
+                            _sequence = -1;
+                        }
+                        else
+                        {
+                            exception = new SequenceOverflowException(
+                                "Sequence overflow. Refusing to generate id for rest of tick");
+                            return -1;
+                        }
                     }
                     _sequence++;
                 }
