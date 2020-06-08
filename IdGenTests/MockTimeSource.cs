@@ -28,8 +28,29 @@ namespace IdGenTests
             Epoch = epoch;
         }
 
+        private int _autoincrementAfterCallsNum;
+        private int _callsRemaining = -1;
+
+        public int AutoincrementAfterCallsNum
+        {
+            set
+            {
+                _autoincrementAfterCallsNum = value;
+                _callsRemaining = value;
+            }
+        }
+
         public long GetTicks()
         {
+            if (_autoincrementAfterCallsNum > 0)
+            {
+                if (Interlocked.Decrement(ref _callsRemaining) == 0)
+                {
+                    _callsRemaining = _autoincrementAfterCallsNum;
+                    NextTick();
+                }
+            }
+            
             return _current;
         }
 

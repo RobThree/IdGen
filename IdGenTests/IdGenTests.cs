@@ -132,6 +132,20 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        public void CreateId_Waits_OnSequenceOverflow()
+        {
+            var ts = new MockTimeSource(){AutoincrementAfterCallsNum = 20};
+            var g = new IdGenerator(0, new MaskConfig(61, 0, 2), ts)
+            {
+                SpinOnTimeSlotExhausted = true
+            };
+
+            // We have a 2-bit sequence; generating 4 id's in a single time slot - wait for other then
+            for (int i = 0; i < 20; i++)
+                Assert.AreEqual(i, g.CreateId());
+        }
+
+        [TestMethod]
         public void TryCreateId_Returns_False_OnSequenceOverflow()
         {
             var ts = new MockTimeSource();

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace IdGen
 {
@@ -232,11 +233,9 @@ namespace IdGen
                     {
                         if (SpinOnTimeSlotExhausted)
                         {
-                            do
-                            {
-                                //Thread.Yield() - would that be on netstandard 1.1
-                            } while (_lastgen == GetTicks());
-                            _lastgen = GetTicks();
+                            SpinWait.SpinUntil(() => _lastgen != GetTicks());
+                            timestamp = GetTicks();
+                            _lastgen = timestamp;
                             _sequence = -1;
                         }
                         else
