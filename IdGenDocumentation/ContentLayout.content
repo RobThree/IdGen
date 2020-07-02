@@ -61,7 +61,12 @@
     </Topic>
     <Topic id="006fa4ee-5895-4401-873a-006b4316365d" visible="True" isSelected="true" title="Version 2.4.0.0">
       <HelpKeywords>
-        <HelpKeyword index="K" term="version, 2.3.0.0" />
+        <HelpKeyword index="K" term="version, 2.4.0.0" />
+      </HelpKeywords>
+    </Topic>
+    <Topic id="941bdc70-cff6-4a4d-80b6-509114890f14" visible="True" title="Version 2.4.1.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 2.4.1.0" />
       </HelpKeywords>
     </Topic>
   </Topic>

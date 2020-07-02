@@ -40,6 +40,16 @@ namespace IdGen.Configuration
         }
 
         /// <summary>
+        /// Gets/sets the spinwait option of the <see cref="IdGeneratorElement"/>.
+        /// </summary>
+        [ConfigurationProperty("useSpinWait", IsRequired = false)]
+        public bool UseSpinWait
+        {
+            get => (bool)this["useSpinWait"];
+            set => this["useSpinWait"] = value;
+        }
+
+        /// <summary>
         /// Gets/sets the Epoch of the <see cref="IdGeneratorElement"/>.
         /// </summary>
         public DateTime Epoch

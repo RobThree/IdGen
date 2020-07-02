@@ -1,4 +1,5 @@
 ﻿using IdGen;
+using IdGenTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -302,5 +303,20 @@ namespace IdGenTests
                                                                                             // And epoch was 2018-7-31 14:48:02 +02:00...
         }
 
+        [TestMethod]
+        public void CreateId_Waits_OnSequenceOverflow()
+        {
+            // Use timesource that generates a new tick every 10 calls to GetTicks()
+            var ts = new MockAutoIncrementingIntervalTimeSource(10);
+            var g = new IdGenerator(0, new MaskConfig(61, 0, 2), ts, true);
+
+            // We have a 2-bit sequence; generating 4 id's in a single time slot - wait for other then
+            Assert.AreEqual(0, g.CreateId());
+            Assert.AreEqual(1, g.CreateId());
+            Assert.AreEqual(2, g.CreateId());
+            Assert.AreEqual(3, g.CreateId());
+            Assert.AreEqual(4, g.CreateId());   // This should trigger a spinwait and return the next ID
+            Assert.AreEqual(5, g.CreateId());
+        }
     }
 }

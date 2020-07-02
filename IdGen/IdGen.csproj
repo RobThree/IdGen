@@ -12,9 +12,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>scalable unique id generator distributed</PackageTags>
-    <PackageReleaseNotes>Fix concurrency issue (see PR #23)</PackageReleaseNotes>
+    <PackageReleaseNotes>Added spinwait option (see #24)</PackageReleaseNotes>
     <Description>Twitter Snowflake-alike ID generator for .Net</Description>
-    <Version>2.4</Version>
+    <Version>2.4.1</Version>
     <RootNamespace>IdGen</RootNamespace>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />

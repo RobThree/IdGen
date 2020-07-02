@@ -37,7 +37,7 @@
     <HelpTitle>IdGen documentation</HelpTitle>
     <FeedbackEMailLinkText>Rob Janssen</FeedbackEMailLinkText>
     <FeedbackEMailAddress>rob%40robiii.me</FeedbackEMailAddress>
-    <CopyrightText>%28c%29 2015 - 2016 Devcorner.nl</CopyrightText>
+    <CopyrightText>%28c%29 2015 - 2020 Devcorner.nl</CopyrightText>
     <CopyrightHref>https://github.com/RobThree/IdGen</CopyrightHref>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CatalogName>VisualStudio11</CatalogName>
@@ -64,7 +64,7 @@
       <NamespaceSummaryItem name="IdGen" isDocumented="True">&lt;para&gt;The IdGen namespace contains classes that allow generating unique (distributed) ID's.&lt;/para&gt;</NamespaceSummaryItem>
       <NamespaceSummaryItem name="IdGen.Configuration" isDocumented="True">&lt;para&gt;The IdGen.Configuration namespace contains the types that provide the programming model for handling configuration data.&lt;/para&gt;</NamespaceSummaryItem>
     </NamespaceSummaries>
-    <HelpFileVersion>2.0.0.0</HelpFileVersion>
+    <HelpFileVersion>2.4.1.0</HelpFileVersion>
     <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
     <CollectionTocStyle>Hierarchical</CollectionTocStyle>
     <MSHelp2SdkLinkType>Msdn</MSHelp2SdkLinkType>
@@ -107,6 +107,7 @@
     <None Include="Content\VersionHistory\v2.2.0.0.aml" />
     <None Include="Content\VersionHistory\v2.3.0.0.aml" />
     <None Include="Content\VersionHistory\v2.4.0.0.aml" />
+    <None Include="Content\VersionHistory\v2.4.1.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>

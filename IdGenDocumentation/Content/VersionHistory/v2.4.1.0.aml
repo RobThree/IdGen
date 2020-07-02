@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="006fa4ee-5895-4401-873a-006b4316365d" revisionNumber="1">
+<topic id="941bdc70-cff6-4a4d-80b6-509114890f14" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-        Version 2.4.0.0 was released on 2020-04-18.
+        Version 2.4.1.0 was released on 2020-07-02.
       </para>
     </introduction>
 
@@ -14,9 +14,9 @@
         <list class="bullet">
           <listItem>
             <para>
-              Fixed concurrency issue (see <externalLink>
-                <linkText>#23</linkText>
-                <linkUri>https://github.com/RobThree/IdGen/pull/23</linkUri>
+              Implemented spinwait (see <externalLink>
+                <linkText>#24</linkText>
+                <linkUri>https://github.com/RobThree/IdGen/pull/24</linkUri>
               </externalLink>).
             </para>
           </listItem>

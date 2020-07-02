@@ -200,12 +200,27 @@
           </listItem>
           <listItem>
             <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,System.Boolean)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
               <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
-              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfi)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig)</codeEntityReference>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,System.Boolean)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,System.DateTimeOffset,IdGen.MaskConfig,System.Boolean)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
@@ -215,12 +230,27 @@
           </listItem>
           <listItem>
             <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, ITimeSource timeSource, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.ITimeSource,System.Boolean)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
               <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig)</codeEntityReference>
             </para>
           </listItem>
           <listItem>
             <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig,System.Boolean)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
               <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig,IdGen.ITimeSource)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference linkText="IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource, bool useSpinWait)">M:IdGen.IdGenerator.#ctor(System.Int32,IdGen.MaskConfig,IdGen.ITimeSource,System.Boolean)</codeEntityReference>
             </para>
           </listItem>
         </list>
@@ -241,7 +271,7 @@
     <idGenerators>
       <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" tickDuration="0:00:00.001" />
       <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
-      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
+      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" useSpinWait="true" />
     </idGenerators>
   </idGenSection>
   
@@ -249,7 +279,7 @@
           ]]>
         </code>
         <para>
-          The attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. The <codeInline>tickDuration</codeInline> is optional and defaults to the default tickduration from a <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference>. Valid DateTime notations for the epoch are:
+          The attributes (<codeInline>name</codeInline>, <codeInline>id</codeInline>, <codeInline>epoch</codeInline>, <codeInline>timestampBits</codeInline>, <codeInline>generatorIdBits</codeInline> and <codeInline>sequenceBits</codeInline>) are required. The <codeInline>tickDuration</codeInline> is optional and defaults to the default tickduration from a <codeEntityReference>T:IdGen.DefaultTimeSource</codeEntityReference>, <codeInline>useSpinWait</codeInline> is optional too and defaults to <codeInline>false</codeInline>. Valid DateTime notations for the epoch are:
         </para>
         <list class="bullet">
           <listItem>

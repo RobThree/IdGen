@@ -12,9 +12,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>idgen configuration</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Added spinwait option (see #24)</PackageReleaseNotes>
     <Description>Configuration support for IdGen</Description>
-    <Version>1.0</Version>
+    <Version>1.0.1</Version>
     <RootNamespace>IdGen.Configuration</RootNamespace>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />

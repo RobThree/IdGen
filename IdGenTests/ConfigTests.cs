@@ -9,7 +9,7 @@ namespace IdGenTests
     public class ConfigTests
     {
         [TestMethod]
-        public void IdGenerator_GetFromConfig_CreatesCorrectGenerator()
+        public void IdGenerator_GetFromConfig_CreatesCorrectGenerator1()
         {
             var target = AppConfigFactory.GetFromConfig("foo");
 
@@ -19,6 +19,21 @@ namespace IdGenTests
             Assert.AreEqual(11, target.MaskConfig.GeneratorIdBits);
             Assert.AreEqual(13, target.MaskConfig.SequenceBits);
             Assert.AreEqual(TimeSpan.FromMilliseconds(50), target.TimeSource.TickDuration);
+            Assert.IsFalse(target.UseSpinWait);
+        }
+
+        [TestMethod]
+        public void IdGenerator_GetFromConfig_CreatesCorrectGenerator2()
+        {
+            var target = AppConfigFactory.GetFromConfig("baz");
+
+            Assert.AreEqual(2047, target.Id);
+            Assert.AreEqual(new DateTime(2016, 2, 29, 0, 0, 0, DateTimeKind.Utc), target.Epoch);
+            Assert.AreEqual(21, target.MaskConfig.TimestampBits);
+            Assert.AreEqual(21, target.MaskConfig.GeneratorIdBits);
+            Assert.AreEqual(21, target.MaskConfig.SequenceBits);
+            Assert.AreEqual(TimeSpan.FromTicks(7), target.TimeSource.TickDuration);
+            Assert.IsTrue(target.UseSpinWait);
         }
 
         [TestMethod]
@@ -90,7 +105,8 @@ namespace IdGenTests
                 TimestampBits = 39,
                 GeneratorIdBits = 11,
                 SequenceBits = 13,
-                TickDuration = TimeSpan.FromMilliseconds(50)
+                TickDuration = TimeSpan.FromMilliseconds(50),
+                UseSpinWait = false
             };
             var expected = AppConfigFactory.GetFromConfig("foo");
 
@@ -100,6 +116,7 @@ namespace IdGenTests
             Assert.AreEqual(expected.MaskConfig.GeneratorIdBits, target.GeneratorIdBits);
             Assert.AreEqual(expected.MaskConfig.SequenceBits, target.SequenceBits);
             Assert.AreEqual(expected.TimeSource.TickDuration, target.TickDuration);
+            Assert.AreEqual(expected.UseSpinWait, target.UseSpinWait);
         }
     }
 }

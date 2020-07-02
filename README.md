@@ -123,11 +123,17 @@ The following constructor overloads are available:
 
 ```c#
 IdGenerator(int generatorId)
+IdGenerator(int generatorId, bool useSpinWait)
 IdGenerator(int generatorId, DateTimeOffset epoch)
-IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfi)
+IdGenerator(int generatorId, DateTimeOffset epoch, bool useSpinWait)
+IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)
+IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, bool useSpinWait)
 IdGenerator(int generatorId, ITimeSource timeSource)
+IdGenerator(int generatorId, ITimeSource timeSource, bool useSpinWait)
 IdGenerator(int generatorId, MaskConfig maskConfig)
+IdGenerator(int generatorId, MaskConfig maskConfig, bool useSpinWait)
 IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
+IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource, bool useSpinWait)
 ```
 
 All properties are read-only to prevent changes once an `IdGenerator` has been instantiated.
@@ -144,14 +150,14 @@ The `AppConfigFactory` class in the `IdGen.Configuration` package provides a 'fa
     <idGenerators>
       <idGenerator name="foo" id="123"  epoch="2016-01-02T12:34:56" timestampBits="39" generatorIdBits="11" sequenceBits="13" tickDuration="0:00:00.001" />
       <idGenerator name="bar" id="987"  epoch="2016-02-01 01:23:45" timestampBits="20" generatorIdBits="21" sequenceBits="22" />
-      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" />
+      <idGenerator name="baz" id="2047" epoch="2016-02-29"          timestampBits="21" generatorIdBits="21" sequenceBits="21" useSpinWait="true" />
     </idGenerators>
   </idGenSection>
 
 </configuration>
 ```
 
-The attributes (`name`, `id`, `epoch`, `timestampBits`, `generatorIdBits` and `sequenceBits`) are required. The tickDuration is optional and defaults to the default tickduration from a `DefaultTimeSource`. Valid DateTime notations for the epoch are:
+The attributes (`name`, `id`, `epoch`, `timestampBits`, `generatorIdBits` and `sequenceBits`) are required. The `tickDuration` is optional and defaults to the default tickduration from a `DefaultTimeSource`, `useSpinWait` is optional too and defaults to false. Valid DateTime notations for the epoch are:
 
 * `yyyy-MM-ddTHH:mm:ss`
 * `yyyy-MM-dd HH:mm:ss`

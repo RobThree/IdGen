@@ -37,7 +37,7 @@ namespace IdGen.Configuration
                 if (idgen != null)
                 {
                     var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(idgen.Epoch, idgen.TickDuration);
-                    return new IdGenerator(idgen.Id, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts);
+                    return new IdGenerator(idgen.Id, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts, idgen.UseSpinWait);
                 }
 
                 throw new KeyNotFoundException();

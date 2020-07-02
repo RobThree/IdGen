@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace IdGenTests
+namespace IdGenTests.Mocks
 {
     public class MockTimeSource : ITimeSource
     {
@@ -28,7 +28,7 @@ namespace IdGenTests
             Epoch = epoch;
         }
 
-        public long GetTicks()
+        public virtual long GetTicks()
         {
             return _current;
         }
