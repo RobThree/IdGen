@@ -14,7 +14,7 @@
         <list class="bullet">
           <listItem>
             <para>
-              This release contains a few (minor) breaking changes. Generated 2.x ID's are still compatible with 3.x ID's. This release is mostly more, better and consistent naming of objects.
+              This release contains a few (minor) breaking changes. Generated 2.x ID's are still compatible with 3.x ID's. This release is mostly better and more consistent naming of objects.
             </para>
 
             <list class="bullet">
@@ -30,7 +30,7 @@
               </listItem>
               <listItem>
                 <para>
-                  The <codeInline>UseSpinWait</codeInline> property has moved to the <codeEntityReference>T:IdGen.IdGeneratorOptions</codeEntityReference> and is now an enum of type <codeEntityReference>T:IdGen.SequenceOverflowStrategy</codeEntityReference> instead of a boolean value. Note that this property has also been renamed in the config file (from <codeInline>useSpinWait</codeInline> to <codeInline>sequenceOverflowStrategy</codeInline>) and is no longer a boolean but rquires one of the values from <codeEntityReference>T:IdGen.SequenceOverflowStrategy</codeEntityReference>.
+                  The <codeInline>UseSpinWait</codeInline> property has moved to the <codeEntityReference>T:IdGen.IdGeneratorOptions</codeEntityReference> and is now an enum of type <codeEntityReference>T:IdGen.SequenceOverflowStrategy</codeEntityReference> instead of a boolean value. Note that this property has also been renamed in the config file (from <codeInline>useSpinWait</codeInline> to <codeInline>sequenceOverflowStrategy</codeInline>) and is no longer a boolean but requires one of the values from <codeEntityReference>T:IdGen.SequenceOverflowStrategy</codeEntityReference>.
                 </para>
               </listItem>
               <listItem>
