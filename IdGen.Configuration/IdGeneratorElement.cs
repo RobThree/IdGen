@@ -40,13 +40,13 @@ namespace IdGen.Configuration
         }
 
         /// <summary>
-        /// Gets/sets the spinwait option of the <see cref="IdGeneratorElement"/>.
+        /// Gets/sets the <see cref="SequenceOverflowStrategy"/> option of the <see cref="IdGeneratorElement"/>.
         /// </summary>
-        [ConfigurationProperty("useSpinWait", IsRequired = false)]
-        public bool UseSpinWait
+        [ConfigurationProperty("sequenceOverflowStrategy", IsRequired = false)]
+        public SequenceOverflowStrategy SequenceOverflowStrategy
         {
-            get => (bool)this["useSpinWait"];
-            set => this["useSpinWait"] = value;
+            get => (SequenceOverflowStrategy)this["sequenceOverflowStrategy"];
+            set => this["sequenceOverflowStrategy"] = value;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace IdGen.Configuration
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="MaskConfig.TimestampBits"/> of the <see cref="IdGeneratorElement"/>.
+        /// Gets/sets the <see cref="IdStructure.TimestampBits"/> of the <see cref="IdGeneratorElement"/>.
         /// </summary>
         [ConfigurationProperty("timestampBits", IsRequired = true)]
         public byte TimestampBits
@@ -69,7 +69,7 @@ namespace IdGen.Configuration
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="MaskConfig.GeneratorIdBits"/> of the <see cref="IdGeneratorElement"/>.
+        /// Gets/sets the <see cref="IdStructure.GeneratorIdBits"/> of the <see cref="IdGeneratorElement"/>.
         /// </summary>
         [ConfigurationProperty("generatorIdBits", IsRequired = true)]
         public byte GeneratorIdBits
@@ -79,7 +79,7 @@ namespace IdGen.Configuration
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="MaskConfig.SequenceBits"/> of the <see cref="IdGeneratorElement"/>.
+        /// Gets/sets the <see cref="IdStructure.SequenceBits"/> of the <see cref="IdGeneratorElement"/>.
         /// </summary>
         [ConfigurationProperty("sequenceBits", IsRequired = true)]
         public byte SequenceBits

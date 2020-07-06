@@ -13,17 +13,9 @@ namespace IdGen
     public class IdGenerator : IIdGenerator<long>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
     {
-        /// <summary>
-        /// Returns the default epoch.
-        /// </summary>
-        public static readonly DateTime DefaultEpoch = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-        private const bool DEFAULTSPINWAIT = false;
-
+        private readonly long _generatorid;
         private int _sequence = 0;
         private long _lastgen = -1;
-        private readonly long _generatorId;
-        private readonly bool _usespinwait;
 
         private readonly long MASK_SEQUENCE;
         private readonly long MASK_TIME;
@@ -37,232 +29,47 @@ namespace IdGen
         private readonly object _genlock = new object();
 
         /// <summary>
+        /// Gets the <see cref="IdGeneratorOptions"/>.
+        /// </summary>
+        public IdGeneratorOptions Options { get; }
+
+
+        /// <summary>
         /// Gets the Id of the generator.
         /// </summary>
-        public int Id => (int)_generatorId;
+        public int Id => (int)_generatorid;
 
         /// <summary>
-        /// Gets the epoch for the <see cref="IdGenerator"/>.
-        /// </summary>
-        public DateTimeOffset Epoch => TimeSource.Epoch;
-
-        /// <summary>
-        /// Gets the <see cref="MaskConfig"/> for the <see cref="IdGenerator"/>.
-        /// </summary>
-        public MaskConfig MaskConfig { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="ITimeSource"/> for the <see cref="IdGenerator"/>.
-        /// </summary>
-        public ITimeSource TimeSource { get; private set; }
-
-        /// <summary>
-        /// Gets wether the <see cref="IdGenerator"/> uses <see cref="SpinWait">spinwaiting</see> when a
-        /// sequenceoverflow occurs.
-        /// </summary>
-        /// <remarks>
-        /// When true, the <see cref="IdGenerator"/> won't throw a <see cref="SequenceOverflowException"/> when a 
-        /// sequence overflows; rather it will wait (using a spinwait) for the next tick and then return a new Id.
-        /// </remarks>
-        public bool UseSpinWait => _usespinwait;
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
-        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
         public IdGenerator(int generatorId)
-            : this(generatorId, DefaultEpoch, DEFAULTSPINWAIT) { }
+            : this(generatorId, new IdGeneratorOptions()) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class, 2015-01-01 0:00:00Z is used as default 
-        /// epoch and the <see cref="IdGen.MaskConfig.Default"/> value is used for the <see cref="MaskConfig"/>. The
-        /// <see cref="DefaultTimeSource"/> is used to retrieve timestamp information.
+        /// Initializes a new instance of the <see cref="IdGenerator"/> class with the specified <see cref="IdGeneratorOptions"/>.
         /// </summary>
         /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when GeneratorId exceeds maximum value.</exception>
-        public IdGenerator(int generatorId, bool useSpinWait)
-            : this(generatorId, DefaultEpoch, useSpinWait) { }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="IdGen.MaskConfig.Default"/> 
-        /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
-        /// timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch)
-            : this(generatorId, epoch, MaskConfig.Default, DEFAULTSPINWAIT) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class. The <see cref="IdGen.MaskConfig.Default"/> 
-        /// value is used for the <see cref="MaskConfig"/>.  The <see cref="DefaultTimeSource"/> is used to retrieve
-        /// timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch, bool useSpinWait)
-            : this(generatorId, epoch, MaskConfig.Default, useSpinWait) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
-        /// used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, MaskConfig maskConfig)
-            : this(generatorId, maskConfig, new DefaultTimeSource(DefaultEpoch), DEFAULTSPINWAIT) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
-        /// used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, MaskConfig maskConfig, bool useSpinWait)
-            : this(generatorId, maskConfig, new DefaultTimeSource(DefaultEpoch), useSpinWait) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
-        /// used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig)
-            : this(generatorId, maskConfig, new DefaultTimeSource(epoch), DEFAULTSPINWAIT) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.  The <see cref="DefaultTimeSource"/> is
-        /// used to retrieve timestamp information.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="epoch">The Epoch of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentNullException">Thrown when maskConfig is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, DateTimeOffset epoch, MaskConfig maskConfig, bool useSpinWait)
-            : this(generatorId, maskConfig, new DefaultTimeSource(epoch), useSpinWait) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, ITimeSource timeSource)
-            : this(generatorId, MaskConfig.Default, timeSource, DEFAULTSPINWAIT) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, ITimeSource timeSource, bool useSpinWait)
-            : this(generatorId, MaskConfig.Default, timeSource, useSpinWait) { }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource)
-            : this(generatorId, maskConfig, timeSource, DEFAULTSPINWAIT) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdGenerator"/> class.
-        /// </summary>
-        /// <param name="generatorId">The Id of the generator.</param>
-        /// <param name="maskConfig">The <see cref="MaskConfig"/> of the generator.</param>
-        /// <param name="timeSource">The time-source to use when acquiring time data.</param>
-        /// <param name="useSpinWait">Whether to use spinwaiting when a sequenceoverflow occurs.</param>
-        /// <exception cref="ArgumentNullException">Thrown when either maskConfig or timeSource is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when maskConfig defines a non-63 bit bitmask.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when GeneratorId or Sequence masks are >31 bit, GeneratorId exceeds maximum value or epoch in future.
-        /// </exception>
-        public IdGenerator(int generatorId, MaskConfig maskConfig, ITimeSource timeSource, bool useSpinWait)
+        /// <param name="options">The <see cref="IdGeneratorOptions"/> for the <see cref="IdGenerator"/></param>.
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is null.</exception>
+        public IdGenerator(int generatorId, IdGeneratorOptions options)
         {
-            if (maskConfig == null)
-                throw new ArgumentNullException(nameof(maskConfig));
+            if (generatorId < 0)
+                throw new ArgumentOutOfRangeException(nameof(generatorId), "GeneratorId must be larger than or equal to 0");
+            _generatorid = generatorId;
 
-            if (timeSource == null)
-                throw new ArgumentNullException(nameof(timeSource));
+            Options = options ?? throw new ArgumentNullException(nameof(options));
 
-            if (maskConfig.TotalBits != 63)
-                throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
-
-            if (maskConfig.GeneratorIdBits > 31)
-                throw new ArgumentOutOfRangeException("GeneratorIdBits", "GeneratorId cannot have more than 31 bits");
-
-            if (maskConfig.SequenceBits > 31)
-                throw new ArgumentOutOfRangeException("SequenceBits", "Sequence cannot have more than 31 bits");
+            var maxgeneratorid = 1 << Options.IdStructure.GeneratorIdBits;
+            if (_generatorid >= maxgeneratorid)
+                throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {maxgeneratorid - 1}.");
 
             // Precalculate some values
-            MASK_TIME = GetMask(maskConfig.TimestampBits);
-            MASK_GENERATOR = GetMask(maskConfig.GeneratorIdBits);
-            MASK_SEQUENCE = GetMask(maskConfig.SequenceBits);
-
-            if (generatorId < 0 || generatorId > MASK_GENERATOR)
-                throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {MASK_GENERATOR} (inclusive).");
-
-            SHIFT_TIME = maskConfig.GeneratorIdBits + maskConfig.SequenceBits;
-            SHIFT_GENERATOR = maskConfig.SequenceBits;
-
-            // Store instance specific values
-            MaskConfig = maskConfig;
-            TimeSource = timeSource;
-            _generatorId = generatorId;
-            _usespinwait = useSpinWait;
+            MASK_TIME = GetMask(options.IdStructure.TimestampBits);
+            MASK_GENERATOR = GetMask(options.IdStructure.GeneratorIdBits);
+            MASK_SEQUENCE = GetMask(options.IdStructure.SequenceBits);
+            SHIFT_TIME = options.IdStructure.GeneratorIdBits + options.IdStructure.SequenceBits;
+            SHIFT_GENERATOR = options.IdStructure.SequenceBits;
         }
 
         /// <summary>
@@ -274,7 +81,7 @@ namespace IdGen
         /// <remarks>Note that this method MAY throw an one of the documented exceptions.</remarks>
         public long CreateId()
         {
-            var id = CreateIdImpl(out Exception ex);
+            var id = CreateIdImpl(out var ex);
             if (ex != null)
                 throw ex;
             return id;
@@ -292,7 +99,7 @@ namespace IdGen
         /// <remarks>This method will not throw exceptions but rather indicate success by the return value.</remarks>
         public bool TryCreateId(out long id)
         {
-            id = CreateIdImpl(out Exception ex);
+            id = CreateIdImpl(out var ex);
             return ex == null;
         }
 
@@ -306,7 +113,7 @@ namespace IdGen
         /// </returns>
         /// <exception cref="InvalidSystemClockException">Thrown when clock going backwards is detected.</exception>
         /// <exception cref="SequenceOverflowException">Thrown when sequence overflows.</exception>
-        private long CreateIdImpl(out Exception exception)
+        private long CreateIdImpl(out Exception? exception)
         {
             lock (_genlock)
             {
@@ -325,15 +132,15 @@ namespace IdGen
                 {
                     if (_sequence >= MASK_SEQUENCE)
                     {
-                        if (_usespinwait)
+                        switch (Options.SequenceOverflowStrategy)
                         {
-                            SpinWait.SpinUntil(() => _lastgen != GetTicks());
-                            return CreateIdImpl(out exception); // Try again
-                        }
-                        else
-                        {
-                            exception = new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
-                            return -1;
+                            case SequenceOverflowStrategy.SpinWait:
+                                SpinWait.SpinUntil(() => _lastgen != GetTicks());
+                                return CreateIdImpl(out exception); // Try again
+                            case SequenceOverflowStrategy.Throw:
+                            default:
+                                exception = new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
+                                return -1;
                         }
                     }
                     _sequence++;
@@ -350,7 +157,7 @@ namespace IdGen
                     exception = null;
                     // Build id by shifting all bits into their place
                     return (timestamp << SHIFT_TIME)
-                        + (_generatorId << SHIFT_GENERATOR)
+                        + (_generatorid << SHIFT_GENERATOR)
                         + _sequence;
                 }
             }
@@ -358,21 +165,21 @@ namespace IdGen
 
         /// <summary>
         /// Returns information about an Id such as the sequence number, generator id and date/time the Id was generated
-        /// based on the current mask config of the generator.
+        /// based on the current <see cref="IdStructure"/> of the generator.
         /// </summary>
         /// <param name="id">The Id to extract information from.</param>
         /// <returns>Returns an <see cref="ID" /> that contains information about the 'decoded' Id.</returns>
         /// <remarks>
-        /// IMPORTANT: note that this method relies on the mask config and timesource; if the id was generated with a 
-        /// diffferent mask config and/or timesource than the current one the 'decoded' ID will NOT contain correct 
-        /// information.
+        /// IMPORTANT: note that this method relies on the <see cref="IdStructure"/> and timesource; if the id was
+        /// generated with a diffferent IdStructure and/or timesource than the current one the 'decoded' ID will NOT
+        /// contain correct information.
         /// </remarks>
         public ID FromId(long id) =>
             // Deconstruct Id by unshifting the bits into the proper parts
             new ID(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
-                TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * TimeSource.TickDuration.Ticks))
+                Options.TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * Options.TimeSource.TickDuration.Ticks))
             );
 
         /// <summary>
@@ -380,7 +187,7 @@ namespace IdGen
         /// </summary>
         /// <returns>Returns the number of ticks since the <see cref="ITimeSource"/>'s epoch.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private long GetTicks() => TimeSource.GetTicks();
+        private long GetTicks() => Options.TimeSource.GetTicks();
 
         /// <summary>
         /// Returns a bitmask masking out the desired number of bits; a bitmask of 2 returns 000...000011, a bitmask of

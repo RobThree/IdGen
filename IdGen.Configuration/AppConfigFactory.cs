@@ -11,7 +11,7 @@ namespace IdGen.Configuration
     /// </summary>
     public static class AppConfigFactory
     {
-        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(IdGenerator.DefaultEpoch);
+        private static readonly ITimeSource defaulttimesource = new DefaultTimeSource(IdGeneratorOptions.DefaultEpoch);
         private static readonly ConcurrentDictionary<string, IdGenerator> _namedgenerators = new ConcurrentDictionary<string, IdGenerator>();
 
         /// <summary>
@@ -37,7 +37,8 @@ namespace IdGen.Configuration
                 if (idgen != null)
                 {
                     var ts = idgen.TickDuration == TimeSpan.Zero ? defaulttimesource : new DefaultTimeSource(idgen.Epoch, idgen.TickDuration);
-                    return new IdGenerator(idgen.Id, new MaskConfig(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts, idgen.UseSpinWait);
+                    var options = new IdGeneratorOptions(new IdStructure(idgen.TimestampBits, idgen.GeneratorIdBits, idgen.SequenceBits), ts, idgen.SequenceOverflowStrategy);
+                    return new IdGenerator(idgen.Id, options);
                 }
 
                 throw new KeyNotFoundException();

@@ -35,6 +35,6 @@ namespace IdGen
         /// innerException parameter is not null, the current exception is raised in a catch block that handles the
         /// inner exception.
         /// </param>
-        public SequenceOverflowException(string message, Exception innerException) : base(message, innerException) { }
+        public SequenceOverflowException(string message, Exception? innerException) : base(message, innerException) { }
     }
 }

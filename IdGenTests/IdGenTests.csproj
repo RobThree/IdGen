@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="ConfigTests.cs" />
     <Compile Include="IdGenTests.cs" />
-    <Compile Include="MaskConfigTests.cs" />
+    <Compile Include="IdStructureTests.cs" />
     <Compile Include="Mocks\MockAutoIncrementingIntervalTimeSource.cs" />
     <Compile Include="Mocks\MockTimeSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

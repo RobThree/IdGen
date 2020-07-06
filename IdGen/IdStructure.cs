@@ -4,7 +4,7 @@ namespace IdGen
     /// <summary>
     /// Specifies the number of bits to use for the different parts of an Id for an <see cref="IdGenerator"/>.
     /// </summary>
-    public class MaskConfig
+    public class IdStructure
     {
         /// <summary>
         /// Gets number of bits to use for the timestamp part of the Id's to generate.
@@ -22,40 +22,51 @@ namespace IdGen
         public byte SequenceBits { get; private set; }
 
         /// <summary>
-        /// Gets the total number of bits for the <see cref="MaskConfig"/>.
-        /// </summary>
-        public int TotalBits => TimestampBits + GeneratorIdBits + SequenceBits;
-
-        /// <summary>
-        /// Returns the maximum number of intervals for this mask configuration.
+        /// Returns the maximum number of intervals for this <see cref="IdStructure"/> configuration.
         /// </summary>
         public long MaxIntervals => (1L << TimestampBits);
 
         /// <summary>
-        /// Returns the maximum number of generators available for this mask configuration.
+        /// Returns the maximum number of generators available for this <see cref="IdStructure"/> configuration.
         /// </summary>
-        public long MaxGenerators => (1L << GeneratorIdBits);
+        public int MaxGenerators => (1 << GeneratorIdBits);
 
         /// <summary>
         /// Returns the maximum number of sequential Id's for a time-interval (e.g. max. number of Id's generated 
         /// within a single interval).
         /// </summary>
-        public long MaxSequenceIds => (1L << SequenceBits);
+        public int MaxSequenceIds => (1 << SequenceBits);
 
         /// <summary>
-        /// Gets a default <see cref="MaskConfig"/> with 41 bits for the timestamp part, 10 bits for the generator-id 
+        /// Gets a default <see cref="IdStructure"/> with 41 bits for the timestamp part, 10 bits for the generator-id 
         /// part and 12 bits for the sequence part of the id.
         /// </summary>
-        public static MaskConfig Default => new MaskConfig(41, 10, 12);
+        public static IdStructure Default => new IdStructure(41, 10, 12);
 
         /// <summary>
-        /// Initializes a bitmask configuration for <see cref="IdGenerator"/>s.
+        /// Initializes an <see cref="IdStructure"/> for <see cref="IdGenerator"/>s.
         /// </summary>
         /// <param name="timestampBits">Number of bits to use for the timestamp-part of Id's.</param>
         /// <param name="generatorIdBits">Number of bits to use for the generator-id of Id's.</param>
         /// <param name="sequenceBits">Number of bits to use for the sequence-part of Id's.</param>
-        public MaskConfig(byte timestampBits, byte generatorIdBits, byte sequenceBits)
+        public IdStructure(byte timestampBits, byte generatorIdBits, byte sequenceBits)
         {
+            if (timestampBits < 0)
+                throw new ArgumentOutOfRangeException(nameof(timestampBits), "Timestamp bits must be at least 0");
+            if (generatorIdBits < 0)
+                throw new ArgumentOutOfRangeException(nameof(generatorIdBits), "GeneratorId bits must be at least 0");
+            if (sequenceBits < 0)
+                throw new ArgumentOutOfRangeException(nameof(sequenceBits), "Sequence bits must be at least 0");
+
+            if (timestampBits + generatorIdBits + sequenceBits != 63)
+                throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
+
+            if (generatorIdBits > 31)
+                throw new ArgumentOutOfRangeException(nameof(generatorIdBits), "GeneratorId cannot have more than 31 bits");
+
+            if (sequenceBits > 31)
+                throw new ArgumentOutOfRangeException(nameof(sequenceBits), "Sequence cannot have more than 31 bits");
+
             TimestampBits = timestampBits;
             GeneratorIdBits = generatorIdBits;
             SequenceBits = sequenceBits;
@@ -63,7 +74,7 @@ namespace IdGen
 
         /// <summary>
         /// Calculates the last date for an Id before a 'wrap around' will occur in the timestamp-part of an Id for the
-        /// given <see cref="MaskConfig"/>.
+        /// given <see cref="IdStructure"/>.
         /// </summary>
         /// <param name="epoch">The used epoch for the <see cref="IdGenerator"/> to use as offset.</param>'
         /// <param name="timeSource">The used <see cref="ITimeSource"/> for the <see cref="IdGenerator"/>.</param>
@@ -85,12 +96,12 @@ namespace IdGen
 
         /// <summary>
         /// Calculates the interval at wich a 'wrap around' will occur in the timestamp-part of an Id for the given
-        /// <see cref="MaskConfig"/>.
+        /// <see cref="IdStructure"/>.
         /// </summary>
         /// <param name="timeSource">The used <see cref="ITimeSource"/> for the <see cref="IdGenerator"/>.</param>
         /// <returns>
         /// The interval at wich a 'wrap around' will occur in the timestamp-part of an Id for the given
-        /// <see cref="MaskConfig"/>.
+        /// <see cref="IdStructure"/>.
         /// </returns>
         /// <remarks>
         /// Please note that for intervals exceeding the <see cref="TimeSpan.MaxValue"/> an
