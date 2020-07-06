@@ -8,6 +8,11 @@ namespace IdGen
     public class SequenceOverflowException : Exception
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class.
+        /// </summary>
+        public SequenceOverflowException() : this("Sequence overflow") { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class with a message that describes the error.
         /// </summary>
         /// <param name="message">
@@ -16,11 +21,6 @@ namespace IdGen
         /// </param>
         public SequenceOverflowException(string message)
             : this(message, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class.
-        /// </summary>
-        public SequenceOverflowException() : this("Sequence overflow") { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class with a message that describes

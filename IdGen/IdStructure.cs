@@ -51,13 +51,6 @@ namespace IdGen
         /// <param name="sequenceBits">Number of bits to use for the sequence-part of Id's.</param>
         public IdStructure(byte timestampBits, byte generatorIdBits, byte sequenceBits)
         {
-            if (timestampBits < 0)
-                throw new ArgumentOutOfRangeException(nameof(timestampBits), "Timestamp bits must be at least 0");
-            if (generatorIdBits < 0)
-                throw new ArgumentOutOfRangeException(nameof(generatorIdBits), "GeneratorId bits must be at least 0");
-            if (sequenceBits < 0)
-                throw new ArgumentOutOfRangeException(nameof(sequenceBits), "Sequence bits must be at least 0");
-
             if (timestampBits + generatorIdBits + sequenceBits != 63)
                 throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
 

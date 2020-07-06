@@ -11,14 +11,14 @@ namespace IdGenTests
         [TestMethod]
         public void DefaultIdStructure_Matches_Expectations()
         {
-            var m = IdStructure.Default;
+            var s = IdStructure.Default;
 
-            Assert.AreEqual(41, m.TimestampBits);
-            Assert.AreEqual(10, m.GeneratorIdBits);
-            Assert.AreEqual(12, m.SequenceBits);
+            Assert.AreEqual(41, s.TimestampBits);
+            Assert.AreEqual(10, s.GeneratorIdBits);
+            Assert.AreEqual(12, s.SequenceBits);
 
             // We should be able to generate a total of 63 bits worth of Id's
-            Assert.AreEqual(long.MaxValue, (m.MaxGenerators * m.MaxIntervals * m.MaxSequenceIds) - 1);
+            Assert.AreEqual(long.MaxValue, (s.MaxGenerators * s.MaxIntervals * s.MaxSequenceIds) - 1);
         }
 
         [TestMethod]
@@ -74,12 +74,26 @@ namespace IdGenTests
         }
 
         [TestMethod]
-        public void IdStructure_CalculatesWraparoundDate_Correctly()
+        public void IdStructure_Calculates_WraparoundDate_Correctly()
         {
-            var m = IdStructure.Default;
+            var s = IdStructure.Default;
             var mc = new MockTimeSource(TimeSpan.FromMilliseconds(1));
-            var d = m.WraparoundDate(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), mc);
+            var d = s.WraparoundDate(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), mc);
             Assert.AreEqual(new DateTime(643346200555520000, DateTimeKind.Utc), d);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void WraparoundDate_ThrowsOnNullTimeSource()
+        {
+            IdStructure.Default.WraparoundDate(IdGeneratorOptions.DefaultEpoch, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void WraparoundInterval_ThrowsOnNullTimeSource()
+        {
+            IdStructure.Default.WraparoundInterval(null);
         }
     }
 }

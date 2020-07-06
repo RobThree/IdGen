@@ -8,7 +8,7 @@ using System.Linq;
 namespace IdGenTests
 {
     [TestClass]
-    public class IdGenTests
+    public class IdGeneratorTests
     {
         [TestMethod]
         public void Sequence_ShouldIncrease_EveryInvocation()
@@ -79,6 +79,14 @@ namespace IdGenTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_Throws_OnNull_Options()
+        {
+            new IdGenerator(1024, null);
+        }
+
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Constructor_Throws_OnInvalidGeneratorId_Positive()
         {
@@ -90,6 +98,12 @@ namespace IdGenTests
         public void Constructor_Throws_OnInvalidGeneratorId_Negative()
         {
             new IdGenerator(-1);
+        }
+
+        [TestMethod]
+        public void Constructor_UsesCorrectId()
+        {
+            Assert.AreEqual(42, new IdGenerator(42).Id);
         }
 
         [TestMethod]

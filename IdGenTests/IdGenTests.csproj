@@ -51,8 +51,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ConfigTests.cs" />
-    <Compile Include="IdGenTests.cs" />
+    <Compile Include="IdGeneratorTests.cs" />
     <Compile Include="IdStructureTests.cs" />
+    <Compile Include="IDTests.cs" />
     <Compile Include="Mocks\MockAutoIncrementingIntervalTimeSource.cs" />
     <Compile Include="Mocks\MockTimeSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

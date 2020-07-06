@@ -8,6 +8,11 @@ namespace IdGen
     public class InvalidSystemClockException : Exception
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class.
+        /// </summary>
+        public InvalidSystemClockException() : this("Invalid system clock") { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class with a message that describes the error.
         /// </summary>
         /// <param name="message">
@@ -16,11 +21,6 @@ namespace IdGen
         /// </param>
         public InvalidSystemClockException(string message)
             : this(message, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class.
-        /// </summary>
-        public InvalidSystemClockException() : this("Invalid system clock") { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class with a message that describes
