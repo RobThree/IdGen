@@ -237,7 +237,16 @@
           <![CDATA[
           var generator = AppConfigFactory.GetFromConfig("foo");
           ]]>
-        </code>        
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Upgrading from 2.x to 3.x</title>
+      <content>
+        <para>
+          Upgrading from 2.x to 3.x should be pretty straightforward. See <link xlink:href="61e6c82e-b332-46f3-8972-6b2d3aa77b53" /> for the changes.
+        </para>
       </content>
     </section>
 

@@ -146,6 +146,17 @@ You can get the IdGenerator from the config using the following code:
 
 `var generator = AppConfigFactory.GetFromConfig("foo");`
 
+## Upgrading from 2.x to 3.x
+
+Upgrading from 2.x to 3.x should be pretty straightforward. The following things have changed:
+
+* Most of the constructor overloads for the `IdGenerator` have been replaced with a single constructor which accepts `IdGeneratorOptions` that contains the `ITimeSource`, `IdStructure` and `SequenceOverflowStrategy`
+* The `MaskConfig` class is now more appropriately named `IdStructure` since it describes the structure of the generated ID's.
+* The `UseSpinWait` property has moved to the `IdGeneratorOptions` and is now an enum of type `SequenceOverflowStrategy` instead of a boolean value. Note that this property has also been renamed in the config file (from `useSpinWait` to `sequenceOverflowStrategy`) and is no longer a boolean but rquires one of the values from `SequenceOverflowStrategy`.
+* `ID` is now `Id` (only used as return value by the `FromId()` method)
+
+The generated 2.x ID's are still compatible with 3.x ID's. This release is mostly more, better and consistent naming of objects.
+
 <hr>
 
 Icon made by [Freepik](http://www.flaticon.com/authors/freepik) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0](http://creativecommons.org/licenses/by/3.0/).

@@ -168,15 +168,15 @@ namespace IdGen
         /// based on the current <see cref="IdStructure"/> of the generator.
         /// </summary>
         /// <param name="id">The Id to extract information from.</param>
-        /// <returns>Returns an <see cref="ID" /> that contains information about the 'decoded' Id.</returns>
+        /// <returns>Returns an <see cref="IdGen.Id" /> that contains information about the 'decoded' Id.</returns>
         /// <remarks>
         /// IMPORTANT: note that this method relies on the <see cref="IdStructure"/> and timesource; if the id was
         /// generated with a diffferent IdStructure and/or timesource than the current one the 'decoded' ID will NOT
         /// contain correct information.
         /// </remarks>
-        public ID FromId(long id) =>
+        public Id FromId(long id) =>
             // Deconstruct Id by unshifting the bits into the proper parts
-            new ID(
+            new Id(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
                 Options.TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * Options.TimeSource.TickDuration.Ticks))
