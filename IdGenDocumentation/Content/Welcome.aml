@@ -137,34 +137,40 @@
             {
                 static void Main(string[] args)
                 {
-                    // Let's say we take april 1st 2015 as our epoch
-                    var epoch = new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc);
-                    // Create an ID with 45 bits for timestamp, 2 for generator-id
+                    // Let's say we take april 1st 2020 as our epoch
+                    var epoch = new DateTime(2020, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+                    
+                    // Create an ID with 45 bits for timestamp, 2 for generator-id 
                     // and 16 for sequence
-                    var s = new IdStructure(45, 2, 16);
+                    var structure = new IdStructure(45, 2, 16);
+                    
+                    // Prepare options
+                    var options = new IdGeneratorOptions(structure, new DefaultTimeSource(epoch));
+                    
                     // Create an IdGenerator with it's generator-id set to 0, our custom epoch 
                     // and id-structure
-                    var generator = new IdGenerator(0, epoch, s);
-
+                    var generator = new IdGenerator(0, options);
+                    
                     // Let's ask the id-structure how many generators we could instantiate 
                     // in this setup (2 bits)
-                    Console.WriteLine("Max. generators       : {0}", s.MaxGenerators);
-
+                    Console.WriteLine("Max. generators       : {0}", structure.MaxGenerators);
+                    
                     // Let's ask the id-structure how many sequential Id's we could generate 
                     // in a single ms in this setup (16 bits)
-                    Console.WriteLine("Id's/ms per generator : {0}", s.MaxSequenceIds);
-
+                    Console.WriteLine("Id's/ms per generator : {0}", structure.MaxSequenceIds);
+                    
                     // Let's calculate the number of Id's we could generate, per ms, should we use
                     // the maximum number of generators
-                    Console.WriteLine("Id's/ms total         : {0}", s.MaxGenerators * s.MaxSequenceIds);
-
-                    // Let's ask the id-structure for how long we could generate Id's before
+                    Console.WriteLine("Id's/ms total         : {0}", structure.MaxGenerators * structure.MaxSequenceIds);
+                    
+                    
+                    // Let's ask the id-structure configuration for how long we could generate Id's before
                     // we experience a 'wraparound' of the timestamp
-                    Console.WriteLine("Wraparound interval   : {0}", s.WraparoundInterval(generator.TimeSource));
-
+                    Console.WriteLine("Wraparound interval   : {0}", structure.WraparoundInterval(generator.Options.TimeSource));
+                    
                     // And finally: let's ask the id-structure when this wraparound will happen
                     // (we'll have to tell it the generator's epoch)
-                    Console.WriteLine("Wraparound date       : {0}", s.WraparoundDate(generator.Epoch, generator.TimeSource).ToString("O"));
+                    Console.WriteLine("Wraparound date       : {0}", structure.WraparoundDate(generator.Options.TimeSource.Epoch, generator.Options.TimeSource).ToString("O"));
                 }
             }
           ]]>
@@ -176,7 +182,7 @@
             Id's/ms per generator : 65536
             Id's/ms total         : 262144
             Wraparound interval   : 407226.12:41:28.8320000 (about 1114 years)
-            Wraparound date       : 3130-03-13T12:41:28.8320000Z
+            Wraparound date       : 3135-03-14T12:41:28.8320000+00:00
           ]]>
         </code>
         <para>
