@@ -165,9 +165,11 @@ The generated 2.x ID's are still compatible with 3.x ID's. This release is mostl
 # FAQ
 
 **Q**: Help, I'm getting duplicate ID's?
+
 **A**: Then you're probably not using IdGen as intended: It should be a singleton, and if you insist on having multiple instances around they should all have their own unique GeneratorId
 
 **Q**: I'm experiencing weird results when these ID's are used in Javascript?
+
 **A**: Remember that generated ID's are 64 (actually 63) bits wide. Javascript uses floats to store all numbers and the [maximum integer value you can safely store](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER) is 53 bits. If you need to handle these ID's in Javascript, treat them as `strings`.
 
 <hr>
