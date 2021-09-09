@@ -49,6 +49,7 @@ class Program
     {
         var generator = new IdGenerator(0);
         var id = generator.CreateId();
+        // Example id: 862817670527975424
     }
 }
 ```
