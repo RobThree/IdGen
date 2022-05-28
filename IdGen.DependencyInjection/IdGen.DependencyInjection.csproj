@@ -13,7 +13,7 @@
 		<PackageTags>idgen di dependency-injection</PackageTags>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Description>Dependency injection support for IdGen</Description>
-		<Version>1.0</Version>
+		<Version>3.0</Version>
 		<RootNamespace>IdGen.DependencyInjection</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageIconUrl />
