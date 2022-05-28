@@ -9,9 +9,7 @@ namespace IdGen
     /// <summary>
     /// Generates Id's inspired by Twitter's (late) Snowflake project.
     /// </summary>
-#pragma warning disable CA1710 // Identifiers should have correct suffix
     public class IdGenerator : IIdGenerator<long>
-#pragma warning restore CA1710 // Identifiers should have correct suffix
     {
         private readonly long _generatorid;
         private int _sequence = 0;
@@ -26,7 +24,7 @@ namespace IdGen
 
 
         // Object to lock() on while generating Id's
-        private readonly object _genlock = new object();
+        private readonly object _genlock = new();
 
         /// <summary>
         /// Gets the <see cref="IdGeneratorOptions"/>.
@@ -55,14 +53,19 @@ namespace IdGen
         public IdGenerator(int generatorId, IdGeneratorOptions options)
         {
             if (generatorId < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(generatorId), "GeneratorId must be larger than or equal to 0");
+            }
+
             _generatorid = generatorId;
 
             Options = options ?? throw new ArgumentNullException(nameof(options));
 
             var maxgeneratorid = 1 << Options.IdStructure.GeneratorIdBits;
             if (_generatorid >= maxgeneratorid)
+            {
                 throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {maxgeneratorid - 1}.");
+            }
 
             // Precalculate some values
             MASK_TIME = GetMask(options.IdStructure.TimestampBits);
@@ -83,7 +86,10 @@ namespace IdGen
         {
             var id = CreateIdImpl(out var ex);
             if (ex != null)
+            {
                 throw ex;
+            }
+
             return id;
         }
 
@@ -176,7 +182,7 @@ namespace IdGen
         /// </remarks>
         public Id FromId(long id) =>
             // Deconstruct Id by unshifting the bits into the proper parts
-            new Id(
+            new(
                 (int)(id & MASK_SEQUENCE),
                 (int)((id >> SHIFT_GENERATOR) & MASK_GENERATOR),
                 Options.TimeSource.Epoch.Add(TimeSpan.FromTicks(((id >> SHIFT_TIME) & MASK_TIME) * Options.TimeSource.TickDuration.Ticks))
@@ -205,7 +211,9 @@ namespace IdGen
         private IEnumerable<long> IdStream()
         {
             while (true)
+            {
                 yield return CreateId();
+            }
         }
 
         /// <summary>

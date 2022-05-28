@@ -80,31 +80,19 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_Throws_OnNull_Options()
-        {
-            new IdGenerator(1024, null);
-        }
+        public void Constructor_Throws_OnNull_Options() => new IdGenerator(1024, null);
 
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnInvalidGeneratorId_Positive()
-        {
-            new IdGenerator(1024, new IdGeneratorOptions(new IdStructure(41, 10, 12)));
-        }
+        public void Constructor_Throws_OnInvalidGeneratorId_Positive() => new IdGenerator(1024, new IdGeneratorOptions(new IdStructure(41, 10, 12)));
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnInvalidGeneratorId_Negative()
-        {
-            new IdGenerator(-1);
-        }
+        public void Constructor_Throws_OnInvalidGeneratorId_Negative() => new IdGenerator(-1);
 
         [TestMethod]
-        public void Constructor_UsesCorrectId()
-        {
-            Assert.AreEqual(42, new IdGenerator(42).Id);
-        }
+        public void Constructor_UsesCorrectId() => Assert.AreEqual(42, new IdGenerator(42).Id);
 
         [TestMethod]
         [ExpectedException(typeof(SequenceOverflowException))]
@@ -116,7 +104,9 @@ namespace IdGenTests
 
             // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
             for (var i = 0; i < 4; i++)
+            {
                 Assert.AreEqual(i, g.CreateId());
+            }
 
             // However, if we invoke once more we should get an SequenceOverflowException
             g.CreateId();
@@ -131,7 +121,9 @@ namespace IdGenTests
 
             // We have a 2-bit sequence; generating 4 id's shouldn't be a problem
             for (var i = 0; i < 4; i++)
+            {
                 Assert.IsTrue(g.TryCreateId(out var _));
+            }
 
             // However, if we invoke once more we should get an SequenceOverflowException
             // which should be indicated by the false return value
@@ -213,7 +205,9 @@ namespace IdGenTests
             // Generate a bunch of id's
             long id = 0;
             for (var i = 0; i < 35; i++)
+            {
                 id = g.CreateId();
+            }
 
             var target = g.FromId(id);
 

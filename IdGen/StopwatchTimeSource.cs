@@ -8,7 +8,7 @@ namespace IdGen
     /// </summary>
     public abstract class StopwatchTimeSource : ITimeSource
     {
-        private static readonly Stopwatch _sw = new Stopwatch();
+        private static readonly Stopwatch _sw = new();
         private static readonly DateTimeOffset _initialized = DateTimeOffset.UtcNow;
 
         /// <summary>

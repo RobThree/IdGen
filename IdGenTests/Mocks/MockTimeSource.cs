@@ -28,19 +28,10 @@ namespace IdGenTests.Mocks
             Epoch = epoch;
         }
 
-        public virtual long GetTicks()
-        {
-            return _current;
-        }
+        public virtual long GetTicks() => _current;
 
-        public void NextTick()
-        {
-            Interlocked.Increment(ref _current);
-        }
+        public void NextTick() => Interlocked.Increment(ref _current);
 
-        public void PreviousTick()
-        {
-            Interlocked.Decrement(ref _current);
-        }
+        public void PreviousTick() => Interlocked.Decrement(ref _current);
     }
 }

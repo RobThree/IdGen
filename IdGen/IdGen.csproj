@@ -5,23 +5,22 @@
     <Authors>RobIII</Authors>
     <Company>Devcorner.nl</Company>
     <PackageId>IdGen</PackageId>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
     <Product>IdGen</Product>
-    <Copyright>Copyright © 2015 - 2020 Devcorner.nl</Copyright>
+    <Copyright>Copyright © 2015 - 2022 Devcorner.nl</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
     <PackageTags>scalable unique id generator distributed</PackageTags>
-    <PackageReleaseNotes>We now use IdGeneratorOptions to configure an IdGenerator. Also, the MaskConfig is now more appropriately named IdStructure. The release contains breaking changes but upgrading 2.x to 3.0 should be pretty simple.</PackageReleaseNotes>
+    <PackageReleaseNotes>Minor internal changes</PackageReleaseNotes>
     <Description>Twitter Snowflake-alike ID generator for .Net</Description>
-    <Version>3.0</Version>
+    <Version>3.0.1</Version>
     <RootNamespace>IdGen</RootNamespace>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Nullable>enable</Nullable>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
@@ -36,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

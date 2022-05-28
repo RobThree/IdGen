@@ -23,6 +23,6 @@ namespace IdGen.Configuration
         /// </summary>
         [ConfigurationProperty(IdGensCollectionName)]
         [ConfigurationCollection(typeof(IdGeneratorsCollection), AddItemName = "idGenerator")]
-        public IdGeneratorsCollection IdGenerators { get { return (IdGeneratorsCollection)base[IdGensCollectionName]; } }
+        public IdGeneratorsCollection IdGenerators => (IdGeneratorsCollection)base[IdGensCollectionName];
     }
 }

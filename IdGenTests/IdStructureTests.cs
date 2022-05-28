@@ -23,24 +23,15 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Constructor_Throws_OnIdStructureNotExactly63Bits()
-        {
-            new IdStructure(41, 10, 11);
-        }
+        public void Constructor_Throws_OnIdStructureNotExactly63Bits() => new IdStructure(41, 10, 11);
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnGeneratorIdMoreThan31Bits()
-        {
-            new IdStructure(21, 32, 10);
-        }
+        public void Constructor_Throws_OnGeneratorIdMoreThan31Bits() => new IdStructure(21, 32, 10);
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_Throws_OnSequenceMoreThan31Bits()
-        {
-            new IdStructure(21, 10, 32);
-        }
+        public void Constructor_Throws_OnSequenceMoreThan31Bits() => new IdStructure(21, 10, 32);
 
         [TestMethod]
         public void IdStructure_CalculatesWraparoundInterval_Correctly()
@@ -84,16 +75,10 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WraparoundDate_ThrowsOnNullTimeSource()
-        {
-            IdStructure.Default.WraparoundDate(IdGeneratorOptions.DefaultEpoch, null);
-        }
+        public void WraparoundDate_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundDate(IdGeneratorOptions.DefaultEpoch, null);
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WraparoundInterval_ThrowsOnNullTimeSource()
-        {
-            IdStructure.Default.WraparoundInterval(null);
-        }
+        public void WraparoundInterval_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundInterval(null);
     }
 }

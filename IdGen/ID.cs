@@ -42,11 +42,7 @@ namespace IdGen
         /// <param name="obj">The object to compare with this instance.</param>
         /// <returns>true if <paramref name="obj"/> is a <see cref="Id"/> that has the same value as this instance; otherwise, false.</returns>
         public override bool Equals(object obj)
-        {
-            if (obj is Id)
-                return Equals((Id)obj);
-            return false;
-        }
+            => obj is Id id && Equals(id);
 
         /// <summary>
         /// Returns the hash code for this instance.

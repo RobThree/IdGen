@@ -17,7 +17,7 @@ namespace IdGen.Configuration
         /// Gets the element key for a specified <see cref="IdGeneratorElement"/>.
         /// </summary>
         /// <param name="element">The <see cref="IdGeneratorElement"/> to return the key for.</param>
-        /// <returns>An <see cref="System.Object"/> that acts as the key for the specified <see cref="IdGeneratorElement"/>.</returns>
+        /// <returns>An <see cref="object"/> that acts as the key for the specified <see cref="IdGeneratorElement"/>.</returns>
         protected override object GetElementKey(ConfigurationElement element) => ((IdGeneratorElement)element)?.Name;
     }
 }

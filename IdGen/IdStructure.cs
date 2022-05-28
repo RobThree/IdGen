@@ -41,7 +41,7 @@ namespace IdGen
         /// Gets a default <see cref="IdStructure"/> with 41 bits for the timestamp part, 10 bits for the generator-id 
         /// part and 12 bits for the sequence part of the id.
         /// </summary>
-        public static IdStructure Default => new IdStructure(41, 10, 12);
+        public static IdStructure Default => new(41, 10, 12);
 
         /// <summary>
         /// Initializes an <see cref="IdStructure"/> for <see cref="IdGenerator"/>s.
@@ -52,13 +52,19 @@ namespace IdGen
         public IdStructure(byte timestampBits, byte generatorIdBits, byte sequenceBits)
         {
             if (timestampBits + generatorIdBits + sequenceBits != 63)
+            {
                 throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
+            }
 
             if (generatorIdBits > 31)
+            {
                 throw new ArgumentOutOfRangeException(nameof(generatorIdBits), "GeneratorId cannot have more than 31 bits");
+            }
 
             if (sequenceBits > 31)
+            {
                 throw new ArgumentOutOfRangeException(nameof(sequenceBits), "Sequence cannot have more than 31 bits");
+            }
 
             TimestampBits = timestampBits;
             GeneratorIdBits = generatorIdBits;
@@ -83,7 +89,10 @@ namespace IdGen
         public DateTimeOffset WraparoundDate(DateTimeOffset epoch, ITimeSource timeSource)
         {
             if (timeSource == null)
+            {
                 throw new ArgumentNullException(nameof(timeSource));
+            }
+
             return epoch.AddDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
 
@@ -110,7 +119,10 @@ namespace IdGen
         public TimeSpan WraparoundInterval(ITimeSource timeSource)
         {
             if (timeSource == null)
+            {
                 throw new ArgumentNullException(nameof(timeSource));
+            }
+
             return TimeSpan.FromDays(timeSource.TickDuration.TotalDays * MaxIntervals);
         }
     }

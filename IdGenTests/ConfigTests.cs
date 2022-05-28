@@ -39,32 +39,20 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(KeyNotFoundException))]
-        public void IdGenerator_GetFromConfig_IsCaseSensitive()
-        {
-            AppConfigFactory.GetFromConfig("Foo");
-        }
+        public void IdGenerator_GetFromConfig_IsCaseSensitive() => AppConfigFactory.GetFromConfig("Foo");
 
         [TestMethod]
         [ExpectedException(typeof(KeyNotFoundException))]
-        public void IdGenerator_GetFromConfig_ThrowsOnNonExisting()
-        {
-            AppConfigFactory.GetFromConfig("xxx");
-        }
+        public void IdGenerator_GetFromConfig_ThrowsOnNonExisting() => AppConfigFactory.GetFromConfig("xxx");
 
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void IdGenerator_GetFromConfig_ThrowsOnInvalidIdStructure()
-        {
-            AppConfigFactory.GetFromConfig("e1");
-        }
+        public void IdGenerator_GetFromConfig_ThrowsOnInvalidIdStructure() => AppConfigFactory.GetFromConfig("e1");
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void IdGenerator_GetFromConfig_ThrowsOnInvalidEpoch()
-        {
-            AppConfigFactory.GetFromConfig("e2");
-        }
+        public void IdGenerator_GetFromConfig_ThrowsOnInvalidEpoch() => AppConfigFactory.GetFromConfig("e2");
 
         [TestMethod]
         public void IdGenerator_GetFromConfig_ReturnsSameInstanceForSameName()
