@@ -168,6 +168,8 @@ Or, when you want to use non-default options:
 services.AddIdGen(123, () => new IdGeneratorOptions(...));  // Where 123 is the generator-id
 ```
 
+This registers both an `IdGenerator` as well as an `IIdGenerator<long>`, both pointing to the same singleton generator.
+
 ## Upgrading from 2.x to 3.x
 
 Upgrading from 2.x to 3.x should be pretty straightforward. The following things have changed:
