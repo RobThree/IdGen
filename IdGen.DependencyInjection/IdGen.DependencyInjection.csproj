@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Authors>RobIII</Authors>
+		<Company>Devcorner.nl</Company>
+		<PackageId>IdGen.Configuration</PackageId>
+		<Product>IdGen.DependencyInjection</Product>
+		<Copyright>Copyright © 2015 - 2022 Devcorner.nl</Copyright>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
+		<PackageTags>idgen di dependency-injection</PackageTags>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Description>Dependency injection support for IdGen</Description>
+		<Version>1.0</Version>
+		<RootNamespace>IdGen.DependencyInjection</RootNamespace>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageIconUrl />
+		<RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\IdGen\IdGen.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\logo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+</Project>

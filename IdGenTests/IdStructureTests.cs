@@ -1,7 +1,6 @@
 ﻿using IdGen;
 using IdGenTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace IdGenTests
 {
@@ -75,10 +74,10 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WraparoundDate_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundDate(IdGeneratorOptions.DefaultEpoch, null);
+        public void WraparoundDate_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundDate(IdGeneratorOptions.DefaultEpoch, null!);
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WraparoundInterval_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundInterval(null);
+        public void WraparoundInterval_ThrowsOnNullTimeSource() => IdStructure.Default.WraparoundInterval(null!);
     }
 }

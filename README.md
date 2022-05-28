@@ -152,6 +152,22 @@ You can get the IdGenerator from the config using the following code:
 
 `var generator = AppConfigFactory.GetFromConfig("foo");`
 
+## Dependency Injection
+
+There is an [IdGen.DependencyInjection NuGet package](https://www.nuget.org/packages/IdGen.DependencyInjection) available that allows for easy integration with the commonly used [Microsoft.Extensions.DependencyInjection](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection).
+
+Usage is straightforward:
+
+```c#
+services.AddIdGen(123); // Where 123 is the generator-id
+```
+
+Or, when you want to use non-default options:
+
+```c#
+services.AddIdGen(123, () => new IdGeneratorOptions(...));  // Where 123 is the generator-id
+```
+
 ## Upgrading from 2.x to 3.x
 
 Upgrading from 2.x to 3.x should be pretty straightforward. The following things have changed:

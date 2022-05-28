@@ -1,9 +1,7 @@
 ﻿using IdGen;
 using IdGenTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections;
-using System.Linq;
 
 namespace IdGenTests
 {
@@ -80,7 +78,7 @@ namespace IdGenTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_Throws_OnNull_Options() => new IdGenerator(1024, null);
+        public void Constructor_Throws_OnNull_Options() => new IdGenerator(1024, null!);
 
 
         [TestMethod]
