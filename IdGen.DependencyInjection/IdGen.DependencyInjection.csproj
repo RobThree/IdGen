@@ -4,9 +4,9 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<Authors>RobIII</Authors>
 		<Company>Devcorner.nl</Company>
-		<PackageId>IdGen.Configuration</PackageId>
+		<PackageId>IdGen.DependencyInjection</PackageId>
 		<Product>IdGen.DependencyInjection</Product>
-		<Copyright>Copyright © 2015 - 2022 Devcorner.nl</Copyright>
+		<Copyright>Copyright © 2022 Devcorner.nl</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
@@ -21,6 +21,10 @@
 		<RepositoryType>git</RepositoryType>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

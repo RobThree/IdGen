@@ -13,7 +13,7 @@
     <RootNamespace>IdGenDocumentation</RootNamespace>
     <Name>IdGenDocumentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5.2</FrameworkVersion>
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>IdGenHelp</HtmlHelpName>
     <Language>en-US</Language>
@@ -37,7 +37,7 @@
     <HelpTitle>IdGen documentation</HelpTitle>
     <FeedbackEMailLinkText>Rob Janssen</FeedbackEMailLinkText>
     <FeedbackEMailAddress>rob%40robiii.me</FeedbackEMailAddress>
-    <CopyrightText>%28c%29 2015 - 2020 Devcorner.nl</CopyrightText>
+    <CopyrightText>%28c%29 2015 - 2022 Devcorner.nl</CopyrightText>
     <CopyrightHref>https://github.com/RobThree/IdGen</CopyrightHref>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CatalogName>VisualStudio11</CatalogName>
@@ -51,7 +51,6 @@
     <CatalogProductId>VS</CatalogProductId>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\IdGen\IdGen.csproj" />
-      <DocumentationSource sourceFile="..\IdGen.Configuration\IdGen.Configuration.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
@@ -109,6 +108,7 @@
     <None Include="Content\VersionHistory\v2.4.0.0.aml" />
     <None Include="Content\VersionHistory\v2.4.1.0.aml" />
     <None Include="Content\VersionHistory\v3.0.0.0.aml" />
+    <None Include="Content\VersionHistory\v3.0.1.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
