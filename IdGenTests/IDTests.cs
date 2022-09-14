@@ -31,7 +31,19 @@ public class IDTests
     }
 
     [TestMethod]
-    public void X()
+    public void ID_FromZeroInt_HasCorrectValue()
+    {
+        var g = new IdGenerator(0);
+        var i = g.FromId(0);
+
+        Assert.AreEqual(0, i.SequenceNumber);
+        Assert.AreEqual(0, i.GeneratorId);
+        Assert.AreEqual(g.Options.TimeSource.Epoch, i.DateTimeOffset);
+    }
+
+
+    [TestMethod]
+    public void ID_FromOneInt_HasCorrectValue()
     {
         var g = new IdGenerator(0);
         var i = g.FromId(1);

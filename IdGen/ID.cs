@@ -5,7 +5,7 @@ namespace IdGen;
 /// <summary>
 /// Holds information about a decoded id.
 /// </summary>
-public struct Id : IEquatable<Id>
+public record struct Id
 {
     /// <summary>
     /// Gets the sequence number of the id.
@@ -35,43 +35,4 @@ public struct Id : IEquatable<Id>
         GeneratorId = generatorId;
         DateTimeOffset = dateTimeOffset;
     }
-
-    /// <summary>
-    /// Returns a value that indicates whether this instance is equal to a specified object.
-    /// </summary>
-    /// <param name="obj">The object to compare with this instance.</param>
-    /// <returns>true if <paramref name="obj"/> is a <see cref="Id"/> that has the same value as this instance; otherwise, false.</returns>
-    public override bool Equals(object obj)
-        => obj is Id id && Equals(id);
-
-    /// <summary>
-    /// Returns the hash code for this instance.
-    /// </summary>
-    /// <returns>The hash code for this instance.</returns>
-    public override int GetHashCode() => Tuple.Create(DateTimeOffset, GeneratorId, SequenceNumber).GetHashCode();
-
-    /// <summary>
-    /// Indicates whether the values of two specified <see cref="Id"/> objects are equal.
-    /// </summary>
-    /// <param name="left">The first object to compare.</param>
-    /// <param name="right">The second object to compare.</param>
-    /// <returns>true if left and right are equal; otherwise, false.</returns>
-    public static bool operator ==(Id left, Id right) => left.Equals(right);
-
-    /// <summary>
-    /// Indicates whether the values of two specified <see cref="Id"/> objects are not equal.
-    /// </summary>
-    /// <param name="left">The first object to compare.</param>
-    /// <param name="right">The second object to compare.</param>
-    /// <returns>true if left and right are not equal; otherwise, false.</returns>
-    public static bool operator !=(Id left, Id right) => !(left == right);
-
-    /// <summary>
-    /// Returns a value indicating whether this instance and a specified <see cref="Id"/> object represent the same value.
-    /// </summary>
-    /// <param name="other">An <see cref="Id"/> to compare to this instance.</param>
-    /// <returns>true if <paramref name="other"/> is equal to this instance; otherwise, false.</returns>
-    public bool Equals(Id other) => GeneratorId == other.GeneratorId
-             && DateTimeOffset == other.DateTimeOffset
-             && SequenceNumber == other.SequenceNumber;
 }
