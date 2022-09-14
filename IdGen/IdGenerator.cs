@@ -52,17 +52,12 @@ public class IdGenerator : IIdGenerator<long>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is null.</exception>
     public IdGenerator(int generatorId, IdGeneratorOptions options)
     {
-        if (generatorId < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(generatorId), "GeneratorId must be larger than or equal to 0");
-        }
-
         _generatorid = generatorId;
-
         Options = options ?? throw new ArgumentNullException(nameof(options));
 
-        var maxgeneratorid = 1 << Options.IdStructure.GeneratorIdBits;
-        if (_generatorid >= maxgeneratorid)
+        var maxgeneratorid = 1U << Options.IdStructure.GeneratorIdBits;
+
+        if (_generatorid < 0 || _generatorid >= maxgeneratorid)
         {
             throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {maxgeneratorid - 1}.");
         }
