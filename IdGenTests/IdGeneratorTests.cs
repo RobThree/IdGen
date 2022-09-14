@@ -93,6 +93,10 @@ public class IdGeneratorTests
         => new IdGenerator(-1);
 
     [TestMethod]
+    public void Constructor_DoesNotThrow_OnMaxValidatorId()
+        => new IdGenerator(int.MaxValue, new IdGeneratorOptions { IdStructure = new IdStructure(16, 31, 16) });
+
+    [TestMethod]
     public void Constructor_UsesCorrectId()
         => Assert.AreEqual(42, new IdGenerator(42).Id);
 
