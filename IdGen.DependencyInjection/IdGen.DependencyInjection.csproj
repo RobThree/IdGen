@@ -21,10 +21,15 @@
 		<RepositoryType>git</RepositoryType>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
+		<Configurations>Debug;Release;ReleaseWithDocumentation</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
 		<DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseWithDocumentation|netstandard2.0|AnyCPU'">
+	  <DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

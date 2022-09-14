@@ -88,6 +88,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'ReleaseWithDocumentation' ">
+    <OutputPath>bin\ReleaseWithDocumentation\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
     <Folder Include="Content\VersionHistory" />

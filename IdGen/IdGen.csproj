@@ -13,7 +13,7 @@
 		<PackageTags>scalable unique id generator distributed</PackageTags>
 		<PackageReleaseNotes>Minor internal changes</PackageReleaseNotes>
 		<Description>Twitter Snowflake-alike ID generator for .Net</Description>
-		<Version>3.0.1</Version>
+		<Version>3.0.2</Version>
 		<RootNamespace>IdGen</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageIconUrl />
@@ -21,10 +21,15 @@
 		<RepositoryType>git</RepositoryType>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
+		<Configurations>Debug;Release;ReleaseWithDocumentation</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
 		<DocumentationFile>bin\Release\IdGen.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseWithDocumentation|netstandard1.1|AnyCPU'">
+	  <DocumentationFile>bin\Release\IdGen.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
