@@ -84,5 +84,10 @@
         <HelpKeyword index="K" term="version, 3.0.2.0" />
       </HelpKeywords>
     </Topic>
+    <Topic id="be207b8d-9fb1-43a7-af8e-d075f4570b9f" visible="True" isSelected="true" title="Version 3.0.3.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 3.0.3.0" />
+      </HelpKeywords>
+    </Topic>
   </Topic>
 </Topics>
