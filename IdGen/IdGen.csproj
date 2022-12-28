@@ -11,9 +11,9 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
 		<PackageTags>scalable unique id generator distributed</PackageTags>
-		<PackageReleaseNotes>Minor internal changes</PackageReleaseNotes>
+		<PackageReleaseNotes>Added NetStandard 2.0</PackageReleaseNotes>
 		<Description>Twitter Snowflake-alike ID generator for .Net</Description>
-		<Version>3.0.2</Version>
+		<Version>3.0.3</Version>
 		<RootNamespace>IdGen</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageIconUrl />
