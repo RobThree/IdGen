@@ -56,11 +56,11 @@ class Program
 
 Voila. You have created your first Id! Want to create 100 Id's? Instead of:
 
-`var id = generator.CreateId();`
+`IdGenerator id = generator.CreateId();`
 
 write:
 
-`var id = generator.Take(100);`
+`long id = generator.Take(100);`
 
 This is because the `IdGenerator()` implements `IEnumerable` providing you with a never-ending stream of Id's (so you might want to be careful doing a `.Select(...)` or `Count()` on it!).
 
@@ -77,18 +77,18 @@ class Program
     static void Main(string[] args)
     {
         // Let's say we take april 1st 2020 as our epoch
-        var epoch = new DateTime(2020, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime epoch = new DateTime(2020, 4, 1, 0, 0, 0, DateTimeKind.Utc);
             
         // Create an ID with 45 bits for timestamp, 2 for generator-id 
         // and 16 for sequence
-        var structure = new IdStructure(45, 2, 16);
+        IdStructure structure = new IdStructure(45, 2, 16);
             
         // Prepare options
-        var options = new IdGeneratorOptions(structure, new DefaultTimeSource(epoch));
+        IdGeneratorOptions options = new IdGeneratorOptions(structure, new DefaultTimeSource(epoch));
             
         // Create an IdGenerator with it's generator-id set to 0, our custom epoch 
         // and id-structure
-        var generator = new IdGenerator(0, options);
+        IdGenerator generator = new IdGenerator(0, options);
 
         // Let's ask the id-structure how many generators we could instantiate 
         // in this setup (2 bits)
@@ -182,6 +182,10 @@ Upgrading from 2.x to 3.x should be pretty straightforward. The following things
 The generated 2.x ID's are still compatible with 3.x ID's. This release is mostly better and more consistent naming of objects.
 
 # FAQ
+
+**Q**: What is the 'object type' of the generated keys?
+
+**A**: The generated keys are `long` that are 64 (actually 63) bits wide
 
 **Q**: Help, I'm getting duplicate ID's?
 
