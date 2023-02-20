@@ -147,15 +147,12 @@ public class IdGenerator : IIdGenerator<long>
                 _lastgen = timestamp;
             }
 
-            unchecked
-            {
-                // If we made it here then no exceptions occurred; make sure we communicate that to the caller by setting `exception` to null
-                exception = null;
-                // Build id by shifting all bits into their place
-                return (timestamp << SHIFT_TIME)
-                    + (_generatorid << SHIFT_GENERATOR)
-                    + _sequence;
-            }
+            // If we made it here then no exceptions occurred; make sure we communicate that to the caller by setting `exception` to null
+            exception = null;
+            // Build id by shifting all bits into their place
+            return (timestamp << SHIFT_TIME)
+                | (_generatorid << SHIFT_GENERATOR)
+                | (long)_sequence;
         }
     }
 
