@@ -241,4 +241,31 @@ public class IdGeneratorTests
         Assert.AreEqual(4, g.CreateId());   // This should trigger a spinwait and return the next ID
         Assert.AreEqual(5, g.CreateId());
     }
+
+    [TestMethod]
+    public void CreateId_Should_Not_Throw_When_Called_In_Parallel()
+    {
+        // We setup our generator so that the time is 0, generator id 0 and we're only left with the sequence
+        // increasing each invocation of CreateId();
+        var s = new IdStructure(50, 1, 12);
+        var g = new IdGenerator(0, new IdGeneratorOptions(idStructure: s, sequenceOverflowStrategy: SequenceOverflowStrategy.SpinWait));
+
+        var parallelOptions = new ParallelOptions
+        {
+            // Set up for max parallelism
+            MaxDegreeOfParallelism = -1
+        };
+        const int iterations = 100_000;
+
+        // Generate a bunch of id's in parallel to see about race conditions if any
+        var count = 0;
+        Parallel.For(0, iterations, parallelOptions, (i, loop) =>
+        {
+            var id = g.CreateId();
+            Interlocked.Increment(ref count);
+        });
+
+        // Sanity check
+        Assert.AreEqual(iterations, count);
+    }
 }
