@@ -37,7 +37,7 @@
     <HelpTitle>IdGen documentation</HelpTitle>
     <FeedbackEMailLinkText>Rob Janssen</FeedbackEMailLinkText>
     <FeedbackEMailAddress>rob%40robiii.me</FeedbackEMailAddress>
-    <CopyrightText>%28c%29 2015 - 2022 Devcorner.nl</CopyrightText>
+    <CopyrightText>%28c%29 2015 - 2023 Devcorner.nl</CopyrightText>
     <CopyrightHref>https://github.com/RobThree/IdGen</CopyrightHref>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CatalogName>VisualStudio11</CatalogName>

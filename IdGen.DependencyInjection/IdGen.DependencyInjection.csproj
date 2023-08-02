@@ -6,7 +6,7 @@
 		<Company>Devcorner.nl</Company>
 		<PackageId>IdGen.DependencyInjection</PackageId>
 		<Product>IdGen.DependencyInjection</Product>
-		<Copyright>Copyright © 2022 Devcorner.nl</Copyright>
+		<Copyright>Copyright © 2022 - 2023 Devcorner.nl</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
