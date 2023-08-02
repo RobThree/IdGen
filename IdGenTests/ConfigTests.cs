@@ -1,6 +1,8 @@
 ﻿using IdGen;
 using IdGen.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 
 namespace IdGenTests;
 

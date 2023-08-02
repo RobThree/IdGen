@@ -1,4 +1,7 @@
-﻿namespace IdGenTests.Mocks;
+﻿using System;
+using System.Threading;
+
+namespace IdGenTests.Mocks;
 
 public class MockAutoIncrementingIntervalTimeSource : MockTimeSource
 {

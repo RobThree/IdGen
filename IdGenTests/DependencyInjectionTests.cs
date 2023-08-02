@@ -3,6 +3,7 @@ using IdGen.DependencyInjection;
 using IdGenTests.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace IdGenTests;
 

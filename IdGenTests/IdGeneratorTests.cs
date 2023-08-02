@@ -1,7 +1,9 @@
 ﻿using IdGen;
 using IdGenTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections;
+using System.Linq;
 
 namespace IdGenTests;
 

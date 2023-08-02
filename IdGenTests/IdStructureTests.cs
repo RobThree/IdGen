@@ -1,6 +1,7 @@
 ﻿using IdGen;
 using IdGenTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace IdGenTests;
 
@@ -69,7 +70,13 @@ public class IdStructureTests
         var s = IdStructure.Default;
         var mc = new MockTimeSource(TimeSpan.FromMilliseconds(1));
         var d = s.WraparoundDate(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), mc);
+
+
+#if NETCOREAPP3_0_OR_GREATER
+        Assert.AreEqual(new DateTime(643346200555519999, DateTimeKind.Utc), d);
+#else //https://learn.microsoft.com/en-us/dotnet/core/compatibility/3.0#floating-point-formatting-and-parsing-behavior-changed
         Assert.AreEqual(new DateTime(643346200555520000, DateTimeKind.Utc), d);
+#endif
     }
 
     [TestMethod]
