@@ -32,7 +32,7 @@ public sealed class IdGeneratorElement : ConfigurationElement
     }
 
 
-    [ConfigurationProperty("epoch", IsRequired = true)]
+    [ConfigurationProperty("epoch", IsRequired = false, DefaultValue = "2015-01-01")]
     private string StringEpoch
     {
         get => (string)this["epoch"];
@@ -42,7 +42,7 @@ public sealed class IdGeneratorElement : ConfigurationElement
     /// <summary>
     /// Gets/sets the <see cref="SequenceOverflowStrategy"/> option of the <see cref="IdGeneratorElement"/>.
     /// </summary>
-    [ConfigurationProperty("sequenceOverflowStrategy", IsRequired = false)]
+    [ConfigurationProperty("sequenceOverflowStrategy", IsRequired = false, DefaultValue = SequenceOverflowStrategy.Throw)]
     public SequenceOverflowStrategy SequenceOverflowStrategy
     {
         get => (SequenceOverflowStrategy)this["sequenceOverflowStrategy"];
@@ -91,7 +91,7 @@ public sealed class IdGeneratorElement : ConfigurationElement
     /// <summary>
     /// Gets/sets the <see cref="ITimeSource.TickDuration"/> of the <see cref="IdGeneratorElement"/>.
     /// </summary>
-    [ConfigurationProperty("tickDuration", IsRequired = false)]
+    [ConfigurationProperty("tickDuration", IsRequired = false, DefaultValue = "0:00:00.001")]
     public TimeSpan TickDuration
     {
         get => (TimeSpan)this["tickDuration"];

@@ -69,6 +69,7 @@ public class ConfigTests
         Assert.AreEqual(new DateTime(2016, 1, 2, 12, 34, 56, DateTimeKind.Utc), AppConfigFactory.GetFromConfig("foo").Options.TimeSource.Epoch);
         Assert.AreEqual(new DateTime(2016, 2, 1, 1, 23, 45, DateTimeKind.Utc), AppConfigFactory.GetFromConfig("bar").Options.TimeSource.Epoch);
         Assert.AreEqual(new DateTime(2016, 2, 29, 0, 0, 0, DateTimeKind.Utc), AppConfigFactory.GetFromConfig("baz").Options.TimeSource.Epoch);
+        Assert.AreEqual(IdGeneratorOptions.DefaultEpoch, AppConfigFactory.GetFromConfig("nt").Options.TimeSource.Epoch);
     }
 
     [TestMethod]
