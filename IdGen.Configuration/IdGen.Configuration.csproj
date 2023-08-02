@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net45</TargetFrameworks>
+		<TargetFrameworks>net48</TargetFrameworks>
 		<Authors>RobIII</Authors>
 		<Company>Devcorner.nl</Company>
 		<PackageId>IdGen.Configuration</PackageId>
