@@ -34,7 +34,7 @@ jobs:
       run: dotnet test -c Release --no-restore --no-build
 
     - name: Create packages
-      run:
+      run: |
         dotnet pack ${{ github.event.repository.name }} -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
         dotnet pack ${{ github.event.repository.name }}.Configuration -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
         dotnet pack ${{ github.event.repository.name }}.DependencyInjection -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
