@@ -5,9 +5,8 @@
 		<Authors>RobIII</Authors>
 		<Company>Devcorner.nl</Company>
 		<PackageId>IdGen.Configuration</PackageId>
-		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<Product>IdGen.Configuration</Product>
-		<Copyright>Copyright © 2015 - 2023 Devcorner.nl</Copyright>
+		<Copyright>Copyright © 2015 - 2024 Devcorner.nl</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
@@ -35,7 +34,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup>

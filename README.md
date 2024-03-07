@@ -1,6 +1,6 @@
 # ![Logo](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png) IdGen
 
-[![Build status](https://ci.appveyor.com/api/projects/status/24wqqq91u0arkf5t)](https://ci.appveyor.com/project/RobIII/idgen) <a href="https://www.nuget.org/packages/IdGen/"><img src="http://img.shields.io/nuget/v/IdGen.svg?style=flat-square" alt="NuGet version" height="18"></a>
+![Build Status](https://img.shields.io/github/actions/workflow/status/RobThree/IdGen/test.yml?branch=master&style=flat-square) [![Nuget version](https://img.shields.io/nuget/v/IdGen.svg?style=flat-square)](https://www.nuget.org/packages/IdGen/)
 
 Twitter Snowflake-alike ID generator for .Net. Available as [Nuget package](https://www.nuget.org/packages/IdGen)
 

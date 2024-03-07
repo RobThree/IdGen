@@ -6,14 +6,13 @@
 		<Company>Devcorner.nl</Company>
 		<PackageId>IdGen</PackageId>
 		<Product>IdGen</Product>
-		<Copyright>Copyright © 2015 - 2023 Devcorner.nl</Copyright>
+		<Copyright>Copyright © 2015 - 2024 Devcorner.nl</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
 		<PackageTags>scalable unique id generator distributed</PackageTags>
 		<PackageReleaseNotes>Added NetStandard 2.0</PackageReleaseNotes>
 		<Description>Twitter Snowflake-alike ID generator for .Net</Description>
-		<Version>3.0.3</Version>
 		<RootNamespace>IdGen</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageIconUrl />
@@ -42,9 +41,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IsExternalInit" Version="1.0.3">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+	  <PackageReference Include="PolySharp" Version="1.14.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 </Project>

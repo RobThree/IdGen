@@ -1,0 +1,43 @@
+name: Publish Nuget Package
+
+on:
+  release:
+    types:
+      - created
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
+        
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c Release --no-restore /p:Version="${{ github.event.release.tag_name }}"
+
+    - name: Run tests
+      run: dotnet test -c Release --no-restore --no-build
+
+    - name: Create packages
+      run:
+        dotnet pack ${{ github.event.repository.name }} -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
+        dotnet pack ${{ github.event.repository.name }}.Configuration -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
+        dotnet pack ${{ github.event.repository.name }}.DependencyInjection -c Release --no-restore --no-build -p:Version="${{ github.event.release.tag_name }}"
+
+    - name: Publish
+      run: dotnet nuget push **\*.nupkg -s 'https://api.nuget.org/v3/index.json' -k ${{secrets.NUGET_API_KEY}}
