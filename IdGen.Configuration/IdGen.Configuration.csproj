@@ -7,7 +7,6 @@
 		<PackageId>IdGen.Configuration</PackageId>
 		<Product>IdGen.Configuration</Product>
 		<Copyright>Copyright © 2015 - 2024 Devcorner.nl</Copyright>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
 		<PackageTags>idgen configuration</PackageTags>

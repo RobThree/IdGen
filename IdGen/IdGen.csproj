@@ -7,7 +7,6 @@
 		<PackageId>IdGen</PackageId>
 		<Product>IdGen</Product>
 		<Copyright>Copyright © 2015 - 2024 Devcorner.nl</Copyright>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
 		<PackageTags>scalable unique id generator distributed</PackageTags>
