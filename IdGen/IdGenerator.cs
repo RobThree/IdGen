@@ -55,11 +55,11 @@ public class IdGenerator : IIdGenerator<long>
         _generatorid = generatorId;
         Options = options ?? throw new ArgumentNullException(nameof(options));
 
-        var maxgeneratorid = 1U << Options.IdStructure.GeneratorIdBits;
+        var maxgeneratorid = (1U << Options.IdStructure.GeneratorIdBits) - 1;
 
-        if (_generatorid < 0 || _generatorid >= maxgeneratorid)
+        if (_generatorid < 0 || _generatorid > maxgeneratorid)
         {
-            throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be between 0 and {maxgeneratorid - 1}.");
+            throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be from 0 to {maxgeneratorid}.");
         }
 
         // Precalculate some values
