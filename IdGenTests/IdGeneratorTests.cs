@@ -79,15 +79,35 @@ public class IdGeneratorTests
     }
 
     [TestMethod]
+    public void Constructor_DoesNotThrow_OnMaxGeneratorId()
+    {
+        var structure = new IdStructure(41, 10, 12);
+        // 1023 is the max generator id for 10 bits.
+        var maxgeneratorid = 1023;
+        new IdGenerator(maxgeneratorid, new IdGeneratorOptions(structure));
+    }
+
+    [TestMethod]
+    public void Constructor_DoesNotThrow_OnGeneratorId_0()
+    {
+        new IdGenerator(0, new IdGeneratorOptions(new IdStructure(41, 10, 12)));
+    }
+
+    [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void Constructor_Throws_OnNull_Options()
         => new IdGenerator(1024, null!);
 
-
     [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void Constructor_Throws_OnInvalidGeneratorId_Positive()
-        => new IdGenerator(1024, new IdGeneratorOptions(new IdStructure(41, 10, 12)));
+    public void Constructor_Throws_OnInvalidGeneratorId_Positive_MaxPlusOne()
+    {
+        var structure = new IdStructure(41, 10, 12);
+        // 1023 is the max generator id for 10 bits.
+        var maxgeneratorid = 1023;
+        int maxPlusOne = maxgeneratorid + 1;
+        new IdGenerator(maxPlusOne, new IdGeneratorOptions(structure));
+    }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
