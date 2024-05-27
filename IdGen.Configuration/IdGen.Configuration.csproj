@@ -12,7 +12,6 @@
 		<PackageTags>idgen configuration</PackageTags>
 		<PackageReleaseNotes>Added spinwait option (see #24)</PackageReleaseNotes>
 		<Description>Configuration support for IdGen</Description>
-		<Version>3.0</Version>
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>IdGen.Configuration</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>

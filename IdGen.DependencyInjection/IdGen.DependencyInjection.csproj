@@ -14,7 +14,6 @@
 		<Description>Dependency injection support for IdGen</Description>
 		<RootNamespace>IdGen.DependencyInjection</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageIconUrl />
 		<RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<Nullable>enable</Nullable>
