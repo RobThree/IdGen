@@ -1,4 +1,4 @@
-# ![Logo](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/icons/Help.png) IdGen
+# ![Logo](https://raw.githubusercontent.com/RobThree/IdGen/master/logo.png) IdGen
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/RobThree/IdGen/test.yml?branch=master&style=flat-square) [![Nuget version](https://img.shields.io/nuget/v/IdGen.svg?style=flat-square)](https://www.nuget.org/packages/IdGen/)
 
@@ -18,7 +18,7 @@ IdGen generates, like Snowflake, 64 bit Id's. The [Sign Bit](https://en.wikipedi
 
 An Id generated with a **Default** `IdStructure` is structured as follows: 
 
-![Id structure](https://raw.githubusercontent.com/RobThree/IdGen/master/IdGenDocumentation/Media/structure.png)
+![Id structure](https://raw.githubusercontent.com/RobThree/IdGen/master/structure.png)
 
 However, using the `IdStructure` class you can tune the structure of the created Id's to your own needs; you can use 45 bits for the timestamp, 2 bits for the generator-id and 16 bits for the sequence if you prefer. As long as all 3 parts (timestamp, generator and sequence) add up to 63 bits you're good to go!
 
