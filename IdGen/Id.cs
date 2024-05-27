@@ -28,7 +28,7 @@ public record struct Id
     /// <param name="sequenceNumber">The sequence number of the id.</param>
     /// <param name="generatorId">The generator id of the generator that generated the id.</param>
     /// <param name="dateTimeOffset">The date/time when the id was generated.</param>
-    /// <returns></returns>
+    /// <returns>An <see cref="Id"/>.</returns>
     internal Id(int sequenceNumber, int generatorId, DateTimeOffset dateTimeOffset)
     {
         SequenceNumber = sequenceNumber;

@@ -24,7 +24,7 @@
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
 		<DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
 	</PropertyGroup>
 

@@ -24,7 +24,7 @@
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
 		<DocumentationFile>bin\Release\IdGen.Configuration.xml</DocumentationFile>
 	</PropertyGroup>
 

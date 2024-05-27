@@ -48,7 +48,7 @@ public class IdGenerator : IIdGenerator<long>
     /// Initializes a new instance of the <see cref="IdGenerator"/> class with the specified <see cref="IdGeneratorOptions"/>.
     /// </summary>
     /// <param name="generatorId">The Id of the generator.</param>
-    /// <param name="options">The <see cref="IdGeneratorOptions"/> for the <see cref="IdGenerator"/></param>.
+    /// <param name="options">The <see cref="IdGeneratorOptions"/> for the <see cref="IdGenerator"/>.</param>.
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> is null.</exception>
     public IdGenerator(int generatorId, IdGeneratorOptions options)
     {
