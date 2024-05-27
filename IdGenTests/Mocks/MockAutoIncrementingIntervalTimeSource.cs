@@ -3,21 +3,14 @@ using System.Threading;
 
 namespace IdGenTests.Mocks;
 
-public class MockAutoIncrementingIntervalTimeSource : MockTimeSource
+public class MockAutoIncrementingIntervalTimeSource(int incrementEvery, long? current = null, TimeSpan? tickDuration = null, DateTimeOffset? epoch = null)
+    : MockTimeSource(current ?? 0, tickDuration ?? TimeSpan.FromMilliseconds(1), epoch ?? DateTimeOffset.MinValue)
 {
-    private readonly int _incrementevery;
-    private int _count;
-
-    public MockAutoIncrementingIntervalTimeSource(int incrementEvery, long? current = null, TimeSpan? tickDuration = null, DateTimeOffset? epoch = null)
-        : base(current ?? 0, tickDuration ?? TimeSpan.FromMilliseconds(1), epoch ?? DateTimeOffset.MinValue)
-    {
-        _incrementevery = incrementEvery;
-        _count = 0;
-    }
+    private int _count = 0;
 
     public override long GetTicks()
     {
-        if (_count == _incrementevery)
+        if (_count == incrementEvery)
         {
             NextTick();
             _count = 0;

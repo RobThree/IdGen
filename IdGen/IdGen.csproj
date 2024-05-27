@@ -10,26 +10,21 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/RobThree/IdGen</PackageProjectUrl>
 		<PackageTags>scalable unique id generator distributed</PackageTags>
-		<PackageReleaseNotes>Added NetStandard 2.0</PackageReleaseNotes>
+		<PackageReleaseNotes></PackageReleaseNotes>
 		<Description>Twitter Snowflake-alike ID generator for .Net</Description>
 		<RootNamespace>IdGen</RootNamespace>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageIconUrl />
 		<RepositoryUrl>https://github.com/RobThree/IdGen</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<LangVersion>latest</LangVersion>
-		<Configurations>Debug;Release;ReleaseWithDocumentation</Configurations>
+		<Configurations>Debug;Release</Configurations>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
-		<DocumentationFile>bin\Release\IdGen.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseWithDocumentation|netstandard1.1|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
 	  <DocumentationFile>bin\Release\IdGen.xml</DocumentationFile>
 	</PropertyGroup>
 

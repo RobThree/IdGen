@@ -10,7 +10,7 @@ public enum SequenceOverflowStrategy
     /// </summary>
     Throw = 0,
     /// <summary>
-    /// Wait, using a <see cref="System.Threading.SpinWait"/>, for the tick te pass before generating a new ID.
+    /// Wait, using a <see cref="SpinWait"/>, for the tick te pass before generating a new ID.
     /// </summary>
     SpinWait = 1
 }

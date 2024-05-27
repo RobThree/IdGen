@@ -9,7 +9,7 @@ namespace IdGen.Configuration;
 /// </summary>
 public sealed class IdGeneratorElement : ConfigurationElement
 {
-    private readonly string[] DATETIMEFORMATS = { "yyyy-MM-dd\\THH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd" };
+    private readonly string[] DATETIMEFORMATS = ["yyyy-MM-dd\\THH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"];
 
     /// <summary>
     /// Gets/sets the name of the <see cref="IdGeneratorElement"/>.

@@ -8,7 +8,12 @@ namespace IdGen;
 /// <remarks>
 /// Unless specified the default duration of a tick for a <see cref="DefaultTimeSource"/> is 1 millisecond.
 /// </remarks>
-public class DefaultTimeSource : StopwatchTimeSource
+/// <remarks>
+/// Initializes a new <see cref="DefaultTimeSource"/> object.
+/// </remarks>
+/// <param name="epoch">The epoch to use as an offset from now,</param>
+/// <param name="tickDuration">The duration of a tick for this timesource.</param>
+public class DefaultTimeSource(DateTimeOffset epoch, TimeSpan tickDuration) : StopwatchTimeSource(epoch, tickDuration)
 {
     /// <summary>
     /// Initializes a new <see cref="DefaultTimeSource"/> object.
@@ -17,14 +22,6 @@ public class DefaultTimeSource : StopwatchTimeSource
     /// <remarks>The default tickduration is 1 millisecond.</remarks>
     public DefaultTimeSource(DateTimeOffset epoch)
         : this(epoch, TimeSpan.FromMilliseconds(1)) { }
-
-    /// <summary>
-    /// Initializes a new <see cref="DefaultTimeSource"/> object.
-    /// </summary>
-    /// <param name="epoch">The epoch to use as an offset from now,</param>
-    /// <param name="tickDuration">The duration of a tick for this timesource.</param>
-    public DefaultTimeSource(DateTimeOffset epoch, TimeSpan tickDuration)
-        : base(epoch, tickDuration) { }
 
     /// <summary>
     /// Returns the current number of ticks for the <see cref="DefaultTimeSource"/>.

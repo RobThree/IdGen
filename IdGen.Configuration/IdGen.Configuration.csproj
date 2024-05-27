@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<Authors>RobIII</Authors>
 		<Company>Devcorner.nl</Company>
 		<PackageId>IdGen.Configuration</PackageId>
@@ -21,15 +21,11 @@
 		<RepositoryType>git</RepositoryType>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
-		<Configurations>Debug;Release;ReleaseWithDocumentation</Configurations>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
 		<DocumentationFile>bin\Release\IdGen.Configuration.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseWithDocumentation|net45|AnyCPU'">
-	  <DocumentationFile>bin\Release\IdGen.Configuration.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

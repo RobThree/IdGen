@@ -21,15 +21,11 @@
 		<LangVersion>latest</LangVersion>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
-		<Configurations>Debug;Release;ReleaseWithDocumentation</Configurations>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
 		<DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseWithDocumentation|netstandard2.0|AnyCPU'">
-	  <DocumentationFile>bin\Release\IdGen.DependencyInjection.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -37,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
 	</ItemGroup>
 

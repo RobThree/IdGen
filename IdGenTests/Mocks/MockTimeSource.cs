@@ -4,16 +4,14 @@ using System.Threading;
 
 namespace IdGenTests.Mocks;
 
-public class MockTimeSource : ITimeSource
+public class MockTimeSource(long current, TimeSpan tickDuration, DateTimeOffset epoch) : ITimeSource
 {
-    private long _current;
-
     public MockTimeSource()
         : this(0) { }
 
-    public DateTimeOffset Epoch { get; private set; }
+    public DateTimeOffset Epoch { get; private set; } = epoch;
 
-    public TimeSpan TickDuration { get; }
+    public TimeSpan TickDuration { get; } = tickDuration;
 
     public MockTimeSource(long current)
         : this(current, TimeSpan.FromMilliseconds(1), DateTimeOffset.MinValue) { }
@@ -21,16 +19,9 @@ public class MockTimeSource : ITimeSource
     public MockTimeSource(TimeSpan tickDuration)
         : this(0, tickDuration, DateTimeOffset.MinValue) { }
 
-    public MockTimeSource(long current, TimeSpan tickDuration, DateTimeOffset epoch)
-    {
-        _current = current;
-        TickDuration = tickDuration;
-        Epoch = epoch;
-    }
+    public virtual long GetTicks() => current;
 
-    public virtual long GetTicks() => _current;
+    public void NextTick() => Interlocked.Increment(ref current);
 
-    public void NextTick() => Interlocked.Increment(ref _current);
-
-    public void PreviousTick() => Interlocked.Decrement(ref _current);
+    public void PreviousTick() => Interlocked.Decrement(ref current);
 }
