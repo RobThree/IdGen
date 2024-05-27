@@ -123,7 +123,7 @@ Wraparound interval   : 407226.12:41:28.8320000 (about 1114 years)
 Wraparound date       : 3135-03-14T12:41:28.8320000+00:00
 ```
 
-IdGen also provides an `ITimeSouce` interface; this can be handy for [unittesting](IdGenTests/IdGenTests.cs) purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. For unittesting we use our own [`MockTimeSource`](IdGenTests/MockTimeSource.cs).
+IdGen also provides an `ITimeSouce` interface; this can be handy for [unittesting](IdGenTests/IdGeneratorTests.cs) purposes or if you want to provide a time-source for the timestamp part of your Id's that is not based on the system time. For unittesting we use our own [`MockTimeSource`](IdGenTests/Mocks/MockTimeSource.cs).
 
 ```xml
 <configuration>
