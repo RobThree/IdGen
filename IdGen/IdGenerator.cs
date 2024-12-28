@@ -59,7 +59,7 @@ public class IdGenerator : IIdGenerator<long>
 
         if (_generatorid < 0 || _generatorid > maxgeneratorid)
         {
-            throw new ArgumentOutOfRangeException(nameof(generatorId), $"GeneratorId must be from 0 to {maxgeneratorid}.");
+            throw new ArgumentOutOfRangeException(nameof(generatorId), string.Format(Translations.ERR_INVALID_GENERATORID, maxgeneratorid));
         }
 
         // Precalculate some values
@@ -119,7 +119,7 @@ public class IdGenerator : IIdGenerator<long>
 
             if (timestamp < _lastgen || ticks < 0)
             {
-                exception = new InvalidSystemClockException($"Clock moved backwards or wrapped around. Refusing to generate id for {_lastgen - timestamp} ticks");
+                exception = new InvalidSystemClockException(string.Format(Translations.ERR_CLOCK_MOVED_BACKWARDS, _lastgen - timestamp));
                 return -1;
             }
 
@@ -135,7 +135,7 @@ public class IdGenerator : IIdGenerator<long>
                             return CreateIdImpl(out exception); // Try again
                         case SequenceOverflowStrategy.Throw:
                         default:
-                            exception = new SequenceOverflowException("Sequence overflow. Refusing to generate id for rest of tick");
+                            exception = new SequenceOverflowException(Translations.ERR_SEQUENCE_OVERFLOW_EX);
                             return -1;
                     }
                 }

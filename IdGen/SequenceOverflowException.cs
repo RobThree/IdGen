@@ -23,7 +23,7 @@ public class SequenceOverflowException(string message, Exception? innerException
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class.
     /// </summary>
-    public SequenceOverflowException() : this("Sequence overflow") { }
+    public SequenceOverflowException() : this(Translations.ERR_SEQUENCE_OVERFLOW) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceOverflowException"/> class with a message that describes the error.

@@ -53,17 +53,17 @@ public class IdStructure
     {
         if (timestampBits + generatorIdBits + sequenceBits != 63)
         {
-            throw new InvalidOperationException("Number of bits used to generate Id's is not equal to 63");
+            throw new InvalidOperationException(Translations.ERR_MUST_BE_63BITS_EXACTLY);
         }
 
         if (generatorIdBits > 31)
         {
-            throw new ArgumentOutOfRangeException(nameof(generatorIdBits), "GeneratorId cannot have more than 31 bits");
+            throw new ArgumentOutOfRangeException(nameof(generatorIdBits), Translations.ERR_GENERATORID_CANNOT_EXCEED_31BITS);
         }
 
         if (sequenceBits > 31)
         {
-            throw new ArgumentOutOfRangeException(nameof(sequenceBits), "Sequence cannot have more than 31 bits");
+            throw new ArgumentOutOfRangeException(nameof(sequenceBits), Translations.ERR_SEQUENCE_CANNOT_EXCEED_31BITS);
         }
 
         TimestampBits = timestampBits;

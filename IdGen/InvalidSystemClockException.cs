@@ -23,7 +23,7 @@ public class InvalidSystemClockException(string message, Exception? innerExcepti
     /// <summary>
     /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class.
     /// </summary>
-    public InvalidSystemClockException() : this("Invalid system clock") { }
+    public InvalidSystemClockException() : this(Translations.ERR_INVALID_SYSTEM_CLOCK) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InvalidSystemClockException"/> class with a message that describes the error.
